@@ -1,0 +1,11 @@
+# to exclude Obsidian workspace settings (including plugin and hotkey configurations)
+Adversary*Simulation*Zettelkasten/.obsidian/*
+
+# OR only to exclude workspace cache
+Adversary*Simulation*Zettelkasten/workspace/*
+
+# Exclude plugins
+Adversary*Simulation*Zettelkasten/.obsidian/plugins/*
+
+# Exclude trash
+Adversary*Simulation*Zettelkasten/.trash/*

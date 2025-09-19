@@ -1697,11 +1697,11 @@ function customizeCategoriesMetadata(metadata, categories, categoryType) {
     
     const replacementPatterns = {
         'primary': {
-            pattern: 'primary categories:\n  - Add link(s) [[]] back to related PRIMARY categories',
+            pattern: /primary categories:\r?\n  - Add link\(s\) \[\[\]\] back to related PRIMARY categories/,
             replacement: `primary categories:\n  - ${categories.join('\n  - ')}`
         },
         'secondary': {
-            pattern: 'secondary categories:\n  - Add link(s) [[]] back to related SECONDARY categories',
+            pattern: /secondary categories:\r?\n  - Add link\(s\) \[\[\]\] back to related SECONDARY categories/,
             replacement: `secondary categories:\n  - ${categories.join('\n  - ')}`
         }
     };

@@ -784,6 +784,11 @@ async function getSecondaryCategories() {
  * @param {string} categoryType - Type of categories to select ("primary" or "secondary")
  * @returns {Promise<string[]>} - Array of selected categories formatted as wiki links with quotes (e.g., ["[[Category 1]]", "[[Category 2]]"])
  */
+/**
+ * Interactive category selection with multi-select capability and formatted output
+ * @param {string} categoryType - Type of categories to select ("primary" or "secondary")
+ * @returns {Promise<string[]>} - Array of selected categories formatted as wiki links with quotes (e.g., ["[[Category 1]]", "[[Category 2]]"])
+ */
 async function selectCategories(categoryType) {
     Logger.info(`Starting ${categoryType} category selection`);
 
@@ -792,8 +797,6 @@ async function selectCategories(categoryType) {
     const categoryLabel = isSecondary ? "SECONDARY" : "PRIMARY";
     
     try {
-        const availableCategories = isSecondary ? await getSecondaryCategories() : await getPrimaryCategories();
-        
         Logger.debug("Available categories loaded", {
             categoryType,
             availableCount: availableCategories.length,
@@ -818,20 +821,34 @@ async function selectCategories(categoryType) {
 
             const remainingCategories = availableCategories.filter(cat => !selectedCategories.includes(cat));
             
-            if (remainingCategories.length === 0) {
-                Logger.debug("No remaining categories to select");
+            if (remainingCategories.length === 0 && selectedCategories.length > 0) {
+                Logger.debug("No remaining categories to select, but some already selected");
                 break;
             }
             
-            const options = [...remainingCategories];
-            const displayOptions = [...remainingCategories];
-            
-            // Add "Done" option after first selection
+            const options = [];
+            const displayOptions = [];
+
+            // Add existing selections with remove indicator
             if (selectedCategories.length > 0) {
-                options.push("DONE");
-                displayOptions.push("✅ Done (Finish Selection)");
+                selectedCategories.forEach(cat => {
+                    displayOptions.push(`❌ ${cat}`);
+                    options.push(`REMOVE_${cat}`);
+                });
             }
             
+            // Add remaining categories
+            if (remainingCategories.length > 0) {
+                remainingCategories.forEach(cat => {
+                    displayOptions.push(`🔳 ${cat}`);
+                    options.push(cat);
+                });
+            }
+
+            // Always add "Done" option at the end
+            options.push("DONE");
+            displayOptions.push("✅ Done (Finish Selection)");
+                        
             const promptText = selectedCategories.length === 0 
                 ? `Select ${categoryLabel} category to link back to:` 
                 : `Selected: ${selectedCategories.join(", ")}. Select another or choose Done:`;
@@ -844,8 +861,14 @@ async function selectCategories(categoryType) {
             
             const selection = await tp.system.suggester(displayOptions, options, false, promptText);
             
-            if (selection === "DONE" || !selection) {
-
+            if (!selection) {
+                Logger.info(`Category selection cancelled`, {
+                    categoryType,
+                    finalSelectionCount: selectedCategories.length,
+                    selectionRounds: selectionRound
+                });
+                continueSelecting = false;
+            } else if (selection === "DONE") {
                 Logger.info(`Category selection completed`, {
                     categoryType,
                     finalSelectionCount: selectedCategories.length,
@@ -853,12 +876,26 @@ async function selectCategories(categoryType) {
                     userChoseDone: selection === "DONE"
                 });
                 continueSelecting = false;
+            } else if (selection.startsWith("REMOVE_")) {
+                // Remove category
+                const categoryToRemove = selection.substring(7); // Remove "REMOVE_" prefix
+                const index = selectedCategories.indexOf(categoryToRemove);
+                if (index > -1) {
+                    selectedCategories.splice(index, 1);
+                    Logger.debug(`Removed category: ${categoryToRemove}`, {
+                        remainingCount: selectedCategories.length
+                    });
+                    showSuccess(`Removed category: ${categoryToRemove}`);
+                }
             } else {
-                selectedCategories.push(selection);
-                Logger.debug(`Category added to selection`, {
-                    addedCategory: selection,
-                    totalSelected: selectedCategories.length
-                });
+                // Add new category
+                if (!selectedCategories.includes(selection)) {
+                    selectedCategories.push(selection);
+                    Logger.debug(`Category added to selection`, {
+                        addedCategory: selection,
+                        totalSelected: selectedCategories.length
+                    });
+                }
             }
         }
 

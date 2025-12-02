@@ -784,11 +784,6 @@ async function getSecondaryCategories() {
  * @param {string} categoryType - Type of categories to select ("primary" or "secondary")
  * @returns {Promise<string[]>} - Array of selected categories formatted as wiki links with quotes (e.g., ["[[Category 1]]", "[[Category 2]]"])
  */
-/**
- * Interactive category selection with multi-select capability and formatted output
- * @param {string} categoryType - Type of categories to select ("primary" or "secondary")
- * @returns {Promise<string[]>} - Array of selected categories formatted as wiki links with quotes (e.g., ["[[Category 1]]", "[[Category 2]]"])
- */
 async function selectCategories(categoryType) {
     Logger.info(`Starting ${categoryType} category selection`);
 

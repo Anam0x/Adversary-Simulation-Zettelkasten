@@ -1,8 +1,7 @@
 ## Overview
 
-```ad-tip
-Catalog indicators of compromise linked to specific threat actors, tools, or techniques.
-```
+> [!tip]
+> Catalog indicators of compromise linked to specific threat actors, tools, or techniques.
 
 ## Details
 

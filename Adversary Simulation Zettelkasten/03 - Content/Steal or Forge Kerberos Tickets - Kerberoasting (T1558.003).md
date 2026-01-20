@@ -19,9 +19,8 @@ type: TTP
 ***
 ## Overview
 
-```ad-info
-The content in this page is directly adapted from the [MITRE ATT&CK](https://attack.mitre.org/techniques/T1558/003/) framework for personal reference. Please consult the original MITRE ATT&CK entry for the most up-to-date and complete information.
-```
+> [!info]
+> The content in this page is directly adapted from the [MITRE ATT&CK](https://attack.mitre.org/techniques/T1558/003/) framework for personal reference. Please consult the original MITRE ATT&CK entry for the most up-to-date and complete information.
 
 Adversaries may abuse a valid Kerberos ticket-granting ticket (TGT) or sniff network traffic to obtain a ticket-granting service (TGS) ticket that may be vulnerable to [Brute Force](https://attack.mitre.org/techniques/T1110)[^1][^2].
 

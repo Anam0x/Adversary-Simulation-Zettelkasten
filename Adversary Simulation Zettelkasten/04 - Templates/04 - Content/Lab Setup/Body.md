@@ -1,8 +1,7 @@
 ## Overview
 
-```ad-tip
-Provide step-by-step instructions for configuring specific testing environments, applications, or vulnerable targets.
-```
+> [!tip]
+> Provide step-by-step instructions for configuring specific testing environments, applications, or vulnerable targets.
 
 ## Requirements
 

@@ -23,13 +23,22 @@ type: Secondary Category
 * [[Obsidian - Plugins]]
 * [[Obsidian - Custom CSS]]
 
+## Core Features
+
+* [[Obsidian - Callouts]]
+
 ## Plugins
 
-* [[Admonition]]
+### Required
+
 * [[Dataview]]
 * [[Templater]]
 * [[Obsidian Git]]
 * [[Emoji Toolbar]]
+
+### Optional
+
+* [[Admonition]]
 
 ***
 

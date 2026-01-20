@@ -121,14 +121,13 @@ git init
 > [!NOTE]
 > In future releases of this template repository I hope to automate the installation and configuration of the required Obsidian community plugins via Bash and PowerShell scripts. For now, the user will have to manually install and configure these.
 
-The vault requires five community plugins for full functionality.
+The vault requires four community plugins for full functionality.
 
 | Plugin        | Key Settings                                        |
 | ------------- | --------------------------------------------------- |
 | [Obsidian Git](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-git) | *Auto commit-and-sync interval (minutes)*: `60`<br />*Auto pull interval (minutes)*: `10`<br />*Commit message on auto commit-and-sync*: `[hostname OR FirstLast] {{date}}`<br />*{{date}} placeholder format*: `MM-DD-YYYY HH:mm:ss`<br />*Push on commit-and-sync*: ON<br />*Pull on commit-and-sync*: ON |
 | [Templater](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/templater-obsidian) | *Template folder location*: `04 - Templates`<br />*Trigger Templater on new file creation*: ON<br />*Enable folder templates*: ON<br />Add new folder templates for `01 - Primary Categories`, `02 - Secondary Categories`, and `03 - Content`<br />Set the folder templates' script to `04 - Templates/0400 - Gen_Note.md` |
 | [Dataview](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/dataview) | *Enable inline queries*: ON<br /> *Inline query prefix*: `=`                     |
-| [Admonition](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-admonition) | *Add Copy Button*: ON                                     |
 | [Emoji Toolbar](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-emoji-toolbar) | Hotkey: <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>.</kbd> (default)                         |
 
 ### Detailed Plugin Setup Instructions
@@ -249,32 +248,7 @@ You may skip Obsidian Git installation and configuration if you are not working 
 </details>
 
 <details>
-<summary><strong>4. Admonition</strong></summary>
-
-#### Admonition Installation
-
-1. Search for "Admonition" in the community plugins browser and select the plugin by Jeremy Valentine
-
-![](/img/admonition-01.png)
-
-2. Click the "Install" button
-
-![](/img/admonition-02.png)
-
-3. After installation, click the "Enable" button
-
-![](/img/admonition-03.png)
-
-#### Admonition Configuration
-
-1. Click the "Options" button
-
-2. Toggle the "Add Copy Button" option to on for convenience
-
-</details>
-
-<details>
-<summary><strong>5. Emoji Toolbar</strong></summary>
+<summary><strong>4. Emoji Toolbar</strong></summary>
 
 #### Emoji Toolbar Installation
 
@@ -302,13 +276,50 @@ You may skip Obsidian Git installation and configuration if you are not working 
 
 </details>
 
+## Optional Plugins
+
+### Admonition
+
+While Obsidian now natively supports callout boxes (admonitions) as of [v0.14.0](https://publish.obsidian.md/hub/01+-+Community/Obsidian+Roundup/2022-03-19+Better+Citations+Workflows+%26+Native+Callout+Boxes), you may still wish to install the Admonition plugin for:
+- Advanced customization options beyond native callouts
+- Legacy vault compatibility if you have existing ` ```ad- ` style admonitions
+- Additional styling features not available in native callouts
+
+See the Admonition note in the vault for a detailed comparison between the plugin and native callouts.
+
+<details>
+<summary><strong>5. Admonition Installation (Optional)</strong></summary>
+
+#### Admonition Installation
+
+1. Search for "Admonition" in the community plugins browser and select the plugin by Jeremy Valentine
+
+![](/img/admonition-01.png)
+
+2. Click the "Install" button
+
+![](/img/admonition-02.png)
+
+3. After installation, click the "Enable" button
+
+![](/img/admonition-03.png)
+
+#### Admonition Configuration
+
+1. Click the "Options" button
+
+2. Toggle the "Add Copy Button" option to on for convenience
+
+</details>
+
 ## Verification Checklist
 
-* [ ] All 5 plugins enabled in Community plugins settings
+* [ ] All 4 required plugins enabled in Community plugins settings
 * [ ] Template files present in the `04 - Templates` directory
 * [ ] Git status visible in Obsidian status bar (if using Git)
 * [ ] Emoji toolbar responds to hotkey
 * [ ] New notes auto-apply templates when created in structured folders
+* [ ] Admonition plugin installed (optional)
 
 ## Getting Started
 

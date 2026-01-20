@@ -1,8 +1,7 @@
 ## Overview
 
-```ad-tip
-Document the requirements, syntax, and usage of a specific command or variants of a command.
-```
+> [!tip]
+> Document the requirements, syntax, and usage of a specific command or variants of a command.
 
 ## Requirements
 

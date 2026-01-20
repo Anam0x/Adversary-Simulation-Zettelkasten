@@ -14,11 +14,10 @@ type: Basic
 
 This vault uses [Obsidian Community Plugins](https://help.obsidian.md/community-plugins) to automate the process of note creation, source control, data querying, and other essential functions.
 
-```ad-todo
-Once the installation and configuration scripts have been set up, add the following line:
-
-``The installation and configuration scripts (`install.ps1` for Windows, `install.sh` for NIX-like systems) automate the installation and configuration process of the required community plugins.``
-```
+> [!todo]
+> Once the installation and configuration scripts have been added, introduce the following line to this page:
+> 
+> ``It is recommended that you run the installation and configuration script (`install.ps1` for Windows, `install.sh` for NIX-like systems) prior to using this vault; more instructions are available in the `README.md` file.``
 
 ## Required Plugins
 
@@ -42,25 +41,34 @@ The [[Templater]][^2] plugin extends Obsidian's built-in template functionality 
 
 The [[Dataview]][^3] plugin transforms Obsidian into a powerful database by enabling SQL-like queries over your notes and their metadata. It can generate dynamic tables, lists, and charts based on tags, frontmatter, and content, making it possible to create automated indexes and dashboards. This plugin is crucial for organizing and discovering content within large knowledge bases.
 
-### Admonition
-
-<iframe src="https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-admonition"></iframe>
-
-The [[Admonition]][^4] plugin adds support for visually distinct code blocks that can highlight important information, warnings, tips, and other content types. It provides a variety of predefined styles and supports custom formatting, making documentation more readable and professionally formatted. These code blocks help organize information hierarchically and draw attention to critical details.
-
 ### Emoji Toolbar
 
 <iframe src="https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-emoji-toolbar"></iframe>
 
-The [[Emoji Toolbar]][^5] plugin provides a user-friendly interface for inserting emojis and Unicode symbols into notes. Beyond basic emoji insertion, it supports custom emoji sets and can be configured to work with specific tagging systems. In this vault, it facilitates the consistent use of emoji-based categorization and visual organization of primary categories and content types.
+The [[Emoji Toolbar]][^4] plugin provides a user-friendly interface for inserting emojis and Unicode symbols into notes. Beyond basic emoji insertion, it supports custom emoji sets and can be configured to work with specific tagging systems. In this vault, it facilitates the consistent use of emoji-based categorization and visual organization of primary categories and content types.
 
 ## Optional Plugins
 
-No plugins are considered optional at this time.
-
-```ad-todo
+> [!todo]
 Experiment more with suggested plugins and add to this section as-needed.
-```
+
+### Admonition
+
+<iframe src="https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-admonition"></iframe>
+
+> [!important] Native Callout Support
+> As of [Obsidian v0.14.0](https://obsidian.md/changelog/2022-03-19-desktop-v0.14.0/), callout boxes (admonitions) are natively supported without requiring this plugin. For most use cases, native callouts are recommended.
+
+The [[Admonition]][^5] plugin adds support for visually distinct code blocks that can highlight important information, warnings, tips, and other content types. It provides a variety of predefined styles and supports custom formatting, making documentation more readable and professionally formatted. These code blocks help organize information hierarchically and draw attention to critical details.
+
+The Admonition plugin is now considered optional for this vault. While Obsidian's native callouts provide the core functionality for creating visually distinct information blocks, you may still choose to install the Admonition plugin for:
+
+- **Legacy compatibility**: If working with vaults that use the older syntax (` ```ad-type `)
+- **Advanced customization**: Access to additional styling options beyond native callouts
+- **Custom callout types**: Creating specialized admonition types with unique styling
+- **RGB color control**: Fine-grained color customization not available in native callouts
+
+For new notes, it is recommended to use native callouts (`> [!type]` syntax) for better performance and future compatibility. See the [[Obsidian - Callouts]] page for a detailed comparison between the plugin and native callout features.
 
 ___
 
@@ -78,8 +86,8 @@ ___
 [^1]: Obsidian Git Plugin, Denis Olehov, https://github.com/denolehov/obsidian-git
 [^2]: Templater Plugin, SilentVoid13, https://github.com/SilentVoid13/Templater
 [^3]: Dataview Plugin, Michael Brenan, https://github.com/blacksmithgu/obsidian-dataview
-[^4]: Admonition Plugin, Jeremy Valentine, https://github.com/javalent/admonitions
-[^5]: Emoji Toolbar Plugin, oliveryh, https://github.com/oliveryh/obsidian-emoji-toolbar
+[^4]: Emoji Toolbar Plugin, oliveryh, https://github.com/oliveryh/obsidian-emoji-toolbar
+[^5]: Admonition Plugin, Jeremy Valentine, https://github.com/javalent/admonitions
 
 ***
 

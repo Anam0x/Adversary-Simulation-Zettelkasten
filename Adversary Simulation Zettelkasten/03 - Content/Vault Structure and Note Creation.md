@@ -116,9 +116,8 @@ The emoji selection interface provides categorized options relevant to adversary
 
 Users can choose a search tag emoji from the categorized options list. Alternatively, they can select the `"🎲 Random selection"` option to allow the system to handle search tag emoji selection. The user can also manually enter a search tag emoji by selecting the `"✏️ Enter emoji manually"` option.
 
-```ad-tip
-The [[Emoji Toolbar]] keyboard will not be available to you when you are redirected to the manual emoji entry system prompt, so it is advised to have your desired emoji copied to your clipboard before this step.
-```
+> [!tip]
+> The [[Emoji Toolbar]] keyboard will not be available to you when you are redirected to the manual emoji entry system prompt, so it is advised to have your desired emoji copied to your clipboard before this step.
 
 #### Emoji Validation and Error Handling
 

@@ -1,8 +1,7 @@
 ## Overview
 
-```ad-tip
-Summarize tool capabilities, essential commands, OPSEC considerations, and operational requirements.
-```
+> [!tip]
+> Summarize tool capabilities, essential commands, OPSEC considerations, and operational requirements.
 
 ## Requirements
 

@@ -42,9 +42,8 @@ type: Basic
 		
 ![[Pasted image 20210907120756.png]]
 
-```ad-important
-If you're using included CSS snippets nonexistent nodes become a bit more visable as they're colored dark red.
-```
+> [!important]
+> If you're using included CSS snippets then nonexistent nodes become a bit more visible as they're colored dark red.
 
 ### Before:
 

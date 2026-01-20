@@ -93,15 +93,13 @@ Additionally, avoid requesting all SPNs in bulk. Multiple SPN requests in a shor
 GetUserSPNs.py -request-user <target-user> -dc-ip <dc-ipv4-address> -outputfile <filename> <domain.full>/<user>
 ```
 
-```ad-todo
-Add discussion about encryption types, the `(servicePrincipalName=*)` LDAP query, and ticket request parameters.
-```
+> [!todo]
+> Add discussion about encryption types, the `(servicePrincipalName=*)` LDAP query, and ticket request parameters.
 
 ## Under-the-Hood
 
-```ad-todo
-Reverse engineer `GetUserSPNs.py` source code, analyze ticket exchanges in [Wireshark](https://www.wireshark.org/), and document detailed function flow.
-```
+> [!todo]
+> Reverse engineer `GetUserSPNs.py` source code, analyze ticket exchanges in [Wireshark](https://www.wireshark.org/), and document detailed function flow.
 
 ## Help Menu
 
@@ -152,8 +150,9 @@ connection:
 
 | Hyperlink                                                                                               | Info                                   |
 | ------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| [GetUserSPNs.py, Fortra](https://github.com/fortra/impacket/blob/master/examples/GetUserSPNs.py)        | GitHub repository for `GetUserSPNs.pu` |
+| [GetUserSPNs.py, Fortra](https://github.com/fortra/impacket/blob/master/examples/GetUserSPNs.py)        | GitHub repository for `GetUserSPNs.py` |
 | [Steal or Forge Kerberos Tickets: Kerberoasting, MITRE](https://attack.mitre.org/techniques/T1558/003/) | MITRE ATT&CK entry for "Kerberoasting" |
+|                                                                                                         |                                        |
 
 [^1]: GetUserSPNs.py, Fortra, https://github.com/fortra/impacket/blob/master/examples/GetUserSPNs.py
 [^2]: Attacking Microsoft Kerberos Kicking the Guard Dog of Hades, Tim Medin, https://youtu.be/PUyhlN-E5MU

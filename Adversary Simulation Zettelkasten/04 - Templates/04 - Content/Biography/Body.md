@@ -1,8 +1,7 @@
 ## Overview
 
-```ad-tip
-Document timelines, notable contributions, and lasting impact of individuals significant to cybersecurity or your professional development.
-```
+> [!tip]
+> Document timelines, notable contributions, and lasting impact of individuals significant to cybersecurity or your professional development.
 
 ## Timeline
 

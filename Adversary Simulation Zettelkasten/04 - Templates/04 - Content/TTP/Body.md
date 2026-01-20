@@ -1,12 +1,10 @@
 ## Overview
 
-```ad-tip
-Document tactics, techniques, and procedures from the MITRE ATT&CK Framework.
-```
+> [!tip]
+> Document tactics, techniques, and procedures from the MITRE ATT&CK Framework.
 
-```ad-info
-The content in this page is directly adapted from the [MITRE ATT&CK](https://attack.mitre.org/techniques/T1558/003/) framework for personal reference. Please consult the original MITRE ATT&CK entry for the most up-to-date and complete information.
-```
+> [!info]
+> The content in this page is directly adapted from the [MITRE ATT&CK](https://attack.mitre.org/techniques/T1558/003/) framework for personal reference. Please consult the original MITRE ATT&CK entry for the most up-to-date and complete information.
 
 ## Procedure Examples
 

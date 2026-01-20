@@ -36,14 +36,11 @@ type: Basic
 
 ## Configuration
 
-```ad-info
-### Not Seeing this stylized in *PREVIEW* mode?
-#### Try installing the community plugin, 'Admonition'
-
-1. *Template Folder Location*: 04 - Templates
-2. *Trigger Templater on New File Creation*: True
-3. *Empty File Template*: 04 - Templates/0400 - Gen_Note
-```
+> [!info] Templater Configuration Instructions
+> ### Required Values
+> 1. *Template Folder Location*: `04 - Templates`
+> 2. *Trigger Templater on New File Creation*: **True**
+> 3. *Empty File Template*: `04 - Templates/0400 - Gen_Note`
 
 To help manage **incomplete**, **NULL**, or **'Untitled'** notes, it can  be helpful to assign `Settings > Files & Links > Folder to Create New Notes in` to `.trash`. Since our **0400 - Gen_Note** template handles moving successfully created notes to their appropriate folders, the categories listed above will automatically end up in trash. 
 

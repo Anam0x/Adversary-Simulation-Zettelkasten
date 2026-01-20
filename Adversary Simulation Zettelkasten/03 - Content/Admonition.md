@@ -18,6 +18,21 @@ Adds admonition block-styled content to Obsidian.md, styled after [Material for 
 
 ![](https://raw.githubusercontent.com/javalent/admonitions/master/publish/gifs/all.gif)
 
+> [!important]
+> As of [Obsidian v0.14.0](https://publish.obsidian.md/hub/01+-+Community/Obsidian+Roundup/2022-03-19+Better+Citations+Workflows+%26+Native+Callout+Boxes), Obsidian natively supports admonitions via [callout boxes](https://help.obsidian.md/callouts). This allows you to create visually distinct blocks with different icons and colors directly in your notes without needing to install the community Admonitions plugin.
+> 
+> ````markdown
+> > [!example]
+> > This is an example callout box.
+> ````
+> 
+> > [!example]
+> > This is an example callout box.
+> 
+> While the older, plugin-based Admonition syntax with code blocks (` ```ad-note `) still functions, the newer Callout syntax is recommended for future compatibility. Admonition is therefore labeled an "optional" plugin for this Zettelkasten vault.
+> 
+> For comprehensive internal documentation on native callouts, see [[Obsidian - Callouts]].
+
 ## Installation
 
 1. Admonition[^1] is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse`
@@ -40,12 +55,22 @@ icon: <FontAwesome or RPG Awesome icon name>
 color: <R,G,B>
 Your content here.
 ```
+
+```ad-info
+title: Custom Title
+collapse: close
+icon: hat-wizard
+color: 200,0,200
+My custom content.
+```
 ````
 
 ```ad-info
 title: Custom Title
-collapse: none
-Your content here.
+collapse: close
+icon: hat-wizard
+color: 200,0,200
+My custom content.
 ```
 
 #### Supported Parameters
@@ -74,20 +99,6 @@ Your content here.
 | `example`  | `example`                         | Providing code examples, demonstrations, or sample content.    |
 | `quote`    | `quote`, `cite`                   | Highlighting quotes, citations, or references.                 |
 
-## Callouts
-
-As of [Obsidian v0.14.0](https://publish.obsidian.md/hub/01+-+Community/Obsidian+Roundup/2022-03-19+Better+Citations+Workflows+%26+Native+Callout+Boxes), Obsidian natively supports admonitions via "callout boxes". This allows you to create visually distinct blocks with different icons and colors directly in your notes without needing to install the community Admonitions plugin.
-
-````markdown
-> [!example]
-> This is an example callout box.
-````
-
-> [!example]
-> This is an example callout box.
-
-While the older, plugin-based Admonition syntax with code blocks (` ```ad-note `) still functions, the newer Callout syntax is recommended for future compatibility.
-
 ### Nesting
 
 For block-style admonitions, wrap with matching backtick levels.
@@ -101,12 +112,6 @@ Nested content
 ```
 Parent content
 ````
-
-> [!note] Parent
-> > [!warning] Nested Child
-> > Nested content
-> 
-> Parent content 
 `````
 
 ````ad-note
@@ -118,34 +123,21 @@ Nested content.
 Parent content
 ````
 
-> [!note] Parent
-> > [!warning] Nested Child
-> > Nested content
-> 
-> Parent content 
 ## Constraints
 
-It is not possible to embed a footnote in admonition-styled code blocks or callouts, illustrated below:
+It is not possible to embed a footnote in admonition-styled code blocks, illustrated below:
 
 ````markdown
 ```ad-example
 Attempt to embed a footnote in this codeblock, it won't work[^2].
 However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
 ```
-
-> [!example]
-> Attempt to embed a footnote in this callout, it won't work[^2].
-> However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
 ````
 
 ```ad-example
 Attempt to embed a footnote in this codeblock, it won't work[^2].
 However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
 ```
-
-> [!example]
-> Attempt to embed a footnote into this callout, it won't work[^2].
-> However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
 
 It is therefore recommended to avoid embedding footnotes in Admonition code blocks and to use inline hyperlinks instead.
 

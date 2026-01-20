@@ -30,12 +30,6 @@
     - [ ] Automatically generated/edited .gitignore
     - [ ] Update Obsidian Git note
 
-- [ ] Deprovision the Admonitions community plugin
- - [ ] Remove from README/installation scripts
- - [ ] Replace code blocks with callouts
- - [ ] Modify notes
- - [ ] Create a note on how to use Obsidian's admonition callouts
-
 - [ ] Installation instructions
   - [X] README
   - [x] Getting Started
@@ -47,6 +41,13 @@
 - [ ] Personal/unfinished ideas directory
   - [ ] Update installation scripts/instructions
   - [ ] Update vault structure notes
+
+- [ ] Improved code creation workflow
+  - [ ] Title character validation includes all invalid tag characters
+  - [ ] Title character validation includes all link-breaking characters
+  - [ ] Prompt for aliases
+  - [ ] Templater support for personal/unfinished ideas directory
+  - [ ] Primary/secondary category templates with pre-built collapsible Dataview queries
 
 ### Low Priority (Cleanup/Polish)
 
@@ -64,3 +65,9 @@
   - [ ] Vulnerability
 
 ## Done ✓
+
+- [x] Deprovision the Admonitions community plugin
+ - [x] Update README
+ - [x] Replace code blocks with callouts
+ - [x] Modify notes
+ - [x] Create a note on how to use Obsidian's admonition callouts

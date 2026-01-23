@@ -249,8 +249,7 @@ Attempt to make externally embedded content more responsive
 >     height: 100%;
 >   }  
 > }
-
-```
+> ```
 
 #### Example
 

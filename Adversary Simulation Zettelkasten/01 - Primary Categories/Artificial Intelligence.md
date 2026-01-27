@@ -123,7 +123,7 @@ dv.paragraph(`
 - Completeness: ${getProgressBar(completenessScore)} ${completenessScore.toFixed(0)}/100
 `);
 
-dv.header(3, "📊 Coverage Overview");
+dv.header(3, "📊 Overview");
 dv.paragraph(`
 - **Secondary Categories**: ${secondaries.length}
 - **Content Notes**: ${content.length}
@@ -142,7 +142,7 @@ dv.paragraph(`
 - **Isolated Notes**: ${isolatedNotes} (${content.length > 0 ? ((isolatedNotes / content.length) * 100).toFixed(0) : 0}%)
 `);
 
-dv.header(3, "📈 Content");
+dv.header(3, "📒 Content");
 dv.paragraph(`
 - **Top Type**: ${topType ? topType[0] : 'N/A'} (${topType ? topType[1] : 0})
 - **Well-Developed**: ${wellDeveloped} (${content.length > 0 ? ((wellDeveloped / content.length) * 100).toFixed(0) : 0}%)

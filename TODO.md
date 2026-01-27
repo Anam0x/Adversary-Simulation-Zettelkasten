@@ -2,26 +2,72 @@
 
 ## Not Started
 
-- [ ] Modify footer template structure of the appropriate content types/categories to include Dataview queries
-
 - [ ] Clarify the difference between Resources table and footnotes (maybe an informal style guide?)
-
-- [ ] Add Python script to scrape MITRE ATT&CK Framework and generate TTP notes
-
-- [ ] Improve "Biography" content type's timeline template
-
-- [ ] Templater Plugin Script Enhancements
-  - [ ] Modify/add new Templater script to permit creating a new Content Type directly (currently only supports content type creation by going through note creation workflow)
-  - [ ] Go back button during note creation workflow (possibly not supportable)
-  - [ ] Sanitize search tag emoji because titles can contain illegal tag characters (e.g., "$" is a valid character for note titles, but not tags)
-  - [ ] Need a hack for preventing file getting created via Templater if the user cancels the workflow or an unexpected error occurs
-  - [ ] Modify back-linking primary/secondary categories menu
-    - [ ] Proceed without selecting a category
-    - [ ] De-select a category
 
 ## In Progress
 
+- [ ] Modify template structure of the categories to include Dataview queries
+  - [x] Primary Categories
+  - [ ] Secondary Categories
+  - [ ] Update `README.md` to include Dataview support for JS queries
+
+- [ ] Content type template improvements
+  - [ ] NEW
+    - [ ] **Attack Surface**
+    - [ ] **Protocol**
+    - [ ] **Security Control**
+  - [ ] MODIFIED
+    - [ ] **Biography**
+    - [ ] **Offensive Code**
+    - [ ] **Reference Material** (rename from "Mindmap")
+    - [ ] **Technique** (rename from "TTP")
+    - [ ] **Tool**
+    - [ ] **Playbook**
+    - [ ] **Vulnerabilities**
+    - [ ] **Command**
+    - [ ] **IOC**
+    - [ ] **Case Study**
+    - [ ] **Infrastructure**
+    - [ ] **Lab Setup**
+
+- [ ] Example notes for all content types
+  - [ ] Attack Surface
+  - [x] Basic
+  - [x] Biography
+  - [ ] Case Study
+  - [x] Command
+  - [ ] Idea
+  - [x] Infrastructure
+  - [ ] IOC
+  - [ ] Lab Setup
+  - [ ] Offensive Code
+  - [x] Playbook
+  - [ ] Protocol
+  - [ ] Reference Material
+  - [ ] Security Control
+  - [x] Study Resources
+  - [ ] Technique
+  - [x] Tool
+  - [ ] Vulnerability
+
 ### High Priority (Core Functionality and Usability)
+
+- [ ] Templater Plugin Script Enhancements
+  - [ ] Modify/add new Templater script to permit creating a new Content Type directly (currently only supports content type creation by going through note creation workflow)
+  - [ ] ~~Go back button during note creation workflow (possibly not supportable)~~
+  - [ ] Sanitize search tag emoji because titles can contain illegal tag characters 
+  - [ ] Need a hack for preventing file getting created via Templater if the user cancels the workflow or an unexpected error occurs
+  - [x] Modify back-linking primary/secondary categories menu
+    - [x] Proceed without selecting a category
+    - [x] De-select a category
+  - [ ] Personal/unfinished ideas directory
+    - [ ] Update installation scripts/instructions
+    - [ ] Update vault structure notes
+  - [ ] Title character validation or search tag emoji sanitization for invalid tag characters (e.g., "$" is a valid character for note titles, but not tags)
+  - [ ] Title character validation includes all link-breaking characters
+  - [ ] Prompt for aliases
+
+### Medium Priority (Enhancement)
 
 - [ ] Setup scripts
   - [ ] Bash for \*NIX-like
@@ -36,33 +82,7 @@
   - [x] Rewrite the "Vault Appendix - Modifying Vault Structure" note
   - [ ] Note on Linux, Windows, macOS, Android, iOS support (Obsidian Git plugin is not recommended for mobile platforms)
 
-### Medium Priority (Enhancement)
-
-- [ ] Personal/unfinished ideas directory
-  - [ ] Update installation scripts/instructions
-  - [ ] Update vault structure notes
-
-- [ ] Improved code creation workflow
-  - [ ] Title character validation includes all invalid tag characters
-  - [ ] Title character validation includes all link-breaking characters
-  - [ ] Prompt for aliases
-  - [ ] Templater support for personal/unfinished ideas directory
-  - [ ] Primary/secondary category templates with pre-built collapsible Dataview queries
-
 ### Low Priority (Cleanup/Polish)
-
-- [ ] Example notes for new content types
-  - [x] Biography
-  - [ ] Case Study
-  - [x] Command
-  - [x] Infrastructure
-  - [ ] IOC
-  - [ ] Lab Setup
-  - [x] Mindmap
-  - [x] Payload
-  - [x] Playbook
-  - [x] Study Resources
-  - [ ] Vulnerability
 
 ## Done ✓
 

@@ -1,17 +1,17 @@
 ---
-aliases: 
+aliases:
 tags:
   - 🥇Primary_Category
-  - 🌐Web_Application_Security
+  - 📦Supply_Chain_Security
 type: Primary Category
 ---
-# [[Web Application Security]]
+# [[Supply Chain Security]]
 
-***
+---
 
 ## Overview
 
-Identification and exploitation of vulnerabilities in web applications and APIs. Includes OWASP Top 10, injection attacks, authentication bypass, client-side attacks, and modern web framework exploitation.
+Analysis and exploitation of vulnerabilities introduced through third-party dependencies, software supply chains, and vendor relationships. Includes dependency confusion attacks, package repository exploitation, software build pipeline compromises, and vendor risk assessment.
 
 ---
 

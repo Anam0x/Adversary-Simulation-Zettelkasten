@@ -19,10 +19,14 @@ Management, organization, and maintenance of this Zettelkasten vault. Includes p
 
 ```dataviewjs
 const primaryLink = dv.current().file.link;
+const isPublished = (page) =>
+  !page["note-status"] ||
+  page["note-status"] === "☑️ Ready" ||
+  page["note-status"] === "Ready";
 const secondaries = dv.pages('"02 - Secondary Categories"')
   .where(p => p.file.outlinks.includes(primaryLink));
 const content = dv.pages('"03 - Content"')
-  .where(p => p.file.outlinks.includes(primaryLink));
+  .where(p => p.file.outlinks.includes(primaryLink) && isPublished(p));
 
 // Helper: Count only connections within 01/02/03 directories
 const countKnowledgeLinks = (note) => {
@@ -230,7 +234,8 @@ SORT file.name ASC
 > ```dataview
 >  LIST
 >  FROM "03 - Content"
->  WHERE contains(primary-categories, this.file.link) OR contains(parents, this.file.link)
+>  WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+>    AND (contains(primary-categories, this.file.link) OR contains(parents, this.file.link))
 >  SORT file.name ASC 
 > ```
 
@@ -241,7 +246,8 @@ TABLE WITHOUT ID
   type AS "Content Type",
   file.mtime AS "Modified"
 FROM "03 - Content"
-WHERE contains(file.outlinks, this.file.link)
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(file.outlinks, this.file.link)
 SORT file.mtime DESC
 LIMIT 10
 ```
@@ -255,7 +261,8 @@ TABLE WITHOUT ID
   length(file.inlinks) AS "← Links In",
   (length(file.outlinks) + length(file.inlinks)) AS "Total"
 FROM "03 - Content"
-WHERE contains(file.outlinks, this.file.link)
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(file.outlinks, this.file.link)
 SORT (length(file.outlinks) + length(file.inlinks)) DESC
 LIMIT 10
 ```
@@ -264,3 +271,4 @@ LIMIT 10
 
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>
+

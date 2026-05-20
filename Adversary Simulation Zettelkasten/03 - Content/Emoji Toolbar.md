@@ -33,43 +33,67 @@ Use the hotkey specified at `Settings > Hotkeys > Emoji Toolbar: Open emoji pick
 ![](https://raw.githubusercontent.com/oliveryh/obsidian-emoji-toolbar/main/demo/demo.gif)
 
 The following emojis are currently used as special search tags for notes:
-* Categories:
-	* 🥇 - Primary Category
-	* 🥈 - Secondary Category
-* Primary Categories:
-	* 🧠 - Artificial Intelligence
-	* ☁️ - Cloud Security
-	* 🗝️ - Cryptography
-	* 🛡️ - Detection Engineering
-	* 🛠️ - Development
-	* ⚙️ - OS Internals
-	* 🔍 - OSINT
-	* 🎯 - Penetration Test
-	* 🔓 - Physical Security
-	* 🔴 - Red Team
-	* ✍️ - Reporting
-	* 🎭 - Social Engineering
-	* 😈 - Threat Intelligence
-	* 🎒 - Training
-	* 🏦 - Vault Administration
-	* 🌐 - Web Application Security
-	* 📶 - Wireless Security
-*  Content:
-	* 📝 - Basic
-	* 👤 - Biography
-	* ⌛ - Case Study
-	* 💲 - Command
-	* 💡 - Idea
-	* 🏗️ - Infrastructure
-	* 👣 - IOC
-	* 🧪 - Lab Setup
-	* 🗺️ - Mind Map
-	* 💣 - Payload
-	* ✅ - Playbook
-	* 🎓 - Study Resources
-	* 📕 - Tactics, Techniques, Procedure (TTP)
-	* ⚔️ - Tool
-	* 🕳️ - Vulnerability
+
+```dataviewjs
+const RESERVED_CATEGORY_TAGS = [
+  { emoji: "🥇", label: "Primary Category" },
+  { emoji: "🥈", label: "Secondary Category" },
+];
+
+const extractEmojiTag = (page, excludedTags = []) => {
+  const tags = (page.tags ?? []).filter(tag => !excludedTags.includes(tag));
+  return tags.length > 0 ? tags[0] : null;
+};
+
+const extractLeadingEmoji = (tagValue) => {
+  if (!tagValue) {
+    return "?";
+  }
+
+  const normalized = String(tagValue).replace(/^#/, "");
+  const emojiMatch = normalized.match(/^[^A-Za-z0-9_]+/u);
+  return emojiMatch ? emojiMatch[0] : normalized;
+};
+
+const renderBulletList = (title, items) => {
+  const lines = [
+    `- ${title}:`,
+    ...items.map(item => `  - ${item.emoji} - ${item.label}`),
+  ];
+  dv.paragraph(lines.join("\n"));
+};
+
+const primaryCategoryItems = dv.pages('"01 - Primary Categories"')
+  .sort(p => p.file.name, "asc")
+  .map(page => ({
+    emoji: extractLeadingEmoji(extractEmojiTag(page, ["🥇Primary_Category"])),
+    label: page.file.name,
+  }))
+  .array();
+
+const contentTypeItems = Array.from(
+  new Map(
+    dv.pages('"04 - Templates/Content"')
+      .where(page => page.type)
+      .sort(page => page.type, "asc")
+      .map(page => {
+        const tag = extractEmojiTag(page);
+        return [
+          page.type,
+          {
+            emoji: extractLeadingEmoji(tag),
+            label: page.type,
+          }
+        ];
+      })
+      .array()
+  ).values()
+).sort((a, b) => a.label.localeCompare(b.label));
+
+renderBulletList("Categories", RESERVED_CATEGORY_TAGS);
+renderBulletList("Primary Categories", primaryCategoryItems);
+renderBulletList("Content", contentTypeItems);
+```
 
 > [!info]
 > Currently, there is no restriction on using the same emoji as a search tag for new primary categories or content types (e.g., you can have a primary category with the search tag "💯New_Category" and a content type with the search tag "💯New_Content_Type"). This is a deliberate design choice to account for scenarios where the list of compatible emojis has been exhausted (an unlikely scenario given Emoji Toolbar theoretically supports [at least 3,790 emojis as of September 2024](https://emojipedia.org/faq#how-many)) and where users create loosely related content types (e.g., two content types with the search tags "⛏️Offensive_Tool" and "⛏️Defensive_Tool").

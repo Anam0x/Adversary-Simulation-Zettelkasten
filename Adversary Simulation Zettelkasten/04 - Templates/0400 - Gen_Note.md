@@ -23,12 +23,12 @@ const PATHS = {
     PRIMARY_CATEGORIES: "01 - Primary Categories",
     SECONDARY_CATEGORIES: "02 - Secondary Categories", 
     CONTENT: "03 - Content",
-    CONTENT_TEMPLATES: "04 - Templates/04 - Content",
-    PRIMARY_TEMPLATE_META: "[[04 - Templates/04 - Primary Category/Metadata]]",
-    PRIMARY_TEMPLATE_BODY: "[[04 - Templates/04 - Primary Category/Body]]",
-    SECONDARY_TEMPLATE_META: "[[04 - Templates/04 - Secondary Category/Metadata]]",
-    SECONDARY_TEMPLATE_BODY: "[[04 - Templates/04 - Secondary Category/Body]]",
-    BASIC_TEMPLATE: "04 - Templates/04 - Content/Basic"
+    CONTENT_TEMPLATES: "04 - Templates/Content",
+    PRIMARY_TEMPLATE_META: "[[04 - Templates/Primary Category/Metadata]]",
+    PRIMARY_TEMPLATE_BODY: "[[04 - Templates/Primary Category/Body]]",
+    SECONDARY_TEMPLATE_META: "[[04 - Templates/Secondary Category/Metadata]]",
+    SECONDARY_TEMPLATE_BODY: "[[04 - Templates/Secondary Category/Body]]",
+    BASIC_TEMPLATE: "04 - Templates/Content/Basic"
 };
 
 const NOTE_TYPES = {

@@ -30,7 +30,7 @@ Configuration, plugins, workflows, and best practices for maintaining Obsidian-b
 
 #### Required
 
-* [[Dataview]]
+* [[03 - Content/Dataview]]
 * [[Templater]]
 * [[Obsidian Git]]
 * [[Emoji Toolbar]]

@@ -35,25 +35,26 @@ The vault uses a hierarchical organization system with four main directories:
 │   │   ├── Note 2.md
 │   │   └── Note 3.md
 │   └── 04 - Templates/
-│       ├── 04 - Content/
-│       │   ├── 04 - Basic/
-│       │   │   ├── Body.md
-│       │   │   ├── Footer.md
-│       │   │   └── Metadata.md
-│       │   ├── 04 - Custom Type 1/
-│       │   │   ├── Body.md
-│       │   │   ├── Footer.md
-│       │   │   └── Metadata.md
-│       │   └── 04 - Custom Type 2/
-│       │       ├── Body.md
-│       │       ├── Footer.md
-│       │       └── Metadata.md
-│       ├── 04 - Primary Category/
+│       ├── Primary Category/
 |       │   ├── Body.md
 │       │   └── Metadata.md
-│       └── 04 - Secondary Category/
-│           ├── Body.md
-│           └── Metadata.md
+│       ├── Secondary Category/
+│       │   ├── Body.md
+│       │   └── Metadata.md
+│       └── Content/
+│           ├── Basic/
+│           │   ├── Body.md
+│           │   ├── Footer.md
+│           │   └── Metadata.md
+│           ├── Custom Type 1/
+│           │   ├── Body.md
+│           │   ├── Footer.md
+│           │   └── Metadata.md
+│           └── Custom Type 2/
+│               ├── Body.md
+│               ├── Footer.md
+│               └── Metadata.md
+
 └── README.md
 ```
 

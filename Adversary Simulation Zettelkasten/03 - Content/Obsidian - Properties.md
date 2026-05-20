@@ -28,7 +28,7 @@ Obsidian properties used in this vault may be any of the following:
 - **Text**: plain text values, including single Obsidian links when appropriate
 - **Lists**: multi-value fields, commonly used for links or controlled vocabulary
 - **Numbers**: quantitative values such as scores or ports
-- **Booleans**: `true` / `false`
+- **Booleans**: `true`/`false`
 - **Dates**: calendar dates
 - **Date & Time**: timestamps when more precision is useful
 
@@ -236,7 +236,7 @@ The property tables below use the following input-mode labels:
 - `Note picker`: choose one or more existing notes from a filtered set of content types
 - `Free-write`: manually enter any value
 - `Free-write list`: manually enter one or more values
-- `Boolean`: `true` / `false`
+- `Boolean`: `true`/`false`
 - `Date`: date entry
 - `Number`: numeric entry
 

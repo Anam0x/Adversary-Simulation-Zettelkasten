@@ -3132,6 +3132,19 @@ function customizeCategoryBody(body, config) {
 }
 
 /**
+ * Normalizes assembled note sections so divider insertion does not create accidental extra blank lines.
+ * @param {string} sectionContent - Raw content section to prepare for final note assembly.
+ * @returns {string} - Trimmed section content ready to be joined with the standard divider.
+ */
+function normalizeAssembledSection(sectionContent) {
+    if (typeof sectionContent !== "string") {
+        return "";
+    }
+
+    return sectionContent.trim();
+}
+
+/**
  * Builds the complete note content from templates and configuration with proper assembly
  * @param {Object} config - Complete note configuration object with all required properties
  * @returns {Promise<string>} - Fully assembled note content ready for file creation
@@ -3243,7 +3256,10 @@ function assembleNoteContent(customizedMetadata, templates, config) {
             componentsAdded += 2;
     }
     
-    const finalContent = contentParts.join(DIVIDER);
+    const finalContent = contentParts
+        .map(normalizeAssembledSection)
+        .filter(Boolean)
+        .join(DIVIDER);
     
     Logger.info("Note content assembly completed", {
         noteType: config.noteType,

@@ -2,53 +2,54 @@
 
 > [!todo] Todo: DELETE ME
 > > [!tip]
-> > Document common technology stacks and platforms encountered during engagements, including attack vectors and exploitation techniques.
+> > Document the security-relevant architecture, trust boundaries, and common attack opportunities for the platform or service.
 
-## Platform Details
+## Architecture Summary
 
-- **Deployment Models**: <!-- SaaS, Self-Hosted, Hybrid, Cloud-Native, etc.-->
-- **Authentication**: <!-- Auth mechanisms: API keys, OAuth, SAML, SSH, certificates, etc.-->
-- **Key Features**: <!-- Core functionality relevant to security assessment -->
-- **Versions/Editions**: <!-- Community, Enterprise, specific version numbers if relevant -->
-- **Common Integrations**: <!-- Third-party services, APIs, plugins -->
+<!-- Briefly explain what the platform/service does, how it is typically deployed, and which major components matter most during assessment. -->
 
----
+## Trust Boundaries
 
-## Architecture
+- **Identity Boundary**: <!-- Where identities are established, federated, or delegated -->
+- **Administrative Boundary**: <!-- Where privileged actions are performed -->
+- **Data Boundary**: <!-- Where sensitive data is processed, stored, or transmitted -->
+- **Network Boundary**: <!-- Where traffic crosses zones, segments, or external interfaces -->
 
-<!-- Brief description of this overall architecture and major components -->
+## Key Components
 
-### Major Component 1
+### Component: <!-- Name -->
 
-<!-- Brief description of this major component's purpose and functionality -->
+**Purpose**: <!-- What this component does -->
 
-> [!todo] Todo: Inlcude Diagram (OPTIONAL)
-> If appropriate, embed a custom/authoritative architectural diagram of the major component.
+**Security Relevance**:
+- <!-- Why it matters to a red team -->
 
-####  Subcomponent 1.1
+**Notable Interfaces**:
+- <!-- API, web UI, agent, protocol, service account, webhook, etc. -->
 
-<!-- Brief description of this subcomponent's purpose and functionality -->
+**Assumptions/Weak Points**:
+- <!-- Common design assumptions, weak defaults, or risky dependencies -->
 
-> [!todo] Todo: Inlcude Diagram (OPTIONAL)
-> If appropriate, embed a custom/authoritative architectural diagram of the subcomponent.
+## Assessment Notes
 
-> [!todo] Todo: Add Sections
-> Depending on the major component or subcomponent, add additional sections here describing the attack surface's architecture.
->
-> Some potential header name ideas:
-> - **Security Model**: discuss a component's implementation of security features, permission models, identity management, and etc.
-> - **Attack Vectors**: link to *Technique*, *Playbook*, *Offensive Code*, and other content notes related to a component
-> - **Security Controls**: link to *Security Control* content notes related to a component, as well as *Technique* notes for bypass
-> - **Common Weaknesses**: link to *Vulnerability* content notes related to common misconfigurations/vulnerabilities affecting the component, as well as *Tool* or *Technique* notes
+### Common Attack Paths
 
-#### Subcomponent 1.2
+- <!-- High-level path or abuse chain -->
 
-<!-- Repeat structure as needed -->
+### Security Model
 
-### Major Component 2
+- <!-- Authentication, authorization, tenancy, isolation, or trust assumptions -->
 
-<!-- Repeat structure as needed -->
+### Common Weaknesses
 
-####  Subcomponent 2.1
+- <!-- Misconfigurations, exposure patterns, or recurring failure modes -->
 
-<!-- Repeat structure as needed -->
+## Defensive Notes
+
+### High-Value Controls
+
+- <!-- Controls that meaningfully reduce risk for this surface -->
+
+### Logging/Telemetry Considerations
+
+- <!-- Useful logs, telemetry, or investigative choke points -->

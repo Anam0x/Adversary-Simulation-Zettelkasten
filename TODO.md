@@ -6,48 +6,51 @@
 
 ## In Progress
 
-- [ ] Modify template structure of the categories to include Dataview queries
+- [x] Modify template structure of the categories to include Dataview queries
   - [x] Primary Categories
-  - [ ] Secondary Categories
-  - [ ] Update `README.md` to include Dataview support for JS queries
+  - [x] Secondary Categories
+  - [x] Update `README.md` to include Dataview support for JS queries
 
-- [ ] Content type template improvements
-  - [ ] NEW
-    - [ ] **Attack Surface**
-    - [ ] **Protocol**
-    - [ ] **Security Control**
-  - [ ] MODIFIED
-    - [ ] **Biography**
-    - [ ] **Offensive Code**
-    - [ ] **Reference Material** (rename from "Mindmap")
-    - [ ] **Technique** (rename from "TTP")
-    - [ ] **Tool**
-    - [ ] **Playbook**
-    - [ ] **Vulnerabilities**
-    - [ ] **Command**
-    - [ ] **IOC**
-    - [ ] **Case Study**
-    - [ ] **Infrastructure**
-    - [ ] **Lab Setup**
+- [x] Content type template improvements
+  - [x] NEW
+    - [x] **Attack Surface**
+    - [x] **Protocol**
+    - [x] **Security Control**
+  - [x] MODIFIED
+    - [x] **Basic**
+    - [x] **Biography**
+    - [x] **Offensive Code**
+    - [x] **Reference Material** (rename from "Mindmap")
+    - [x] **Tradecraft** (rename from "TTP")
+    - [x] **Tool**
+    - [x] **Playbook**
+    - [x] **Vulnerability**
+    - [x] **Command**
+    - [x] **IOC**
+    - [x] **Case Study**
+    - [x] **Infrastructure**
+    - [x] **Lab Setup**
+    - [x] **Idea**
+    - [x] **Study Resources**
 
-- [ ] Example notes for all content types
+- [ ] Refactor/create notes for all content types
   - [ ] Attack Surface
-  - [x] Basic
-  - [x] Biography
+  - [ ] Basic
+  - [ ] Biography
   - [ ] Case Study
-  - [x] Command
+  - [ ] Command
   - [ ] Idea
-  - [x] Infrastructure
+  - [ ] Infrastructure
   - [ ] IOC
   - [ ] Lab Setup
   - [ ] Offensive Code
-  - [x] Playbook
+  - [ ] Playbook
   - [ ] Protocol
   - [ ] Reference Material
   - [ ] Security Control
-  - [x] Study Resources
-  - [ ] Technique
-  - [x] Tool
+  - [ ] Study Resources
+  - [ ] Tool
+  - [ ] Tradecraft
   - [ ] Vulnerability
 
 ### High Priority (Core Functionality and Usability)

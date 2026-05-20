@@ -4,17 +4,20 @@
 > > [!tip]
 > > Curate and organize cheatsheets, visual guides, diagrams, and external learning resources for quick reference.
 
-## Content Type
+## Summary
 
-- [ ] Cheatsheet
-- [ ] Visual Diagram/Mindmap
-- [ ] Online Resource
-- [ ] Quick Reference Guide
-- [ ] Other: ___________
+<!-- Briefly explain what this reference contains and when to consult it. -->
 
-> [!todo] 
-> Insert graphic/embed content
+## Embedded Reference/Notes
+
+> [!todo]
+> Insert graphic, excerpt, embed, or structured notes here if appropriate.
 
 ## Key Takeaways
 
-- 
+- <!-- Most useful idea or reminder -->
+- <!-- Most useful idea or reminder -->
+
+## When To Use This
+
+- <!-- Trigger conditions, scenarios, or notes it pairs well with -->

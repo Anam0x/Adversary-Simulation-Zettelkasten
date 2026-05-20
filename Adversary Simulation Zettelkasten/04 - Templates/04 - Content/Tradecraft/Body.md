@@ -1,141 +1,72 @@
-## Description
+## Overview
 
 > [!todo] Todo: DELETE ME
 > > [!tip]
-> > Document offensive techniques, tactics, and procedures (TTPs) from established frameworks or custom tradecraft.
+> > Document adversary behavior, operational procedure, and defensive implications for a specific tradecraft pattern.
 
-## Access Requirements
+## Objective
 
-### Host
+<!-- Briefly explain what this tradecraft achieves for the operator and when it is useful. -->
 
-- [ ] Prerequisite 1
-	- [ ] Prerequisite 1.1
-- [ ] Prerequisite 2
-	- [ ] Prerequisite 2.1
+## Preconditions
 
-### Network
+### Host/Identity Requirements
 
-- [ ] Prerequisite 1
-	- [ ] Prerequisite 1.1
-- [ ] Prerequisite 2
-	- [ ] Prerequisite 2.1
+- <!-- Required access, privileges, tokens, software state, or identity context -->
+
+### Network/Environmental Requirements
+
+- <!-- Required reachability, protocol access, trust relationships, or exposed services -->
 
 ## Procedure
 
 1. <!-- Step 1 -->
 2. <!-- Step 2 -->
+3. <!-- Step 3 -->
 
-## Related Techniques
+## Variants
 
-- Add link(s) [[]] back to related TECHNIQUE content notes
+- <!-- Common implementation variants, branches, or notable differences across platforms -->
 
 ## Operational Considerations
 
-<!-- Add any concerns related to live deployment of this technique -->
-<!-- Delete any unnecessary sections -->
+### OPSEC And Evasion
 
-### Denial of Service Risk
+- <!-- Visibility risks, noisy steps, and evasion opportunities -->
 
-- 
+### Reliability/Failure Modes
 
-### OPSEC and Evasion
-
-- 
-
-### Common Issues
-
-- 
+- <!-- Common issues, environmental dependencies, or breakpoints -->
 
 ### Success Indicators
 
-- 
+- <!-- Observable signs that the tradecraft worked as intended -->
 
-## Detections
+## Detection And Response
 
-### Host
+### Host Signals
 
-### Network
+- <!-- Process, file, registry, or identity-side indicators -->
 
----
+### Network Signals
 
-## Connected Notes
+- <!-- Protocol, connection, or traffic-side indicators -->
 
-### Related Tools
-```dataview
-LIST
-FROM "03 - Content"
-WHERE type = "Tool"
-  AND contains(implements-techniques, this.file.link)
-SORT tool-category ASC, file.name ASC
-```
+### Defensive Friction
 
-### Related Commands
-```dataview
-LIST
-FROM "03 - Content"
-WHERE type = "Command"
-  AND contains(related-techniques, this.file.link)
-SORT platform ASC, file.name ASC
-```
+- <!-- Controls or hardening measures that most meaningfully disrupt this tradecraft -->
 
-### Related Security Controls
-```dataview
-TABLE control-type AS "Type", bypass-difficulty AS "Bypass Difficulty"
-FROM "03 - Content"
-WHERE type = "Security Control"
-  AND contains(file.outlinks, this.file.link)
-SORT bypass-difficulty DESC, file.name ASC
-```
+## References And Examples
 
-### Related Case Studies
-```dataview
-LIST
-FROM "03 - Content"
-WHERE type = "Case Study"
-  AND contains(techniques-used, this.file.link)
-SORT engagement-date DESC
-```
+### Procedure Examples
 
-### Related Playbooks
-```dataview
-LIST
-FROM "03 - Content"
-WHERE type = "Playbook"
-  AND contains(required-techniques, this.file.link)
-SORT complexity ASC
-```
+| Source | Actor/Tool/Campaign     | Description | Reference |
+| ------ | ----------------------- | ----------- | --------- |
 
-### Related Offensive Code
-```dataview
-LIST
-FROM "03 - Content"
-WHERE type = "Offensive Code"
-  AND contains(implements-technique, this.file.link)
-SORT language ASC
-```
+### Framework Mappings
 
-## Procedure Examples
-
-| Source | Actor/Tool/Campaign | Description | Reference |
-| ------ | ------------------- | ----------- | --------- |
-
-## Mitigations
-
-| Mitigation | Description | Framework Reference |
-| ---------- | ----------- | ------------------- |
-
-## Detection
-
-| Data Source | Data Component | Detection Logic | Framework Reference |
-| ----------- | -------------- | --------------- | ------------------- |
-
-## Framework Mappings
-
-> [!todo] 
-> Cross-reference to multiple frameworks when applicable, otherwise delete this section.
-
-| Framework        | ID  | Name | URL |
-| ---------------- | --- | ---- | --- |
-| MITRE ATT&CK     |     |      |     |
-| Kill Chain Phase |     |      |     |
-| Other            |     |      |     |
+| Framework    | ID | Name | URL |
+| ------------ | -- | ---- | --- |
+| MITRE ATT&CK |    |      |     |
+| Kill Chain   |    |      |     |
+| Other        |    |      |     |

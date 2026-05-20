@@ -2,71 +2,66 @@
 
 > [!todo] Todo: DELETE ME
 > > [!tip]
-> > Document source code analysis and complete implementations of offensive security code components (e.g., payloads, droppers, loaders, stagers, encryptors, and exploits).
+> > Document what the code does, how it is structured, and the operational tradeoffs involved in using or studying it.
 
-## Component Information
+## Purpose
 
-**Type**: (e.g., Payload, Dropper, Loader, Stager, Shellcode, Encryptor, Exploit)
-**Language**:
-**Purpose**:
-**Target Environment**:
+- **Problem Solved**: <!-- What operational need this code addresses -->
+- **Expected Outcome**: <!-- What the operator or analyst should get from running it -->
+- **Scope**: <!-- Payload, exploit, helper module, research PoC, etc. -->
 
-## Functionality
+## Implementation Notes
 
-- **Primary Function**:
-- **Key Capabilities**:
-	- 
-- **Dependencies**:
-	- 
+### Entry Points
 
-## OPSEC Considerations
+- <!-- Main execution path(s), exported functions, CLI, loader, etc. -->
 
----
+### Core Logic
 
-## Technical Implementation
+- <!-- Short walkthrough of the most important routines or execution stages -->
 
-### Step 1: Example Step
+### Dependencies
 
-```python
-# Code snippet with explanation...
-```
+- <!-- Libraries, services, runtime assumptions, or companion files -->
 
-### Step 2: Example Step
+## Usage
 
-```cs
-// Code snippet with explanation...
-```
-
----
-
-## File Contents
-
-### `file1.py`
-
-```python
-
-```
-
-### `file2.cs`
-
-```c#
-
-```
-
----
-
-## Usage Examples
+### Build/Setup
 
 ```bash
-# Compilation
-
-# Execution
-
+# Build, compile, or prepare the code
 ```
 
----
+### Execution
 
-## Detection Notes
+```bash
+# Example invocation
+```
 
-- **Common Signatures**:
-- **Behavioral Indicators**:
+### Expected Output
+
+- <!-- Artifacts, network behavior, console output, or post-conditions -->
+
+## Detection And OPSEC
+
+### Detection Considerations
+
+- <!-- Common signatures, telemetry, or suspicious behaviors -->
+
+### Operational Risks
+
+- <!-- Loud behavior, stability concerns, or failure cases -->
+
+### Hardening/Variants
+
+- <!-- Ways the code is commonly adapted, modified, or constrained -->
+
+## Analyst Notes
+
+### Important Functions/Files
+
+- <!-- Point to the highest-value files or routines to review -->
+
+### Open Questions
+
+- <!-- Unknowns, gaps, or follow-up reverse engineering tasks -->

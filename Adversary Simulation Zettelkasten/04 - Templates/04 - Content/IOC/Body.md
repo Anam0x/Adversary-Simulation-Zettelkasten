@@ -2,21 +2,35 @@
 
 > [!todo] Todo: DELETE ME
 > > [!tip]
-> > Catalog indicators of compromise linked to specific threat actors, tools, or techniques.
+> > Catalog indicators of compromise, the context around them, and how they should be detected or investigated.
 
-## Details
+## Indicator Context
 
-## Detection
+- **What it is**: <!-- Short description of the indicator -->
+- **Why it matters**: <!-- Threat relevance or investigative value -->
+- **Scope/Confidence Notes**: <!-- Any ambiguity, age, or quality concerns -->
 
-YARA rule (if applicable):
+## Detection And Investigation
+
+### Detection Logic
+
+- <!-- How this IOC is typically matched or searched for -->
+
+### False Positive Considerations
+
+- <!-- Benign overlaps or environmental caveats -->
+
+### Triage Notes
+
+- <!-- Where to pivot next if this IOC is observed -->
+
+### YARA/Rule Snippet
+
 ```
-
+# Optional rule content
 ```
 
 ## Related Threats/Campaigns
 
-| Threat Actor / Campaign | Description                                                 | Reference / Report                          |
-| ----------------------- | ----------------------------------------------------------- | ------------------------------------------- |
-| APT29                   | Russian-linked group known for stealthy phishing campaigns. | [Mandiant Report](https://www.mandiant.com) |
-| Emotet                  | Banking trojan turned modular malware platform.             | [CISA Advisory](https://cisa.gov)           |
-| SolarWinds Campaign     | Supply chain compromise with widespread impact.             | [FireEye Analysis](https://fireeye.com)     |
+| Threat Actor/Campaign | Description | Reference / Report |
+| ----------------------- | ----------- | ------------------ |

@@ -2,12 +2,26 @@
 
 > [!todo] Todo: DELETE ME
 > > [!tip]
-> > Outline learning objectives, exercises, and key takeaways from courses, certifications, and training programs.
+> > Outline what the resource teaches, how to use it effectively, and what is worth retaining afterward.
 
 ## Learning Objectives
 
-## Exercises or Lab Work
+- <!-- What you expect to learn from this resource -->
+- <!-- Which topics or skills it covers best -->
 
-| Exercise/Lab | Link(s) to Debrief/Note |
-| ------------ | ----------------------- |
-|              |                         |
+## Exercises/Lab Work
+
+| Exercise/Lab | Link(s) to Debrief/Note | Notes |
+| ------------ | ----------------------- | ----- |
+
+## Recommended Use
+
+- <!-- Best audience, prerequisite knowledge, or order of consumption -->
+
+## Key Takeaways
+
+- <!-- Most important lessons, heuristics, or recurring themes -->
+
+## Follow-up
+
+- [ ] <!-- Additional labs, debrief notes, or related resources to review -->

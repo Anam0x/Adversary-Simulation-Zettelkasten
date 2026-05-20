@@ -21,32 +21,40 @@ LIMIT 10
 
 #### Related Tradecraft
 ```dataview
-LIST WITHOUT ID related-tradecraft
-WHERE file = this.file
-FLATTEN related-tradecraft
-SORT related-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.related-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Related Vulnerabilities
 ```dataview
-LIST WITHOUT ID related-vulnerabilities
-WHERE file = this.file
-FLATTEN related-vulnerabilities
-SORT related-vulnerabilities ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Vulnerability"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.related-vulnerabilities, file.link)
+SORT file.name ASC
 ```
 
 #### Related Security Controls
 ```dataview
-LIST WITHOUT ID related-controls
-WHERE file = this.file
-FLATTEN related-controls
-SORT related-controls ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Security Control"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.related-controls, file.link)
+SORT file.name ASC
 ```
 
 #### Related Tools
 ```dataview
-LIST WITHOUT ID related-tools
-WHERE file = this.file
-FLATTEN related-tools
-SORT related-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.related-tools, file.link)
+SORT file.name ASC
 ```

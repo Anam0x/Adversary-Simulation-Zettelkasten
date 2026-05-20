@@ -22,16 +22,20 @@ LIMIT 10
 
 #### Practices Tradecraft
 ```dataview
-LIST WITHOUT ID practices-tradecraft
-WHERE file = this.file
-FLATTEN practices-tradecraft
-SORT practices-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.practices-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Uses Tools
 ```dataview
-LIST WITHOUT ID uses-tools
-WHERE file = this.file
-FLATTEN uses-tools
-SORT uses-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.uses-tools, file.link)
+SORT file.name ASC
 ```

@@ -21,16 +21,20 @@ LIMIT 10
 
 #### Covers Tradecraft
 ```dataview
-LIST WITHOUT ID covers-tradecraft
-WHERE file = this.file
-FLATTEN covers-tradecraft
-SORT covers-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.covers-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Covers Tools
 ```dataview
-LIST WITHOUT ID covers-tools
-WHERE file = this.file
-FLATTEN covers-tools
-SORT covers-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.covers-tools, file.link)
+SORT file.name ASC
 ```

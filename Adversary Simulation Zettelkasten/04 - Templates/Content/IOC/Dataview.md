@@ -21,16 +21,20 @@ LIMIT 10
 
 #### Associated Tradecraft
 ```dataview
-LIST WITHOUT ID associated-tradecraft
-WHERE file = this.file
-FLATTEN associated-tradecraft
-SORT associated-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.associated-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Associated Tools
 ```dataview
-LIST WITHOUT ID associated-tools
-WHERE file = this.file
-FLATTEN associated-tools
-SORT associated-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.associated-tools, file.link)
+SORT file.name ASC
 ```

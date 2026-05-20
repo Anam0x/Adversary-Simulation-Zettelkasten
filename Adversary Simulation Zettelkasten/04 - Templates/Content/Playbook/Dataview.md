@@ -21,16 +21,20 @@ LIMIT 10
 
 #### Required Tradecraft
 ```dataview
-LIST WITHOUT ID required-tradecraft
-WHERE file = this.file
-FLATTEN required-tradecraft
-SORT required-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.required-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Required Tools
 ```dataview
-LIST WITHOUT ID required-tools
-WHERE file = this.file
-FLATTEN required-tools
-SORT required-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.required-tools, file.link)
+SORT file.name ASC
 ```

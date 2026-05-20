@@ -18,16 +18,20 @@ LIMIT 10
 
 #### Used In Tradecraft
 ```dataview
-LIST WITHOUT ID used-in-tradecraft
-WHERE file = this.file
-FLATTEN used-in-tradecraft
-SORT used-in-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.used-in-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Used By Tools
 ```dataview
-LIST WITHOUT ID used-by-tools
-WHERE file = this.file
-FLATTEN used-by-tools
-SORT used-by-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.used-by-tools, file.link)
+SORT file.name ASC
 ```

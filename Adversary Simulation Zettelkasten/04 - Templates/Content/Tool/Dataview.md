@@ -21,18 +21,22 @@ LIMIT 10
 
 #### Implements Tradecraft
 ```dataview
-LIST WITHOUT ID implements-tradecraft
-WHERE file = this.file
-FLATTEN implements-tradecraft
-SORT implements-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.implements-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Used In Playbooks
 ```dataview
-LIST WITHOUT ID used-in-playbooks
-WHERE file = this.file
-FLATTEN used-in-playbooks
-SORT used-in-playbooks ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Playbook"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.used-in-playbooks, file.link)
+SORT file.name ASC
 ```
 
 ### Reverse Relationships

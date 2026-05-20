@@ -21,24 +21,30 @@ LIMIT 10
 
 #### Abused By Tradecraft
 ```dataview
-LIST WITHOUT ID abused-by-tradecraft
-WHERE file = this.file
-FLATTEN abused-by-tradecraft
-SORT abused-by-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.abused-by-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Secured By Controls
 ```dataview
-LIST WITHOUT ID secured-by-controls
-WHERE file = this.file
-FLATTEN secured-by-controls
-SORT secured-by-controls ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Security Control"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.secured-by-controls, file.link)
+SORT file.name ASC
 ```
 
 #### Related Tools
 ```dataview
-LIST WITHOUT ID related-tools
-WHERE file = this.file
-FLATTEN related-tools
-SORT related-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.related-tools, file.link)
+SORT file.name ASC
 ```

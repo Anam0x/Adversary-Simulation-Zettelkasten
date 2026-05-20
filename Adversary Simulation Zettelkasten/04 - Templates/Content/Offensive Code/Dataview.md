@@ -21,24 +21,30 @@ LIMIT 10
 
 #### Implements Tradecraft
 ```dataview
-LIST WITHOUT ID implements-tradecraft
-WHERE file = this.file
-FLATTEN implements-tradecraft
-SORT implements-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.implements-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Targets Vulnerabilities
 ```dataview
-LIST WITHOUT ID targets-vulnerabilities
-WHERE file = this.file
-FLATTEN targets-vulnerabilities
-SORT targets-vulnerabilities ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Vulnerability"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.targets-vulnerabilities, file.link)
+SORT file.name ASC
 ```
 
 #### Uses Protocols
 ```dataview
-LIST WITHOUT ID uses-protocols
-WHERE file = this.file
-FLATTEN uses-protocols
-SORT uses-protocols ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Protocol"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.uses-protocols, file.link)
+SORT file.name ASC
 ```

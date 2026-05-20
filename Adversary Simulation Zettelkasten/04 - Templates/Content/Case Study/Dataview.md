@@ -18,24 +18,30 @@ LIMIT 10
 
 #### Used Tradecraft
 ```dataview
-LIST WITHOUT ID used-tradecraft
-WHERE file = this.file
-FLATTEN used-tradecraft
-SORT used-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.used-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Used Tools
 ```dataview
-LIST WITHOUT ID used-tools
-WHERE file = this.file
-FLATTEN used-tools
-SORT used-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.used-tools, file.link)
+SORT file.name ASC
 ```
 
 #### Exploited Vulnerabilities
 ```dataview
-LIST WITHOUT ID exploited-vulnerabilities
-WHERE file = this.file
-FLATTEN exploited-vulnerabilities
-SORT exploited-vulnerabilities ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Vulnerability"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.exploited-vulnerabilities, file.link)
+SORT file.name ASC
 ```

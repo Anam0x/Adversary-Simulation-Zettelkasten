@@ -21,24 +21,30 @@ LIMIT 10
 
 #### Supports Tradecraft
 ```dataview
-LIST WITHOUT ID supports-tradecraft
-WHERE file = this.file
-FLATTEN supports-tradecraft
-SORT supports-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.supports-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Supports Tools
 ```dataview
-LIST WITHOUT ID supports-tools
-WHERE file = this.file
-FLATTEN supports-tools
-SORT supports-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.supports-tools, file.link)
+SORT file.name ASC
 ```
 
 #### Supports Playbooks
 ```dataview
-LIST WITHOUT ID supports-playbooks
-WHERE file = this.file
-FLATTEN supports-playbooks
-SORT supports-playbooks ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Playbook"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.supports-playbooks, file.link)
+SORT file.name ASC
 ```

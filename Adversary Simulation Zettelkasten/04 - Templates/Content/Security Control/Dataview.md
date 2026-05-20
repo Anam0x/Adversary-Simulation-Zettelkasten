@@ -21,18 +21,22 @@ LIMIT 10
 
 #### Detects Tradecraft
 ```dataview
-LIST WITHOUT ID detects-tradecraft
-WHERE file = this.file
-FLATTEN detects-tradecraft
-SORT detects-tradecraft ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.detects-tradecraft, file.link)
+SORT file.name ASC
 ```
 
 #### Known Bypasses
 ```dataview
-LIST WITHOUT ID known-bypasses
-WHERE file = this.file
-FLATTEN known-bypasses
-SORT known-bypasses ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tradecraft"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.known-bypasses, file.link)
+SORT file.name ASC
 ```
 
 ### Reverse Relationships

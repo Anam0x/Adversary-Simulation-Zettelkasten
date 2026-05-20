@@ -1,7 +1,8 @@
 ## Overview
 
-> [!tip]
-> Create step-by-step procedures and checklists for completing specific operational objectives or security tasks.
+> [!todo] Todo: DELETE ME
+> > [!tip]
+> > Create step-by-step procedures and checklists for completing specific operational objectives or security tasks.
 
 ## Steps
 

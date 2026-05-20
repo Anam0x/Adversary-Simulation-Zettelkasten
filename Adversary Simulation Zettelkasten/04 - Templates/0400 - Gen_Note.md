@@ -5,7 +5,7 @@
  * This script automates the creation of hierarchical notes for a red team reference guide:
  * - Primary Categories (🥇): High-level topics like "Penetration Test", "Red Team"
  * - Secondary Categories (🥈): Mid-level topics like "Active Directory", "Post-Exploitation" 
- * - Content Notes (⚛️): Atomic notes with specific content types like "Tools", "TTPs", "Payloads"
+ * - Content Notes (⚛️): Atomic notes with specific content types like "Tools", "Tradecraft", and "Payloads"
  * 
  * Features:
  * - Interactive note type selection with validation
@@ -74,6 +74,262 @@ const RESERVED_NAMES = /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\.|$)/i;
 const EMOJI_REGEX = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA70}-\u{1FAFF}]|[\u{2300}-\u{23FF}]|[\u{2B50}]|[\u{2194}-\u{21AA}]|[\u{231A}-\u{231B}]|[\u{25AA}-\u{25FE}]/u;
 const DIVIDER = "\n\n---\n\n";
 const TIMESTAMP = "*Created Date*: <%+tp.file.creation_date(\"MMMM Do YYYY (HH:mm a)\")%\>  \n*Last Modified Date*: \<%+tp.file.last_modified_date(\"MMMM Do YYYY (HH:mm a)\")%\>";
+const NOTE_STATUS = {
+    DRAFT: "✍️ Draft",
+    READY: "☑️ Ready"
+};
+const QUERY_TIERS = {
+    NONE: "None",
+    LIGHTWEIGHT: "Lightweight",
+    RICH: "Rich"
+};
+
+const UNIVERSAL_CONTENT_PROPERTIES = [
+    { name: "aliases", type: "list[text]", required: false, prompt: "Aliases" },
+    { name: "tags", type: "list[text]", required: false, prompt: "Search tags" },
+    { name: "primary-categories", type: "list[link]", required: true, prompt: "Primary categories" },
+    { name: "secondary-categories", type: "list[link]", required: true, prompt: "Secondary categories" },
+    { name: "type", type: "text", required: true, prompt: "Content type label" }
+];
+
+const OTHER_OPTION = "Other";
+
+/**
+ * Appends a reusable "Other" option to a controlled vocabulary while ensuring it stays last.
+ * @param {string[]} values - Ordered list of controlled vocabulary values.
+ * @returns {string[]} - New vocabulary array with "Other" appended at the end.
+ */
+function withOtherOption(values = []) {
+    const filteredValues = values.filter(value => value !== OTHER_OPTION);
+    return [...filteredValues, OTHER_OPTION];
+}
+
+/**
+ * Creates starter Dataview template content for a new custom content type based on the selected query tier.
+ * @param {string} queryTier - Query tier constant from QUERY_TIERS.
+ * @returns {string} - Markdown content for the starter `Dataview.md` file.
+ */
+function createStarterDataviewTemplate(queryTier) {
+    switch (queryTier) {
+        case QUERY_TIERS.RICH:
+            return [
+                "## Related Notes",
+                "",
+                "### Same Classification",
+                "",
+                "### Typed Relationships",
+                "",
+                "### Reverse Relationships"
+            ].join("\n");
+        case QUERY_TIERS.LIGHTWEIGHT:
+            return [
+                "## Related Notes",
+                "",
+                "### Typed Relationships",
+                "",
+                "### Same Classification"
+            ].join("\n");
+        case QUERY_TIERS.NONE:
+        default:
+            return [
+                "## Related Notes",
+                "",
+                "<!-- Add Dataview queries here if this content type later benefits from automatic discovery. -->"
+            ].join("\n");
+    }
+}
+
+const CONTROLLED_VALUES = {
+    CONFIDENCE_LEVELS: ["High", "Medium", "Low"],
+    AFFECTED_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cloud", "Network", "Application", "SaaS", "Identity", "Email", "Hypervisor", "Database", "Mobile", "Kubernetes", "Entra ID", "Active Directory"]),
+    ATTACK_SURFACE_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cloud", "Network", "SaaS", "Hardware"]),
+    ATTACK_SURFACE_DEPLOYMENT_MODELS: withOtherOption(["Cloud", "On-Premises", "Hybrid", "Containerized"]),
+    ATTACK_SURFACE_AUTHENTICATION_METHODS: withOtherOption(["API Keys", "OAuth", "OpenID Connect", "SAML", "SSH", "Certificates", "Kerberos", "NTLM", "Basic Auth", "Digest", "LDAP Bind", "RADIUS", "TACACS+", "MFA", "Passkeys/FIDO2"]),
+    CASE_STUDY_ENGAGEMENT_TYPES: withOtherOption(["Red Team", "Penetration Test", "Purple Team", "Real-World Incident", "Training Exercise", "APT Campaign"]),
+    COMMAND_EXECUTION_ENVIRONMENTS: withOtherOption(["Windows", "Linux", "macOS", "Container", "AWS", "Azure", "GCP"]),
+    COMMAND_TARGET_ENVIRONMENTS: withOtherOption(["Active Directory", "Entra ID", "Microsoft 365", "AWS", "Azure", "GCP", "Kubernetes", "Network", "Database", "Email", "SaaS", "Web Application"]),
+    CONTROL_CATEGORIES: withOtherOption(["EDR", "AV", "SIEM", "WAF", "IDS/IPS", "DLP", "Firewall", "MFA", "SAST", "DAST", "SCA", "Identity Monitoring", "NDR", "XDR", "SOAR", "PAM", "CASB", "ZTNA", "MDM", "DNS Filtering", "Email Security", "Sandboxing", "IAM", "CSPM", "CWPP", "CIEM"]),
+    CONTROLLED_PROVIDER_STATUS: ["Not Started", "In Progress", "Completed", "Revisit"],
+    DETECTION_DIFFICULTY: ["Low", "Medium", "High", "Very High"],
+    DIFFICULTY_LEVELS: ["Beginner", "Intermediate", "Advanced", "Expert"],
+    ENTRY_POINTS: withOtherOption(["CLI", "DLL Export", "Macro", "Shellcode Loader", "Web Endpoint", "Script", "Service", "Driver", "BOF", "Beacon Object File", "Reflective Loader", "COM Object", "Browser Extension", "Package"]),
+    IDEA_STATUS: ["Draft", "Exploring", "Testing", "Archived"],
+    INFRASTRUCTURE_PLATFORMS: withOtherOption(["AWS", "Azure", "GCP", "On-Premises", "Hybrid", "Container", "Windows", "Linux"]),
+    INFRASTRUCTURE_TYPES: withOtherOption(["C2 Server", "Redirector", "Phishing Infrastructure", "Lab Environment", "Cloud Architecture", "Network Topology", "Team Server", "Payload Hosting", "Staging Server", "VPN", "Domain Fronting", "Mail Infrastructure", "Identity Infrastructure", "Container Cluster"]),
+    IOC_TYPES: withOtherOption(["Hash", "IP Address", "Domain", "URL", "Email", "File Path", "Registry Key", "Mutex", "User-Agent", "Certificate", "Event ID", "JA3/JA4", "Named Pipe", "Scheduled Task", "Service Name", "Process Name", "Command Line", "Hostname", "ASN"]),
+    LAB_PURPOSES: withOtherOption(["Active Directory Lab", "Cloud Environment", "Vulnerable Web App", "CTF", "Training", "Malware Analysis", "Detection Engineering", "Protocol Research", "Exploit Development", "Web App Testing", "Phishing Simulation", "Cloud Privilege Escalation"]),
+    LAB_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cloud", "Network", "Hardware"]),
+    LANGUAGES: withOtherOption(["C", "C++", "C#", "Python", "PowerShell", "Assembly", "Rust", "Go", "JavaScript", "TypeScript", "Java", "PHP", "Ruby", "VBA", "VBScript", "Swift", "Kotlin"]),
+    OFFENSIVE_CODE_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cross-Platform", "Cloud", "Identity", "SaaS", "Email", "Hypervisor", "Database", "Mobile", "Kubernetes", "Entra ID", "Active Directory"]),
+    OPSEC_RISK: ["Low", "Medium", "High", "Critical"],
+    PERMISSIONS_REQUIRED: withOtherOption(["User", "Authenticated User", "Administrator", "SYSTEM", "root"]),
+    PLAYBOOK_SCOPES: withOtherOption(["External", "Internal", "Cloud", "Physical", "Social Engineering", "Web Application", "Identity", "Email", "Kubernetes", "Multi-Stage"]),
+    PRIMARY_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cloud", "Identity", "SaaS", "Email", "Hypervisor", "Database", "Mobile", "Kubernetes", "Entra ID", "Active Directory"]),
+    PROTECTED_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cloud", "Network", "Container", "Identity", "SaaS", "Email", "Hypervisor", "Database", "Mobile", "Kubernetes", "Entra ID", "Active Directory"]),
+    PROTOCOL_AUTHENTICATION_METHODS: withOtherOption(["Kerberos", "NTLM", "Certificates", "Tokens", "API Keys", "OAuth", "OpenID Connect", "Basic Auth", "Digest", "LDAP Bind", "RADIUS", "TACACS+", "MFA", "Passkeys/FIDO2"]),
+    PROTOCOL_FAMILIES: withOtherOption(["Application", "Network", "Authentication", "Industrial", "Cloud API", "Identity", "Directory", "Management", "Messaging", "Remote Access", "Web", "File Sharing", "Database", "Service Discovery"]),
+    REFERENCE_RESOURCE_TYPES: withOtherOption(["Book", "Article", "Blog Post", "Whitepaper", "Documentation", "Video", "Research Paper", "Conference Talk", "Cheat Sheet", "RFC/Standard", "Vendor Documentation", "GitHub Repository"]),
+    SEVERITY_LEVELS: ["Critical", "High", "Medium", "Low"],
+    SHELL_ENVIRONMENTS: withOtherOption(["PowerShell", "pwsh", "CMD", "Bash", "sh", "ZSH", "Fish", "AWS CLI", "Azure CLI", "SQL Shell", "KQL", "Graph PowerShell", "kubectl", "Terraform CLI"]),
+    STUDY_RESOURCE_TYPES: withOtherOption(["Course", "Certification", "Lab", "Book", "Article", "Playlist", "Workshop", "Practice Range", "CTF", "Assessment", "Module", "Bootcamp"]),
+    TACTICS: ["Reconnaissance", "Resource Development", "Initial Access", "Execution", "Persistence", "Privilege Escalation", "Defense Evasion", "Credential Access", "Discovery", "Lateral Movement", "Collection", "Command and Control", "Exfiltration", "Impact"],
+    TARGET_PLATFORMS: withOtherOption(["Windows", "Linux", "macOS", "Cloud", "Network", "Container", "Identity", "SaaS", "Email", "Hypervisor", "Database", "Mobile", "Kubernetes", "Entra ID", "Active Directory"])
+};
+
+const CONTENT_TYPE_PROPERTY_SCHEMAS = {
+    "Attack Surface": [
+        { name: "platforms", type: "list[text]", required: true, promptOnCreate: true, prompt: "Platforms", allowedValues: CONTROLLED_VALUES.ATTACK_SURFACE_PLATFORMS },
+        { name: "deployment-models", type: "list[text]", required: false, promptOnCreate: true, prompt: "Deployment models", allowedValues: CONTROLLED_VALUES.ATTACK_SURFACE_DEPLOYMENT_MODELS },
+        { name: "authentication-methods", type: "list[text]", required: false, promptOnCreate: true, prompt: "Authentication methods", allowedValues: CONTROLLED_VALUES.ATTACK_SURFACE_AUTHENTICATION_METHODS },
+        { name: "related-controls", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related security controls", targetContentTypes: ["Security Control"] },
+        { name: "related-tradecraft", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tradecraft notes", targetContentTypes: ["Tradecraft"] },
+        { name: "related-vulnerabilities", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related vulnerabilities", targetContentTypes: ["Vulnerability"] },
+        { name: "related-tools", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tools", targetContentTypes: ["Tool"] }
+    ],
+    "Basic": [],
+    "Biography": [
+        { name: "organizations", type: "list[text|link]", required: false, prompt: "Organizations", example: "[[TrustedSec]], SpecterOps" },
+        { name: "roles", type: "list[text]", required: false, prompt: "Roles", example: "'Researcher', 'Professor'" },
+        { name: "active-from", type: "date", required: false, prompt: "Active from date" },
+        { name: "active-to", type: "date", required: false, prompt: "Active to date" },
+        { name: "related-tradecraft", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "related-tools", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tools", targetContentTypes: ["Tool"] }
+    ],
+    "Case Study": [
+        { name: "engagement-type", type: "text", required: true, promptOnCreate: true, prompt: "Engagement type", allowedValues: CONTROLLED_VALUES.CASE_STUDY_ENGAGEMENT_TYPES },
+        { name: "target-environment", type: "text", required: true, prompt: "Target environment", example: "'Internal Windows estate with legacy PKI'" },
+        { name: "used-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "used-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used tools", targetContentTypes: ["Tool"] },
+        { name: "exploited-vulnerabilities", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Exploited vulnerabilities", targetContentTypes: ["Vulnerability"] },
+        { name: "start-date", type: "date", required: false, prompt: "Start date" },
+        { name: "end-date", type: "date", required: false, prompt: "End date" }
+    ],
+    "Command": [
+        { name: "execution-environments", type: "list[text]", required: true, promptOnCreate: true, prompt: "Execution environments", allowedValues: CONTROLLED_VALUES.COMMAND_EXECUTION_ENVIRONMENTS },
+        { name: "target-environments", type: "list[text]", required: false, promptOnCreate: true, prompt: "Target environments", allowedValues: CONTROLLED_VALUES.COMMAND_TARGET_ENVIRONMENTS },
+        { name: "shell-environments", type: "list[text]", required: false, promptOnCreate: true, prompt: "Shell environments", allowedValues: CONTROLLED_VALUES.SHELL_ENVIRONMENTS },
+        { name: "permissions-required", type: "list[text]", required: false, promptOnCreate: true, prompt: "Permissions required", allowedValues: CONTROLLED_VALUES.PERMISSIONS_REQUIRED },
+        { name: "used-in-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used in tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "used-by-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used by tools", targetContentTypes: ["Tool"] },
+        { name: "supports-remote", type: "boolean", required: false, prompt: "Supports remote usage" }
+    ],
+    "Idea": [
+        { name: "status", type: "text", required: false, promptOnCreate: true, prompt: "Idea status", allowedValues: CONTROLLED_VALUES.IDEA_STATUS },
+        { name: "related-tradecraft", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "related-tools", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tools", targetContentTypes: ["Tool"] },
+        { name: "related-playbooks", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related playbooks", targetContentTypes: ["Playbook"] }
+    ],
+    "Infrastructure": [
+        { name: "infrastructure-type", type: "text", required: true, promptOnCreate: true, prompt: "Infrastructure type", allowedValues: CONTROLLED_VALUES.INFRASTRUCTURE_TYPES },
+        { name: "platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Platforms", allowedValues: CONTROLLED_VALUES.INFRASTRUCTURE_PLATFORMS },
+        { name: "components", type: "list[text|link]", required: false, prompt: "Components", example: "Nginx Redirector, [[Cobalt Strike Team Server]]" },
+        { name: "supports-playbooks", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Supported playbooks", targetContentTypes: ["Playbook"] },
+        { name: "supports-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Supported tools", targetContentTypes: ["Tool"] },
+        { name: "supports-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Supported tradecraft", targetContentTypes: ["Tradecraft"] }
+    ],
+    "IOC": [
+        { name: "ioc-type", type: "text", required: true, promptOnCreate: true, prompt: "IOC type", allowedValues: CONTROLLED_VALUES.IOC_TYPES },
+        { name: "indicator-value", type: "text", required: true, prompt: "Indicator value", example: "185.199.110.153 or login.microsoftonline.com" },
+        { name: "confidence", type: "text", required: false, promptOnCreate: true, prompt: "Confidence", allowedValues: CONTROLLED_VALUES.CONFIDENCE_LEVELS },
+        { name: "associated-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Associated tools", targetContentTypes: ["Tool"] },
+        { name: "associated-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Associated tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "first-seen", type: "date", required: false, prompt: "First seen date" },
+        { name: "last-seen", type: "date", required: false, prompt: "Last seen date" },
+        { name: "active", type: "boolean", required: false, prompt: "Indicator still active" }
+    ],
+    "Lab Setup": [
+        { name: "lab-purpose", type: "text", required: true, promptOnCreate: true, prompt: "Lab purpose", allowedValues: CONTROLLED_VALUES.LAB_PURPOSES },
+        { name: "platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Platforms", allowedValues: CONTROLLED_VALUES.LAB_PLATFORMS },
+        { name: "difficulty", type: "text", required: false, promptOnCreate: true, prompt: "Difficulty", allowedValues: CONTROLLED_VALUES.DIFFICULTY_LEVELS },
+        { name: "estimated-build-time", type: "text", required: false, prompt: "Estimated build time", example: "2 hours" },
+        { name: "practices-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Practiced tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "uses-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used tools", targetContentTypes: ["Tool"] }
+    ],
+    "Offensive Code": [
+        { name: "languages", type: "list[text]", required: true, promptOnCreate: true, prompt: "Languages", allowedValues: CONTROLLED_VALUES.LANGUAGES },
+        { name: "entry-points", type: "list[text]", required: false, promptOnCreate: true, prompt: "Entry points", allowedValues: CONTROLLED_VALUES.ENTRY_POINTS },
+        { name: "implements-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Implemented tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "targets-vulnerabilities", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Targeted vulnerabilities", targetContentTypes: ["Vulnerability"] },
+        { name: "uses-protocols", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used protocols", targetContentTypes: ["Protocol"] },
+        { name: "opsec-risk", type: "text", required: false, promptOnCreate: true, prompt: "OPSEC risk", allowedValues: CONTROLLED_VALUES.OPSEC_RISK },
+        { name: "platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Platforms", allowedValues: CONTROLLED_VALUES.OFFENSIVE_CODE_PLATFORMS }
+    ],
+    "Playbook": [
+        { name: "objective", type: "text", required: true, prompt: "Objective", example: "'Obtain domain admin from a low-privileged foothold'" },
+        { name: "scope", type: "text", required: true, promptOnCreate: true, prompt: "Scope", allowedValues: CONTROLLED_VALUES.PLAYBOOK_SCOPES },
+        { name: "required-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Required tools", targetContentTypes: ["Tool"] },
+        { name: "required-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Required tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "required-access", type: "list[text]", required: false, prompt: "Required access", example: "'Valid domain user credentials', 'VPN access'" },
+        { name: "opsec-risk", type: "text", required: false, promptOnCreate: true, prompt: "OPSEC risk", allowedValues: CONTROLLED_VALUES.OPSEC_RISK },
+        { name: "tested", type: "boolean", required: false, prompt: "Tested" },
+        { name: "last-executed", type: "date", required: false, prompt: "Last executed date" }
+    ],
+    "Protocol": [
+        { name: "protocol-family", type: "text", required: true, promptOnCreate: true, prompt: "Protocol family", allowedValues: CONTROLLED_VALUES.PROTOCOL_FAMILIES },
+        { name: "ports", type: "list[number]", required: false, prompt: "Ports" },
+        { name: "authentication-methods", type: "list[text]", required: false, promptOnCreate: true, prompt: "Authentication methods", allowedValues: CONTROLLED_VALUES.PROTOCOL_AUTHENTICATION_METHODS },
+        { name: "abused-by-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Abused by tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "secured-by-controls", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Secured by controls", targetContentTypes: ["Security Control"] },
+        { name: "related-tools", type: "list[link]", required: true, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Related tools", targetContentTypes: ["Tool"] }
+    ],
+    "Reference Material": [
+        { name: "resource-type", type: "text", required: true, promptOnCreate: true, prompt: "Resource type", allowedValues: CONTROLLED_VALUES.REFERENCE_RESOURCE_TYPES },
+        { name: "authors", type: "list[text]", required: false, prompt: "Authors", example: "Will Schroeder, Lee Christensen" },
+        { name: "publisher", type: "text", required: false, prompt: "Publisher", example: "TrustedSec" },
+        { name: "publication-date", type: "date", required: false, prompt: "Publication date" },
+        { name: "covers-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Covered tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "covers-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Covered tools", targetContentTypes: ["Tool"] },
+        { name: "covers-platforms", type: "list[text]", required: false, prompt: "Covered platforms", example: "Windows, Active Directory" }
+    ],
+    "Security Control": [
+        { name: "control-category", type: "text", required: true, promptOnCreate: true, prompt: "Control category", allowedValues: CONTROLLED_VALUES.CONTROL_CATEGORIES },
+        { name: "protects-platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Protected platforms", allowedValues: CONTROLLED_VALUES.PROTECTED_PLATFORMS },
+        { name: "detects-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Detected tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "known-bypasses", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Known bypasses", targetContentTypes: ["Tradecraft"] },
+        { name: "telemetry-sources", type: "list[text]", required: false, prompt: "Telemetry sources", example: "Sysmon Event ID 1, Windows Security 4688" },
+        { name: "enforcement-points", type: "list[text]", required: false, prompt: "Enforcement points", example: "'Endpoint agent', 'Identity provider'" }
+    ],
+    "Study Resources": [
+        { name: "resource-type", type: "text", required: true, promptOnCreate: true, prompt: "Resource type", allowedValues: CONTROLLED_VALUES.STUDY_RESOURCE_TYPES },
+        { name: "provider", type: "text", required: false, prompt: "Provider", example: "OffSec" },
+        { name: "status", type: "text", required: false, promptOnCreate: true, prompt: "Status", allowedValues: CONTROLLED_VALUES.CONTROLLED_PROVIDER_STATUS },
+        { name: "covers-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Covered tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "covers-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Covered tools", targetContentTypes: ["Tool"] },
+        { name: "covers-platforms", type: "list[text]", required: false, prompt: "Covered platforms", example: "Windows, Azure" },
+        { name: "completed-on", type: "date", required: false, prompt: "Completed on date" }
+    ],
+    "Tool": [
+        { name: "tool-category", type: "text", required: true, prompt: "Tool category", example: "'Password Cracker'" },
+        { name: "operating-platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Operating platforms", allowedValues: CONTROLLED_VALUES.PRIMARY_PLATFORMS },
+        { name: "target-platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Target platforms", allowedValues: CONTROLLED_VALUES.TARGET_PLATFORMS },
+        { name: "implements-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Implemented tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "used-in-playbooks", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used in playbooks", targetContentTypes: ["Playbook"] },
+        { name: "opsec-risk", type: "text", required: false, promptOnCreate: true, prompt: "OPSEC risk", allowedValues: CONTROLLED_VALUES.OPSEC_RISK },
+        { name: "detection-difficulty", type: "text", required: false, promptOnCreate: true, prompt: "Detection difficulty", allowedValues: CONTROLLED_VALUES.DETECTION_DIFFICULTY },
+        { name: "tested", type: "boolean", required: false, prompt: "Tested" }
+    ],
+    "Tradecraft": [
+        { name: "attack-id", type: "text", required: false, prompt: "ATT&CK or framework ID", example: "T1059.001" },
+        { name: "tactic", type: "text", required: true, promptOnCreate: true, prompt: "Tactic", allowedValues: CONTROLLED_VALUES.TACTICS },
+        { name: "platforms", type: "list[text]", required: true, promptOnCreate: true, prompt: "Platforms", allowedValues: CONTROLLED_VALUES.TARGET_PLATFORMS },
+        { name: "permissions-required", type: "list[text]", required: false, promptOnCreate: true, prompt: "Permissions required", allowedValues: CONTROLLED_VALUES.PERMISSIONS_REQUIRED },
+        { name: "supports-remote", type: "boolean", required: false, prompt: "Supports remote" },
+        { name: "data-sources", type: "list[text]", required: false, prompt: "Data sources", example: "Process, PowerShell Transcript, Windows Event Logs" },
+        { name: "uses-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used tools", targetContentTypes: ["Tool"] },
+        { name: "bypasses-controls", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Bypassed controls", targetContentTypes: ["Security Control"] },
+        { name: "exploits-vulnerabilities", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Exploited vulnerabilities", targetContentTypes: ["Vulnerability"] },
+        { name: "uses-protocols", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Used protocols", targetContentTypes: ["Protocol"] }
+    ],
+    "Vulnerability": [
+        { name: "cve-id", type: "text", required: false, prompt: "CVE ID", example: "CVE-2021-34527" },
+        { name: "cvss-score", type: "number", required: false, prompt: "CVSS score" },
+        { name: "severity", type: "text", required: true, promptOnCreate: true, prompt: "Severity", allowedValues: CONTROLLED_VALUES.SEVERITY_LEVELS },
+        { name: "affected-platforms", type: "list[text]", required: false, promptOnCreate: true, prompt: "Affected platforms", allowedValues: CONTROLLED_VALUES.AFFECTED_PLATFORMS },
+        { name: "affects-attack-surfaces", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Affected attack surfaces", targetContentTypes: ["Attack Surface"] },
+        { name: "exploited-by-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Exploited by tradecraft", targetContentTypes: ["Tradecraft"] },
+        { name: "prerequisites", type: "list[text]", required: false, prompt: "Prerequisites", example: "'Authenticated access', 'Reachable RPC service'" }
+    ]
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //                              LOGGING UTILITY                                //
@@ -134,16 +390,976 @@ const Logger = {
  * Shows a user notice with consistent formatting
  * @param {string} message - Message to display
  * @param {"error"|"success"|"suggestion"|"warning"} noticeType - Type of notice
+ * @returns {void} - Shows a transient Obsidian notice.
  */
 function showNotice(message, noticeType) {
 	const emoji = EMOJI_NOTICE[noticeType.toUpperCase()] || "";
 	new Notice(`${emoji} ${message}`);
 }
 
+/**
+ * Displays an error notice using the vault's standard emoji and styling conventions.
+ * @param {string} message - Error message to show to the user.
+ * @returns {void} - Shows a transient Obsidian notice.
+ */
 function showError(message) { showNotice(message, "error"); }
+/**
+ * Displays a success notice using the vault's standard emoji and styling conventions.
+ * @param {string} message - Success message to show to the user.
+ * @returns {void} - Shows a transient Obsidian notice.
+ */
 function showSuccess(message) { showNotice(message, "success"); }
+/**
+ * Displays a suggestion notice using the vault's standard emoji and styling conventions.
+ * @param {string} message - Suggestion message to show to the user.
+ * @returns {void} - Shows a transient Obsidian notice.
+ */
 function showSuggestion(message) { showNotice(message, "suggestion"); }
+/**
+ * Displays a warning notice using the vault's standard emoji and styling conventions.
+ * @param {string} message - Warning message to show to the user.
+ * @returns {void} - Shows a transient Obsidian notice.
+ */
 function showWarning(message) { showNotice(message, "warning"); }
+
+/**
+ * Converts a relative template path into the Obsidian include-link syntax expected by Templater.
+ * @param {string} relativePathWithoutExtension - Relative vault path without the `.md` extension.
+ * @returns {string} - Obsidian include link for `tp.file.include`.
+ */
+function createTemplateIncludePath(relativePathWithoutExtension) {
+    return `[[${relativePathWithoutExtension}]]`;
+}
+
+/**
+ * Builds the full set of template include paths for a content type's component files.
+ * @param {string} contentTypeName - Content type folder name under the content templates directory.
+ * @returns {Object} - Object containing metadataTemplate, bodyTemplate, dataviewTemplate, and footerTemplate paths.
+ */
+function createContentTemplatePaths(contentTypeName) {
+    const basePath = `${PATHS.CONTENT_TEMPLATES}/${contentTypeName}`;
+    return {
+        metadataTemplate: createTemplateIncludePath(`${basePath}/Metadata`),
+        bodyTemplate: createTemplateIncludePath(`${basePath}/Body`),
+        dataviewTemplate: createTemplateIncludePath(`${basePath}/Dataview`),
+        footerTemplate: createTemplateIncludePath(`${basePath}/Footer`)
+    };
+}
+
+/**
+ * Resolves the effective schema for a content type using the built-in in-script schema definitions.
+ * @param {string} contentTypeName - Content type name to resolve.
+ * @returns {Object} - Resolved schema object with universal, type-specific, and combined properties.
+ */
+function getContentTypePropertySchema(contentTypeName) {
+    return buildResolvedContentTypeSchema(contentTypeName);
+}
+
+/**
+ * Builds the final schema used by the note-creation workflow from built-in definitions.
+ * @param {string} contentTypeName - Content type whose schema should be resolved.
+ * @returns {Object} - Resolved schema object with universal, typeSpecific, allProperties, and metadata.
+ */
+function buildResolvedContentTypeSchema(contentTypeName) {
+    const typeSpecificProperties = CONTENT_TYPE_PROPERTY_SCHEMAS[contentTypeName] || [];
+
+    if (!CONTENT_TYPE_PROPERTY_SCHEMAS[contentTypeName]) {
+        Logger.warn("No content type schema found, defaulting to universal properties only", {
+            contentTypeName,
+            availableSchemas: Object.keys(CONTENT_TYPE_PROPERTY_SCHEMAS)
+        });
+    }
+
+    return {
+        universal: UNIVERSAL_CONTENT_PROPERTIES,
+        typeSpecific: typeSpecificProperties,
+        allProperties: [...UNIVERSAL_CONTENT_PROPERTIES, ...typeSpecificProperties]
+    };
+}
+
+/**
+ * Escapes a string so it can be safely interpolated into a regular expression.
+ * @param {string} value - Raw string that may contain regex metacharacters.
+ * @returns {string} - Regex-safe version of the input string.
+ */
+function escapeRegex(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Detects the dominant line ending used by a block of text.
+ * @param {string} text - Text whose newline style should be inspected.
+ * @returns {"\n"|"\r\n"} - Detected line ending, defaulting to LF.
+ */
+function detectLineEnding(text = "") {
+    return text.includes("\r\n") ? "\r\n" : "\n";
+}
+
+/**
+ * Serializes a single property value for safe YAML frontmatter output.
+ * @param {*} value - Raw scalar value to serialize.
+ * @param {string} propertyType - Property type hint used to format booleans, numbers, and links.
+ * @returns {string} - YAML-safe scalar representation.
+ */
+function formatYamlScalar(value, propertyType = "text") {
+    if (value === null || value === undefined || value === "") {
+        return "";
+    }
+
+    if (propertyType === "boolean" || propertyType === "number") {
+        return String(value);
+    }
+
+    if (typeof value === "string" && value.startsWith("[[")) {
+        return `"${value}"`;
+    }
+
+    return String(value);
+}
+
+/**
+ * Serializes an array of values into YAML list syntax.
+ * @param {Array} values - Array of property values to serialize.
+ * @param {string} propertyType - Property type hint used to format each list item.
+ * @returns {string} - YAML list block ready for insertion into frontmatter.
+ */
+function formatYamlList(values, propertyType = "list[text]") {
+    if (!Array.isArray(values) || values.length === 0) {
+        return "  - ";
+    }
+
+    return values
+        .map(value => `  - ${formatYamlScalar(value, propertyType)}`)
+        .join("\n");
+}
+
+/**
+ * Ensures that a scalar frontmatter property exists with the provided value, updating or inserting it as needed.
+ * @param {string} metadata - Raw frontmatter block to modify.
+ * @param {string} propertyName - Property name to insert or update.
+ * @param {*} propertyValue - Value to serialize into the property.
+ * @param {"\n"|"\r\n"} lineEnding - Newline style to preserve when mutating the block.
+ * @returns {string} - Updated frontmatter block containing the requested property.
+ */
+function ensureMetadataProperty(metadata, propertyName, propertyValue, lineEnding = "\n") {
+    const scalarPattern = new RegExp(`^${escapeRegex(propertyName)}:.*$`, "m");
+    const serializedValue = formatYamlScalar(propertyValue, "text");
+
+    if (scalarPattern.test(metadata)) {
+        return metadata.replace(scalarPattern, `${propertyName}: ${serializedValue}`);
+    }
+
+    const closingDelimiter = metadata.lastIndexOf(`${lineEnding}---`);
+    if (closingDelimiter === -1) {
+        throw new Error(`Unable to insert metadata property "${propertyName}" because the closing frontmatter delimiter was not found`);
+    }
+
+    return [
+        metadata.slice(0, closingDelimiter),
+        `${lineEnding}${propertyName}: ${serializedValue}`,
+        metadata.slice(closingDelimiter)
+    ].join("");
+}
+
+/**
+ * Determines whether a property should be prompted during note creation.
+ * @param {Object} propertyDefinition - Normalized property definition from the resolved schema.
+ * @returns {boolean} - True when the property should appear in the creation workflow.
+ */
+function shouldPromptOnCreate(propertyDefinition) {
+    return propertyDefinition?.promptOnCreate === true || propertyDefinition?.required === true;
+}
+
+/**
+ * Determines whether a prompted property may be left empty during note creation.
+ * @param {Object} propertyDefinition - Normalized property definition from the resolved schema.
+ * @returns {boolean} - True when the workflow may preserve placeholders instead of requiring a value.
+ */
+function canLeaveEmptyOnCreate(propertyDefinition) {
+    return propertyDefinition?.allowEmptyOnCreate === true;
+}
+
+/**
+ * Normalizes unknown thrown values into a readable error message string.
+ * @param {*} error - Thrown error object or arbitrary value.
+ * @returns {string} - Human-readable error message.
+ */
+function getErrorMessage(error) {
+    if (error instanceof Error) {
+        return error.message;
+    }
+
+    return String(error || "Unknown error");
+}
+
+/**
+ * Detects whether an error represents a user cancellation rather than an unexpected workflow failure.
+ * @param {*} error - Thrown error object or arbitrary value.
+ * @returns {boolean} - True when the error message matches a known cancellation path.
+ */
+function isCancellationError(error) {
+    const message = getErrorMessage(error);
+    return message === "User cancelled input" || message === "Operation cancelled by user";
+}
+
+/**
+ * Summarizes prompted-property results for completion notices and recovery content.
+ * @param {Object} summary - Raw prompt summary containing prompted, provided, and preserved property arrays.
+ * @returns {Object} - Normalized counts and property-name arrays for downstream messaging.
+ */
+function summarizePromptedPropertyOutcomes(summary = {}) {
+    const provided = Array.isArray(summary.providedProperties) ? summary.providedProperties : [];
+    const preserved = Array.isArray(summary.preservedPlaceholderProperties) ? summary.preservedPlaceholderProperties : [];
+    const promptCount = Number.isFinite(summary.promptedPropertyCount) ? summary.promptedPropertyCount : provided.length + preserved.length;
+
+    return {
+        promptCount,
+        providedCount: provided.length,
+        preservedCount: preserved.length,
+        providedProperties: provided,
+        preservedPlaceholderProperties: preserved
+    };
+}
+
+/**
+ * Filters a resolved schema down to the type-specific properties that should prompt during creation.
+ * @param {Object} schema - Resolved content type schema.
+ * @returns {Object[]} - Array of type-specific property definitions that should prompt on create.
+ */
+function getCreateTimePromptProperties(schema) {
+    return (schema?.typeSpecific || []).filter(property => shouldPromptOnCreate(property));
+}
+
+/**
+ * Builds a quick lookup table from property name to property definition.
+ * @param {Object} schema - Resolved schema containing `allProperties`.
+ * @returns {Object} - Plain object keyed by property name.
+ */
+function buildSchemaLookup(schema) {
+    return Object.fromEntries((schema?.allProperties || []).map(property => [property.name, property]));
+}
+
+/**
+ * Determines whether a property type represents a wiki-link-aware field.
+ * @param {string} propertyType - Schema property type string.
+ * @returns {boolean} - True when the property type includes links.
+ */
+function isLinkProperty(propertyType = "") {
+    return propertyType.includes("link");
+}
+
+/**
+ * Validates whether a string matches the vault's expected date format.
+ * @param {string} value - Candidate date string.
+ * @returns {boolean} - True when the string matches `YYYY-MM-DD`.
+ */
+function isDateString(value) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+/**
+ * Validates whether a string matches the vault's expected date-time format.
+ * @param {string} value - Candidate datetime string.
+ * @returns {boolean} - True when the string matches the supported datetime pattern.
+ */
+function isDateTimeString(value) {
+    return /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2})?$/.test(value);
+}
+
+/**
+ * Normalizes a value into Obsidian wiki-link syntax when appropriate.
+ * @param {*} value - Raw property value supplied by the user or schema.
+ * @returns {*} - Original value or normalized wiki-link string.
+ */
+function normalizeWikiLink(value) {
+    if (typeof value !== "string") {
+        return value;
+    }
+
+    const trimmedValue = value.trim();
+    if (trimmedValue === "") {
+        return trimmedValue;
+    }
+
+    if (trimmedValue.startsWith("[[") && trimmedValue.endsWith("]]")) {
+        return `[[${trimmedValue.slice(2, -2).trim()}]]`;
+    }
+
+    return `[[${trimmedValue}]]`;
+}
+
+/**
+ * Normalizes a prompted property value according to its schema definition before validation.
+ * @param {Object} propertyDefinition - Schema definition describing the property.
+ * @param {*} value - Raw prompted value to normalize.
+ * @returns {*} - Normalized scalar or list value ready for validation.
+ */
+function normalizePropertyValue(propertyDefinition, value) {
+    if (value === null || value === undefined) {
+        return value;
+    }
+
+    if (Array.isArray(value)) {
+        const normalizedList = value
+            .map(item => normalizePropertyValue({ ...propertyDefinition, type: propertyDefinition.type.replace(/^list\[(.+)\]$/, "$1") }, item))
+            .filter(item => item !== null && item !== undefined && item !== "");
+
+        return [...new Set(normalizedList)];
+    }
+
+    if (propertyDefinition.type === "text" || propertyDefinition.type === "date" || propertyDefinition.type === "datetime") {
+        if (typeof value === "string") {
+            return value.trim();
+        }
+    }
+
+    if (propertyDefinition.type === "number") {
+        return typeof value === "number" ? value : Number(value);
+    }
+
+    if (propertyDefinition.type === "boolean") {
+        if (typeof value === "boolean") {
+            return value;
+        }
+
+        if (typeof value === "string") {
+            const normalizedBoolean = value.trim().toLowerCase();
+            if (normalizedBoolean === "true") return true;
+            if (normalizedBoolean === "false") return false;
+        }
+    }
+
+    if (isLinkProperty(propertyDefinition.type)) {
+        return normalizeWikiLink(value);
+    }
+
+    return value;
+}
+
+/**
+ * Validates a normalized property value against its schema definition.
+ * @param {Object} propertyDefinition - Schema definition for the property being checked.
+ * @param {*} value - Normalized value to validate.
+ * @returns {Object} - Validation result object with isValid, error, suggestion, and canProceedAnyway.
+ */
+function validatePropertyValueAgainstDefinition(propertyDefinition, value) {
+    const propertyLabel = propertyDefinition.prompt || propertyDefinition.name;
+
+    if (propertyDefinition.required) {
+        const isMissing = value === null || value === undefined || value === "" || (Array.isArray(value) && value.length === 0);
+        if (isMissing) {
+            throw new Error(`${propertyLabel} is required but no value was provided`);
+        }
+    }
+
+    if (value === null || value === undefined || value === "") {
+        return;
+    }
+
+    if (propertyDefinition.type.startsWith("list[")) {
+        if (!Array.isArray(value)) {
+            throw new Error(`${propertyLabel} must be a list`);
+        }
+
+        value.forEach(item => validatePropertyValueAgainstDefinition(
+            { ...propertyDefinition, type: propertyDefinition.type.replace(/^list\[(.+)\]$/, "$1"), required: false },
+            item
+        ));
+        return;
+    }
+
+    if (propertyDefinition.type === "boolean" && typeof value !== "boolean") {
+        throw new Error(`${propertyLabel} must be true or false`);
+    }
+
+    if (propertyDefinition.type === "number" && (!Number.isFinite(value) || Number.isNaN(value))) {
+        throw new Error(`${propertyLabel} must be a valid number`);
+    }
+
+    if (propertyDefinition.type === "date" && (typeof value !== "string" || !isDateString(value))) {
+        throw new Error(`${propertyLabel} must use YYYY-MM-DD format`);
+    }
+
+    if (propertyDefinition.type === "datetime" && (typeof value !== "string" || !isDateTimeString(value))) {
+        throw new Error(`${propertyLabel} must use YYYY-MM-DD HH:mm or YYYY-MM-DDTHH:mm format`);
+    }
+
+    if (isLinkProperty(propertyDefinition.type) && (typeof value !== "string" || !/^\[\[[^\]]+\]\]$/.test(value))) {
+        throw new Error(`${propertyLabel} must be a valid Obsidian wiki-link`);
+    }
+
+    if (Array.isArray(propertyDefinition.allowedValues) && propertyDefinition.allowedValues.length > 0) {
+        if (!propertyDefinition.allowedValues.includes(value)) {
+            throw new Error(`${propertyLabel} must match one of the allowed values`);
+        }
+    }
+}
+
+/**
+ * Normalizes and validates every prompted property before frontmatter assembly.
+ * @param {Object} schema - Resolved schema containing all property definitions for the content type.
+ * @param {Object} promptedProperties - Raw prompted-property map keyed by property name.
+ * @returns {Object} - Validated and normalized prompted-property map.
+ */
+function normalizeAndValidatePromptedProperties(schema, promptedProperties = {}) {
+    const schemaLookup = buildSchemaLookup(schema);
+    const normalizedProperties = {};
+
+    for (const [propertyName, propertyValue] of Object.entries(promptedProperties)) {
+        const propertyDefinition = schemaLookup[propertyName];
+
+        if (!propertyDefinition) {
+            throw new Error(`No schema definition found for prompted property "${propertyName}"`);
+        }
+
+        const normalizedValue = normalizePropertyValue(propertyDefinition, propertyValue);
+        validatePropertyValueAgainstDefinition(propertyDefinition, normalizedValue);
+        normalizedProperties[propertyName] = normalizedValue;
+    }
+
+    return normalizedProperties;
+}
+
+/**
+ * Guards against malformed frontmatter by checking that both opening and closing delimiters are present.
+ * @param {string} metadata - Raw frontmatter text to inspect.
+ * @returns {void} - Throws if frontmatter delimiters are missing or malformed.
+ */
+function assertFrontmatterIntegrity(metadata) {
+    if (typeof metadata !== "string" || !metadata.startsWith("---")) {
+        throw new Error("Metadata template is malformed: missing opening frontmatter delimiter");
+    }
+
+    const closingDelimiterIndex = metadata.indexOf("\n---", 3);
+    if (closingDelimiterIndex === -1) {
+        throw new Error("Metadata template is malformed: missing closing frontmatter delimiter");
+    }
+}
+
+/**
+ * Creates a reusable non-empty validation function for prompt inputs.
+ * @param {string} promptLabel - Friendly property label used in returned validation messages.
+ * @returns {Function} - Async validation function that returns a standard validation result object.
+ */
+function createNonEmptyValidation(promptLabel) {
+    return async (input) => {
+        if (!input || input.trim() === "") {
+            return createValidationResult(
+                false,
+                `${promptLabel} cannot be empty`,
+                `Provide a value for ${promptLabel.toLowerCase()}`
+            );
+        }
+
+        return createValidationResult(true);
+    };
+}
+
+/**
+ * Builds consistent prompt text for scalar and list property collection.
+ * @param {string} action - Leading action text such as "Enter" or "Select".
+ * @param {Object} propertyDefinition - Property definition supplying prompt text and examples.
+ * @param {boolean} listMode - Whether the prompt is being built for a list value.
+ * @returns {string} - Fully formatted prompt string for Templater input dialogs.
+ */
+function formatPromptText(action, propertyDefinition, listMode = false) {
+    const basePrompt = listMode
+        ? `${action} ${propertyDefinition.prompt}`
+        : `${action} ${propertyDefinition.prompt}`;
+
+    if (!propertyDefinition.example) {
+        return basePrompt;
+    }
+
+    return `${basePrompt} (e.g., ${propertyDefinition.example})`;
+}
+
+/**
+ * Prompts the user for a required scalar property and validates the result.
+ * @param {Object} propertyDefinition - Schema definition for the scalar property being collected.
+ * @returns {Promise<*>} - Validated scalar property value.
+ */
+async function promptRequiredScalarProperty(propertyDefinition) {
+    const { prompt, allowedValues, type } = propertyDefinition;
+
+    if (Array.isArray(allowedValues) && allowedValues.length > 0) {
+        while (true) {
+            const selectedValue = await tp.system.suggester(
+                allowedValues,
+                allowedValues,
+                false,
+                `Select ${prompt}:`
+            );
+
+            if (selectedValue) {
+                return selectedValue;
+            }
+
+            showWarning(`${prompt} is required`);
+        }
+    }
+
+    const input = await retryWithValidation(
+        formatPromptText("Enter", propertyDefinition),
+        createNonEmptyValidation(prompt),
+        VALIDATION_LIMITS.MAX_VALIDATION_ATTEMPTS
+    );
+
+    if (type === "number") {
+        return Number(input);
+    }
+
+    if (type === "boolean") {
+        return String(input).toLowerCase() === "true";
+    }
+
+    return input.trim();
+}
+
+/**
+ * Reads a content note's `type` frontmatter value from a vault file object.
+ * @param {TFile|Object} file - Obsidian file object to inspect.
+ * @returns {string|null} - Content type string when available, otherwise null.
+ */
+function getContentNoteType(file) {
+    const frontmatter = app.metadataCache.getFileCache(file)?.frontmatter;
+
+    if (typeof frontmatter?.type === "string" && frontmatter.type.trim() !== "") {
+        return frontmatter.type.trim();
+    }
+
+    return null;
+}
+
+/**
+ * Gathers eligible content-note choices for a typed link property picker.
+ * @param {Object} propertyDefinition - Property definition containing target content type filters.
+ * @returns {string[]} - Ordered array of wiki-link strings eligible for selection.
+ */
+function getEligibleContentNoteChoices(propertyDefinition) {
+    const targetContentTypes = propertyDefinition.targetContentTypes || [];
+
+    if (!Array.isArray(targetContentTypes) || targetContentTypes.length === 0) {
+        return [];
+    }
+
+    const normalizedContentPath = `${PATHS.CONTENT}/`;
+
+    return app.vault
+        .getMarkdownFiles()
+        .filter(file => file.path.startsWith(normalizedContentPath))
+        .filter(file => {
+            const contentType = getContentNoteType(file);
+            return targetContentTypes.includes(contentType);
+        })
+        .map(file => file.basename)
+        .sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * Summarizes which content note types are currently available in the vault for troubleshooting prompts.
+ * @returns {string} - Comma-separated summary of available content note types.
+ */
+function summarizeAvailableContentTypes() {
+    const normalizedContentPath = `${PATHS.CONTENT}/`;
+    const typeCounts = {};
+
+    app.vault
+        .getMarkdownFiles()
+        .filter(file => file.path.startsWith(normalizedContentPath))
+        .forEach(file => {
+            const contentType = getContentNoteType(file);
+            if (!contentType) {
+                return;
+            }
+
+            typeCounts[contentType] = (typeCounts[contentType] || 0) + 1;
+        });
+
+    return Object.entries(typeCounts)
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([type, count]) => `${type} (${count})`)
+        .join(", ");
+}
+
+/**
+ * Builds a stable multi-select option list that preserves ordering while toggling selected state.
+ * @param {string[]} allValues - Full ordered set of selectable values.
+ * @param {string[]} selectedValues - Values currently selected by the user.
+ * @returns {Object} - Object containing displayOptions and optionValues arrays for Templater suggesters.
+ */
+function buildStableMultiSelectOptions(allValues, selectedValues) {
+    const displayOptions = [];
+    const optionValues = [];
+
+    allValues.forEach(value => {
+        if (selectedValues.includes(value)) {
+            displayOptions.push(`❌ ${value}`);
+            optionValues.push(`REMOVE_${value}`);
+            return;
+        }
+
+        displayOptions.push(`🔳 ${value}`);
+        optionValues.push(value);
+    });
+
+    displayOptions.push("✅ Done");
+    optionValues.push("__DONE__");
+
+    return { displayOptions, optionValues };
+}
+
+/**
+ * Prompts the user to select one or more linked notes for a typed link-list property.
+ * @param {Object} propertyDefinition - Property definition describing target note types and prompt text.
+ * @returns {Promise<string[]|null>} - Selected wiki-link values, or null when placeholders should be preserved.
+ */
+async function promptLinkedNoteListProperty(propertyDefinition) {
+    const { prompt, targetContentTypes = [] } = propertyDefinition;
+    const availableNotes = getEligibleContentNoteChoices(propertyDefinition);
+
+    if (availableNotes.length === 0) {
+        if (!canLeaveEmptyOnCreate(propertyDefinition)) {
+            const availableTypeSummary = summarizeAvailableContentTypes() || "none";
+            throw new Error(
+                `No eligible notes were found in ${PATHS.CONTENT} for ${prompt}. ` +
+                `Create at least one ${targetContentTypes.join(" or ")} note before creating this note. ` +
+                `Currently available content note types: ${availableTypeSummary}.`
+            );
+        }
+
+        const availableTypeSummary = summarizeAvailableContentTypes() || "none";
+        showWarning(
+            `No eligible notes were found for ${prompt}. Leaving the template placeholder in place. ` +
+            `Currently available content note types: ${availableTypeSummary}.`
+        );
+        return null;
+    }
+
+    const selectedValues = [];
+
+    while (true) {
+        const { displayOptions, optionValues } = buildStableMultiSelectOptions(availableNotes, selectedValues);
+
+        const selectedValue = await tp.system.suggester(
+            displayOptions,
+            optionValues,
+            false,
+            selectedValues.length === 0
+                ? `Select one or more notes for ${prompt}:`
+                : `Selected: ${selectedValues.join(", ")}. Add, remove, or finish ${prompt}:`
+        );
+
+        if (selectedValue === "__DONE__") {
+            if (!canLeaveEmptyOnCreate(propertyDefinition) && selectedValues.length === 0) {
+                showWarning(`${prompt} requires at least one linked note`);
+                continue;
+            }
+
+            return selectedValues.length > 0 ? selectedValues : null;
+        }
+
+        if (!selectedValue) {
+            if (!canLeaveEmptyOnCreate(propertyDefinition) && selectedValues.length === 0) {
+                showWarning(`${prompt} requires at least one linked note`);
+                continue;
+            }
+
+            return selectedValues.length > 0 ? selectedValues : null;
+        }
+
+        if (selectedValue.startsWith("REMOVE_")) {
+            const valueToRemove = selectedValue.substring(7);
+            const index = selectedValues.indexOf(valueToRemove);
+
+            if (index > -1) {
+                selectedValues.splice(index, 1);
+                showSuccess(`Removed ${valueToRemove} from ${prompt}`);
+            }
+
+            continue;
+        }
+
+        selectedValues.push(selectedValue);
+
+        if (selectedValues.length === availableNotes.length) {
+            return selectedValues;
+        }
+    }
+}
+
+/**
+ * Prompts the user for a required list property, supporting controlled vocabularies and free-write lists.
+ * @param {Object} propertyDefinition - Schema definition for the list property being collected.
+ * @returns {Promise<Array|null>} - Validated list value or null when allowed for placeholder preservation.
+ */
+async function promptRequiredListProperty(propertyDefinition) {
+    const { prompt, allowedValues } = propertyDefinition;
+
+    if (propertyDefinition.type === "list[link]" && Array.isArray(propertyDefinition.targetContentTypes)) {
+        return await promptLinkedNoteListProperty(propertyDefinition);
+    }
+
+    if (Array.isArray(allowedValues) && allowedValues.length > 0) {
+        const selectedValues = [];
+        let continueSelecting = true;
+
+        while (continueSelecting) {
+            const { displayOptions, optionValues } = buildStableMultiSelectOptions(allowedValues, selectedValues);
+
+            const selectedValue = await tp.system.suggester(
+                displayOptions,
+                optionValues,
+                false,
+                selectedValues.length === 0
+                    ? `Select one or more values for ${prompt}:`
+                    : `Selected: ${selectedValues.join(", ")}. Add, remove, or finish ${prompt}:`
+            );
+
+            if (selectedValue === "__DONE__") {
+                if (selectedValues.length > 0) {
+                    return selectedValues;
+                }
+
+                showWarning(`${prompt} requires at least one value`);
+                continue;
+            }
+
+            if (!selectedValue) {
+                showWarning(`${prompt} requires at least one value`);
+                continue;
+            }
+
+            if (selectedValue.startsWith("REMOVE_")) {
+                const valueToRemove = selectedValue.substring(7);
+                const index = selectedValues.indexOf(valueToRemove);
+
+                if (index > -1) {
+                    selectedValues.splice(index, 1);
+                    showSuccess(`Removed ${valueToRemove} from ${prompt}`);
+                }
+
+                continue;
+            }
+
+            selectedValues.push(selectedValue);
+            if (selectedValues.length === allowedValues.length) {
+                return selectedValues;
+            }
+        }
+    }
+
+    const input = await retryWithValidation(
+        formatPromptText("Enter one or more comma-separated values for", propertyDefinition, true),
+        createNonEmptyValidation(prompt),
+        VALIDATION_LIMITS.MAX_VALIDATION_ATTEMPTS
+    );
+
+    return input
+        .split(",")
+        .map(value => value.trim())
+        .filter(Boolean);
+}
+
+/**
+ * Routes a required property prompt to the correct scalar or list collector.
+ * @param {Object} propertyDefinition - Schema definition for the property being collected.
+ * @returns {Promise<*>} - Prompted property value appropriate to the property type.
+ */
+async function promptRequiredPropertyValue(propertyDefinition) {
+    Logger.debug("Prompting for required property", {
+        propertyName: propertyDefinition.name,
+        propertyType: propertyDefinition.type,
+        prompt: propertyDefinition.prompt
+    });
+
+    if (propertyDefinition.type.startsWith("list[")) {
+        return await promptRequiredListProperty(propertyDefinition);
+    }
+
+    return await promptRequiredScalarProperty(propertyDefinition);
+}
+
+/**
+ * Prompts for the short Overview description used when creating primary and secondary category notes.
+ * @param {string} noteType - Category note type constant.
+ * @param {string} title - Category title for contextual prompt text.
+ * @returns {Promise<string>} - Validated 1-2 sentence description for the category overview section.
+ */
+async function promptCategoryDescription(noteType, title) {
+    const categoryLabel = noteType === NOTE_TYPES.PRIMARY ? "primary category" : "secondary category";
+    const promptMessage = `Enter a 1-2 sentence description for "${title}"`;
+
+    const input = await retryWithValidation(
+        promptMessage,
+        async (value) => {
+            const trimmedValue = value.trim();
+            if (!trimmedValue) {
+                return {
+                    isValid: false,
+                    error: "Category description cannot be empty.",
+                    suggestion: "Write a short overview that explains what this category covers."
+                };
+            }
+
+            const sentences = trimmedValue
+                .split(/[.!?]+/)
+                .map(sentence => sentence.trim())
+                .filter(Boolean);
+
+            if (sentences.length < 1 || sentences.length > 2) {
+                return {
+                    isValid: false,
+                    error: "Category descriptions should be 1-2 sentences.",
+                    suggestion: "Keep the overview short and scannable for category landing pages."
+                };
+            }
+
+            return { isValid: true };
+        },
+        VALIDATION_LIMITS.MAX_VALIDATION_ATTEMPTS
+    );
+
+    return input.trim();
+}
+
+/**
+ * Prompts for a typed link property using the content-note picker workflow.
+ * @param {Object} propertyDefinition - Schema definition for the typed link property.
+ * @returns {Promise<string[]|null>} - Selected linked notes or null when placeholders should be preserved.
+ */
+async function promptTypedLinkPropertyValue(propertyDefinition) {
+    Logger.debug("Prompting for typed link property", {
+        propertyName: propertyDefinition.name,
+        propertyType: propertyDefinition.type,
+        prompt: propertyDefinition.prompt,
+        targetContentTypes: propertyDefinition.targetContentTypes || []
+    });
+
+    return await promptLinkedNoteListProperty(propertyDefinition);
+}
+
+/**
+ * Collects, normalizes, and summarizes all create-time prompted properties for a content note.
+ * @param {Object} contentTypeConfig - Selected content type configuration object.
+ * @returns {Promise<Object>} - Object containing resolved schema, normalized values, and prompt outcome summary.
+ */
+async function collectPromptedContentProperties(contentTypeConfig) {
+    const schema = buildResolvedContentTypeSchema(contentTypeConfig.name);
+    const promptProperties = getCreateTimePromptProperties(schema);
+    const collectedValues = {};
+    const providedProperties = [];
+    const preservedPlaceholderProperties = [];
+
+    Logger.info("Collecting prompted content properties", {
+        contentTypeName: contentTypeConfig.name,
+        promptPropertyCount: promptProperties.length,
+        promptPropertyNames: promptProperties.map(property => property.name)
+    });
+
+    for (const propertyDefinition of promptProperties) {
+        const propertyValue =
+            propertyDefinition.type === "list[link]" && Array.isArray(propertyDefinition.targetContentTypes)
+                ? await promptTypedLinkPropertyValue(propertyDefinition)
+                : await promptRequiredPropertyValue(propertyDefinition);
+
+        if (propertyValue !== null && propertyValue !== undefined) {
+            collectedValues[propertyDefinition.name] = propertyValue;
+            providedProperties.push(propertyDefinition.name);
+            continue;
+        }
+
+        preservedPlaceholderProperties.push(propertyDefinition.name);
+    }
+
+    const normalizedValues = normalizeAndValidatePromptedProperties(schema, collectedValues);
+
+    return {
+        schema,
+        values: normalizedValues,
+        summary: {
+            promptedPropertyCount: promptProperties.length,
+            providedProperties,
+            preservedPlaceholderProperties
+        }
+    };
+}
+
+/**
+ * Applies prompted property values into a frontmatter template by replacing scalar and list placeholders.
+ * @param {string} metadata - Raw metadata template content.
+ * @param {Object} promptedProperties - Normalized prompted-property map keyed by property name.
+ * @param {Object|null} schema - Resolved schema used to determine property formatting.
+ * @returns {string} - Updated metadata block with prompted values inserted.
+ */
+function applyPromptedPropertyValues(metadata, promptedProperties = {}, schema = null) {
+    assertFrontmatterIntegrity(metadata);
+
+    const schemaLookup = buildSchemaLookup(schema);
+    const lineEnding = detectLineEnding(metadata);
+    let updatedMetadata = metadata;
+
+    for (const [propertyName, propertyValue] of Object.entries(promptedProperties)) {
+        const propertyDefinition = schemaLookup[propertyName];
+        if (!propertyDefinition) {
+            throw new Error(`No schema definition found for property "${propertyName}" during metadata customization`);
+        }
+
+        const escapedPropertyName = escapeRegex(propertyName);
+        const isListValue = Array.isArray(propertyValue);
+
+        if (isListValue) {
+            const listPattern = new RegExp(`^${escapedPropertyName}:\\s*\\r?\\n(?:[ \\t]{2}-.*(?:\\r?\\n|$))+`, "m");
+            if (!listPattern.test(updatedMetadata)) {
+                throw new Error(`Unable to find list placeholder for property "${propertyName}" in metadata template`);
+            }
+
+            const formattedList = formatYamlList(propertyValue, propertyDefinition.type).replace(/\n/g, lineEnding);
+            const replacement = `${propertyName}:${lineEnding}${formattedList}${lineEnding}`;
+            updatedMetadata = updatedMetadata.replace(listPattern, replacement);
+            continue;
+        }
+
+        const scalarPattern = new RegExp(`^${escapedPropertyName}:.*$`, "m");
+        if (!scalarPattern.test(updatedMetadata)) {
+            throw new Error(`Unable to find scalar placeholder for property "${propertyName}" in metadata template`);
+        }
+
+        updatedMetadata = updatedMetadata.replace(
+            scalarPattern,
+            `${propertyName}: ${formatYamlScalar(propertyValue, propertyDefinition.type)}`
+        );
+    }
+
+    assertFrontmatterIntegrity(updatedMetadata);
+    return updatedMetadata;
+}
+
+/**
+ * Loads an optional template component and degrades gracefully when the file is missing.
+ * @param {string|null} templatePath - Include path for the template component.
+ * @param {string} componentName - Friendly component name used for logging and notices.
+ * @returns {Promise<string>} - Template content string or an empty string when unavailable.
+ */
+async function loadOptionalTemplate(templatePath, componentName) {
+    if (!templatePath) {
+        Logger.debug(`Skipping optional ${componentName} template because no path was provided`);
+        return "";
+    }
+
+    try {
+        Logger.debug(`Loading optional ${componentName} template`, { templatePath });
+        const content = await tp.file.include(templatePath);
+        Logger.debug(`Optional ${componentName} template loaded (${content.length} chars)`);
+        return content;
+    } catch (error) {
+        Logger.warn(`Optional ${componentName} template could not be loaded; continuing without it`, {
+            templatePath,
+            error: error.message
+        });
+        return "";
+    }
+}
 
 /**
  * Creates a standardized validation result object
@@ -675,6 +1891,7 @@ async function getValidatedNoteTitle(noteType) {
     
 	const validationFn = async (title) => {
         Logger.debug("Validating title input", { title, noteType });
+
         const destinationPath = createDestinationPath(noteType, title);
         Logger.debug("Created destination path", { destinationPath });
         return await validateNoteTitle(title, destinationPath, true);
@@ -815,32 +2032,16 @@ async function selectCategories(categoryType) {
             });
 
             const remainingCategories = availableCategories.filter(cat => !selectedCategories.includes(cat));
-            
+
             if (remainingCategories.length === 0 && selectedCategories.length > 0) {
                 Logger.debug("No remaining categories to select, but some already selected");
                 break;
             }
-            
-            const options = [];
-            const displayOptions = [];
 
-            // Add existing selections with remove indicator
-            if (selectedCategories.length > 0) {
-                selectedCategories.forEach(cat => {
-                    displayOptions.push(`❌ ${cat}`);
-                    options.push(`REMOVE_${cat}`);
-                });
-            }
-            
-            // Add remaining categories
-            if (remainingCategories.length > 0) {
-                remainingCategories.forEach(cat => {
-                    displayOptions.push(`🔳 ${cat}`);
-                    options.push(cat);
-                });
-            }
+            const stableOptions = buildStableMultiSelectOptions(availableCategories, selectedCategories);
+            const displayOptions = stableOptions.displayOptions.slice(0, -1);
+            const options = stableOptions.optionValues.slice(0, -1);
 
-            // Always add "Done" option at the end
             options.push("DONE");
             displayOptions.push("✅ Done (Finish Selection)");
                         
@@ -1394,14 +2595,23 @@ async function createNewContentType() {
             emojiCodePoint: selectedEmoji.codePointAt(0)
         });
 
-        Logger.debug("Phase 4.3: Creating content type template structure");
-	    await createTemplateStructure(typeName, selectedEmoji);
-	    
+        Logger.debug("Phase 4.3: Selecting query tier for new content type");
+        const queryTier = await selectQueryTierForContentType(typeName);
+
+        Logger.info("Content type query tier selected", {
+            typeName,
+            queryTier
+        });
+
+        Logger.debug("Phase 4.4: Creating content type template structure");
+	    await createTemplateStructure(typeName, selectedEmoji, queryTier);
+
         const newContentType = {
             name: typeName,
             emoji: selectedEmoji,
             displayName: `${selectedEmoji} ${typeName}`,
-            searchTag: `${selectedEmoji}${typeName.replace(/\s+/g, '_')}`
+            searchTag: `${selectedEmoji}${typeName.replace(/\s+/g, '_')}`,
+            queryTier
         };
         
         Logger.info("====== Phase 4: New Content Type Creation Completed Successfully ======", newContentType);
@@ -1417,18 +2627,52 @@ async function createNewContentType() {
 }
 
 /**
+ * Prompts the user to choose the starter Dataview query tier for a new custom content type.
+ * @param {string} typeName - Name of the new content type for prompt context.
+ * @returns {Promise<string>} - Selected query tier constant from QUERY_TIERS.
+ */
+async function selectQueryTierForContentType(typeName) {
+    const options = [QUERY_TIERS.NONE, QUERY_TIERS.LIGHTWEIGHT, QUERY_TIERS.RICH];
+    const displayOptions = [
+        "📝 None - Create an empty Related Notes section",
+        "🔎 Lightweight - Seed typed relationships and same classification headings",
+        "🕸️ Rich - Seed same classification, typed relationships, and reverse relationships headings"
+    ];
+
+    const selectedTier = await tp.system.suggester(
+        displayOptions,
+        options,
+        false,
+        `Select Dataview query tier for "${typeName}":`
+    );
+
+    if (!selectedTier) {
+        Logger.warn("No query tier selected for new content type; defaulting to None", {
+            typeName,
+            defaultTier: QUERY_TIERS.NONE
+        });
+        return QUERY_TIERS.NONE;
+    }
+
+    return selectedTier;
+}
+
+/**
  * Creates template folder structure and files for new content type based on Basic template
  * @param {string} typeName - Content type name for folder and file naming
  * @param {string} emoji - Selected emoji for search tags and identification
+ * @param {string} queryTier - Selected Dataview query tier used to seed starter query scaffolding.
+ * @returns {Promise<void>} - Creates the template folder and files for the new content type.
  * @throws {Error} - If template creation fails (folder creation, file copying, or customization)
  */
-async function createTemplateStructure(typeName, emoji) {
+async function createTemplateStructure(typeName, emoji, queryTier) {
 	// Obsidian handles cross-platform file separators automatically
     const basePath = `${PATHS.CONTENT_TEMPLATES}/${typeName}`;
 
     Logger.info(`Creating template structure for new content type`, {
         typeName,
         emoji,
+        queryTier,
         basePath
     });
 
@@ -1480,6 +2724,12 @@ async function createTemplateStructure(typeName, emoji) {
             Logger.debug(`Created file: ${targetFilePath}`);
         }
 
+        const dataviewTargetPath = `${basePath}/Dataview.md`;
+        await app.vault.create(dataviewTargetPath, createStarterDataviewTemplate(queryTier));
+        filesCreated += 2;
+        Logger.debug(`Created file: ${dataviewTargetPath}`);
+        Logger.debug(`Created file: ${schemaTargetPath}`);
+
         Logger.info(`Template structure created successfully`, {
             typeName,
             emoji,
@@ -1507,6 +2757,12 @@ async function createTemplateStructure(typeName, emoji) {
  * Note Configuration Builder - eliminates complex parameter objects
  */
 class NoteConfigBuilder {
+    /**
+     * Initializes a builder with the base note type and title used throughout note creation.
+     * @param {string} noteType - Selected note type constant.
+     * @param {string} title - Validated title for the note being created.
+     * @returns {void} - Stores the initial mutable configuration state on the builder instance.
+     */
     constructor(noteType, title) {
         this.config = { 
             noteType, 
@@ -1516,30 +2772,89 @@ class NoteConfigBuilder {
         };
     }
     
+    /**
+     * Stores selected primary category links on the in-progress configuration.
+     * @param {string[]} categories - Primary category wiki links.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
     withPrimaryCategories(categories) {
         this.config.primaryCategories = categories || [];
         return this;
     }
     
+    /**
+     * Stores selected secondary category links on the in-progress configuration.
+     * @param {string[]} categories - Secondary category wiki links.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
     withSecondaryCategories(categories) {
         this.config.secondaryCategories = categories || [];
         return this;
     }
     
+    /**
+     * Stores the selected emoji used for category tagging or custom content type identification.
+     * @param {string} emoji - Selected emoji character.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
     withEmoji(emoji) {
         this.config.emoji = emoji;
         return this;
     }
     
+    /**
+     * Stores the short Overview description collected for category notes.
+     * @param {string} categoryDescription - 1-2 sentence description for the category.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
+    withCategoryDescription(categoryDescription) {
+        this.config.categoryDescription = categoryDescription || "";
+        return this;
+    }
+    
+    /**
+     * Stores the selected content type configuration for a content note.
+     * @param {Object} contentTypeConfig - Selected content type configuration object.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
     withContentType(contentTypeConfig) {
         this.config.contentType = contentTypeConfig;
         return this;
     }
+
+    /**
+     * Stores normalized prompted property values collected during content-note creation.
+     * @param {Object} promptedProperties - Prompted property map keyed by property name.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
+    withPromptedProperties(promptedProperties) {
+        this.config.promptedProperties = promptedProperties || {};
+        return this;
+    }
+
+    /**
+     * Stores a summary of prompt outcomes for later notices and fallback recovery content.
+     * @param {Object|null} promptedPropertySummary - Summary object returned from prompt collection.
+     * @returns {NoteConfigBuilder} - Builder instance for fluent chaining.
+     */
+    withPromptedPropertySummary(promptedPropertySummary) {
+        this.config.promptedPropertySummary = promptedPropertySummary || null;
+        return this;
+    }
     
+    /**
+     * Finalizes the configuration object by attaching derived paths and template references.
+     * @returns {Object} - Complete note configuration object ready for content assembly.
+     */
     build() {
         return this._addPathsAndTemplates(this.config);
     }
     
+    /**
+     * Adds destination paths, template references, and workflow defaults based on note type.
+     * @param {Object} config - Partially built note configuration.
+     * @returns {Object} - Enriched configuration with destination and template metadata.
+     */
     _addPathsAndTemplates(config) {
         const pathConfigurationStrategies = {
             [NOTE_TYPES.PRIMARY]: () => ({
@@ -1556,11 +2871,12 @@ class NoteConfigBuilder {
                 if (!config.contentType || !config.contentType.name) {
                     throw new Error("Content type is required for content notes but was not provided");
                 }
+                const templatePaths = createContentTemplatePaths(config.contentType.name);
                 return {
                     destination: `${PATHS.CONTENT}/`,
-                    metadataTemplate: `[[04 - Templates/04 - Content/${config.contentType.name}/Metadata]]`,
-                    bodyTemplate: `[[04 - Templates/04 - Content/${config.contentType.name}/Body]]`,
-                    footerTemplate: `[[04 - Templates/04 - Content/${config.contentType.name}/Footer]]`
+                    noteStatus: NOTE_STATUS.DRAFT,
+                    contentTypeSchema: buildResolvedContentTypeSchema(config.contentType.name),
+                    ...templatePaths
                 };
             }
         };
@@ -1577,14 +2893,15 @@ class NoteConfigBuilder {
 
 /**
  * Loads all required templates for a note configuration from Obsidian template files
- * @param {Object} config - Note configuration object containing template paths (metadataTemplate, bodyTemplate, footerTemplate)
- * @returns {Promise<Object>} - Template content object with metadata, body, and optionally footer properties
+ * @param {Object} config - Note configuration object containing template paths
+ * @returns {Promise<Object>} - Template content object with metadata, body, and optional dataview/footer properties
  * @throws {Error} - If any required template file cannot be loaded
  */
 async function loadNoteTemplates(config) {
 	Logger.info("Loading note templates", {
         metadataTemplate: config.metadataTemplate,
         bodyTemplate: config.bodyTemplate,
+        dataviewTemplate: config.dataviewTemplate || 'none',
         footerTemplate: config.footerTemplate || 'none'
     });
 
@@ -1599,11 +2916,8 @@ async function loadNoteTemplates(config) {
         templates.body = await tp.file.include(config.bodyTemplate);
         Logger.debug(`Body template loaded (${templates.body.length} chars)`);
 
-        if (config.footerTemplate) {
-            Logger.debug("Loading footer template");
-            templates.footer = await tp.file.include(config.footerTemplate);
-            Logger.debug(`Footer template loaded (${templates.footer.length} chars)`);
-        }
+        templates.dataview = await loadOptionalTemplate(config.dataviewTemplate, "dataview");
+        templates.footer = await loadOptionalTemplate(config.footerTemplate, "footer");
 
         Logger.info("All templates loaded successfully", {
             templateCount: Object.keys(templates).length,
@@ -1615,6 +2929,7 @@ async function loadNoteTemplates(config) {
         Logger.error("Template loading failed", error, {
             metadataTemplate: config.metadataTemplate,
             bodyTemplate: config.bodyTemplate,
+            dataviewTemplate: config.dataviewTemplate,
             footerTemplate: config.footerTemplate
         });
         throw new Error(`Failed to load templates: ${error.message}`);
@@ -1684,7 +2999,8 @@ function customizeMetadata(metadata, config) {
     if (config.noteType === NOTE_TYPES.CONTENT) {
         Logger.debug("Applying CONTENT note metadata customization", {
             primaryCategoriesCount: config.primaryCategories?.length || 0,
-            secondaryCategoriesCount: config.secondaryCategories?.length || 0
+            secondaryCategoriesCount: config.secondaryCategories?.length || 0,
+            promptedPropertyCount: Object.keys(config.promptedProperties || {}).length
         });
         
         customizedMetadata = customizeCategoriesMetadata(customizedMetadata, config.primaryCategories, 'primary');
@@ -1692,7 +3008,23 @@ function customizeMetadata(metadata, config) {
         
         customizedMetadata = customizeCategoriesMetadata(customizedMetadata, config.secondaryCategories, 'secondary');
         transformationsApplied++;
-        
+
+        customizedMetadata = applyPromptedPropertyValues(
+            customizedMetadata,
+            config.promptedProperties,
+            config.contentTypeSchema
+        );
+        transformationsApplied++;
+
+        const lineEnding = detectLineEnding(customizedMetadata);
+        customizedMetadata = ensureMetadataProperty(
+            customizedMetadata,
+            "note-status",
+            config.noteStatus || NOTE_STATUS.DRAFT,
+            lineEnding
+        );
+        transformationsApplied++;
+
         Logger.debug("CONTENT note metadata customization completed", {
             transformationsApplied
         });
@@ -1729,12 +3061,12 @@ function customizeCategoriesMetadata(metadata, categories, categoryType) {
     
     const replacementPatterns = {
         'primary': {
-            pattern: /primary categories:\r?\n  - Add link\(s\) \[\[\]\] back to related PRIMARY categories/,
-            replacement: `primary categories:\n  - ${categories.join('\n  - ')}`
+            pattern: /primary(?:-|\s)categories:\r?\n  - Add link\(s\) \[\[\]\] back to related PRIMARY categories/,
+            replacement: `primary-categories:\n  - ${categories.join('\n  - ')}`
         },
         'secondary': {
-            pattern: /secondary categories:\r?\n  - Add link\(s\) \[\[\]\] back to related SECONDARY categories/,
-            replacement: `secondary categories:\n  - ${categories.join('\n  - ')}`
+            pattern: /secondary(?:-|\s)categories:\r?\n  - Add link\(s\) \[\[\]\] back to related SECONDARY categories/,
+            replacement: `secondary-categories:\n  - ${categories.join('\n  - ')}`
         }
     };
     
@@ -1772,6 +3104,34 @@ function customizeCategoriesMetadata(metadata, categories, categoryType) {
 }
 
 /**
+ * Injects a prompted description into the Overview section of a primary or secondary category body template.
+ * @param {string} body - Raw body template content for the category note.
+ * @param {Object} config - Note configuration containing noteType and categoryDescription.
+ * @returns {string} - Updated body template with the Overview placeholder replaced when applicable.
+ */
+function customizeCategoryBody(body, config) {
+    if (![NOTE_TYPES.PRIMARY, NOTE_TYPES.SECONDARY].includes(config.noteType)) {
+        return body;
+    }
+
+    const categoryDescription = (config.categoryDescription || "").trim();
+    if (!categoryDescription) {
+        return body;
+    }
+
+    const placeholderPattern =
+        config.noteType === NOTE_TYPES.PRIMARY
+            ? /<!-- Brief description of primary category -->/
+            : /<!-- Brief description of secondary category -->/;
+
+    if (placeholderPattern.test(body)) {
+        return body.replace(placeholderPattern, categoryDescription);
+    }
+
+    return body.replace(/^## Overview\s*$/m, `## Overview\n\n${categoryDescription}`);
+}
+
+/**
  * Builds the complete note content from templates and configuration with proper assembly
  * @param {Object} config - Complete note configuration object with all required properties
  * @returns {Promise<string>} - Fully assembled note content ready for file creation
@@ -1790,6 +3150,7 @@ async function buildNoteContent(config) {
 
         Logger.debug("Phase 3.2: Customizing metadata");
         const customizedMetadata = customizeMetadata(templates.metadata, config);
+        const customizedBody = customizeCategoryBody(templates.body, config);
 
         Logger.debug("Metadata customization results", {
             originalLength: templates.metadata.length,
@@ -1798,7 +3159,7 @@ async function buildNoteContent(config) {
         });
 
         Logger.debug("Phase 3.3: Assembling final content");
-		const finalContent = assembleNoteContent(customizedMetadata, templates, config);
+		const finalContent = assembleNoteContent(customizedMetadata, { ...templates, body: customizedBody }, config);
 
         Logger.info("====== Phase 3: Note Content Build Completed Successfully ======", {
             finalContentLength: finalContent.length,
@@ -1821,7 +3182,7 @@ async function buildNoteContent(config) {
 /**
  * Assembles the final note content from all components with proper dividers and formatting
  * @param {string} customizedMetadata - Processed metadata with all placeholders replaced
- * @param {Object} templates - Template content object with metadata, body, and optional footer
+ * @param {Object} templates - Template content object with metadata, body, and optional dataview/footer
  * @param {Object} config - Note configuration object for type-specific assembly logic
  * @returns {string} - Complete note content with header, body, footer, and timestamp
  */
@@ -1848,10 +3209,20 @@ function assembleNoteContent(customizedMetadata, templates, config) {
     switch (config.noteType) {
         case NOTE_TYPES.CONTENT:
             Logger.debug("Assembling CONTENT note components");
-            contentParts.push(templates.body, templates.footer, TIMESTAMP);
-            componentsAdded += 3;
+            contentParts.push(templates.body);
+            if (templates.dataview?.trim()) {
+                contentParts.push(templates.dataview);
+                componentsAdded++;
+            }
+            if (templates.footer?.trim()) {
+                contentParts.push(templates.footer);
+                componentsAdded++;
+            }
+            contentParts.push(TIMESTAMP);
+            componentsAdded += 2;
             Logger.debug("CONTENT note components added", {
                 bodyLength: templates.body?.length || 0,
+                dataviewLength: templates.dataview?.length || 0,
                 footerLength: templates.footer?.length || 0,
                 timestampLength: TIMESTAMP.length
             });
@@ -1897,14 +3268,16 @@ function assembleNoteContent(customizedMetadata, templates, config) {
  */
 async function buildNoteConfiguration() {
 	Logger.info("====== Phase 1: Note Configuration Build Started ======");
+    let noteType;
+    let title;
 
 	try {
 		Logger.debug("Phase 1.1: Selecting note type");
-	    const noteType = await selectNoteType();
+	    noteType = await selectNoteType();
 	    Logger.info(`Selected note type: ${noteType}`);
 
 		Logger.debug("Phase 1.2: Saving validated note title");
-	    const title = await getValidatedNoteTitle(noteType);
+	    title = await getValidatedNoteTitle(noteType);
 	    Logger.info(`Validated title: "${title}"`);
 
         Logger.debug("Phase 1.3: Creating type-specific configuration", { noteType, title });
@@ -1950,35 +3323,46 @@ async function createConfigurationForNoteType(noteType, title) {
 	        [NOTE_TYPES.PRIMARY]: async () => {
                 Logger.debug("Executing PRIMARY category configuration strategy");
 	            const emoji = await selectEmoji(title);
+                const categoryDescription = await promptCategoryDescription(noteType, title);
 
-                Logger.debug("PRIMARY configuration completed", { emoji });
-	            return builder.withEmoji(emoji);
+                Logger.debug("PRIMARY configuration completed", { emoji, hasCategoryDescription: !!categoryDescription });
+	            return builder
+                    .withEmoji(emoji)
+                    .withCategoryDescription(categoryDescription);
 	        },
 	        [NOTE_TYPES.SECONDARY]: async () => {
                 Logger.debug("Executing SECONDARY category configuration strategy");
 	            const primaryCategories = await selectCategories("primary");
+                const categoryDescription = await promptCategoryDescription(noteType, title);
 
                 Logger.debug("SECONDARY configuration completed", {
-                    primaryCategoriesCount: primaryCategories.length
+                    primaryCategoriesCount: primaryCategories.length,
+                    hasCategoryDescription: !!categoryDescription
                 });
-	            return builder.withPrimaryCategories(primaryCategories);
+	            return builder
+                    .withPrimaryCategories(primaryCategories)
+                    .withCategoryDescription(categoryDescription);
 	        },
 	        [NOTE_TYPES.CONTENT]: async () => {
                 Logger.debug("Executing CONTENT note configuration strategy");
 		        const primaryCategories = await selectCategories("primary");
 		        const secondaryCategories = await selectCategories("secondary");
 		        const contentType = await selectContentType();
+                const promptedPropertyCollection = await collectPromptedContentProperties(contentType);
 
                 Logger.debug("CONTENT configuration completed", {
                     primaryCategoriesCount: primaryCategories.length,
                     secondaryCategoriesCount: secondaryCategories.length,
-                    contentTypeName: contentType.name
+                    contentTypeName: contentType.name,
+                    promptedPropertyCount: Object.keys(promptedPropertyCollection.values).length
                 });
 
-	            return builder
-	                .withPrimaryCategories(primaryCategories)
-	                .withSecondaryCategories(secondaryCategories)
-	                .withContentType(contentType);
+                return builder
+                    .withPrimaryCategories(primaryCategories)
+                    .withSecondaryCategories(secondaryCategories)
+                    .withContentType(contentType)
+                    .withPromptedProperties(promptedPropertyCollection.values)
+                    .withPromptedPropertySummary(promptedPropertyCollection.summary);
 	        }
 	    };
 	    
@@ -2022,11 +3406,15 @@ async function createConfigurationForNoteType(noteType, title) {
 /**
  * Moves the current note to its destination directory based on note type and configuration
  * @param {Object} config - Note configuration object containing destination path and title
+ * @returns {Promise<void>} - Moves the active file into its final destination folder.
  * @throws {Error} - If file move operation fails (permissions, path issues, etc.)
  */
 async function moveNoteToDestination(config) {
 	Logger.info("====== Phase 2: Note Relocation Started ======");
 	const destinationPath = `${config.destination}${config.title}`;
+    const destinationFolder = config.destination.endsWith("/")
+        ? config.destination.slice(0, -1)
+        : config.destination;
 
 	Logger.debug(`Phase 2.1: Moving note to destination`, {
         from: tp.file.path(true),
@@ -2034,10 +3422,12 @@ async function moveNoteToDestination(config) {
     });
 	
 	try {
+        if (!app.vault.getAbstractFileByPath(destinationFolder)) {
+            await app.vault.createFolder(destinationFolder);
+        }
         await tp.file.move(destinationPath);
         Logger.debug(`File successfully moved to: ${destinationPath}`);
     	Logger.info("====== Phase 2: Note Relocation Completed Successfully ======");
-        showSuccess(`Note moved to ${config.noteType} directory`);
     } catch (error) {
         Logger.error("File move operation failed", error, {
             sourceFile: tp.file.path(true),
@@ -2050,16 +3440,85 @@ async function moveNoteToDestination(config) {
 }
 
 /**
- * Creates fallback content when the main workflow fails to ensure user gets usable note
- * @returns {string} Basic note content with error message and timestamp
+ * Shows end-of-workflow notices so users understand what was filled, what was preserved, and where the note was saved
+ * @param {Object} config - Final note configuration
+ * @returns {void} - Displays completion notices tailored to the note type and prompt outcomes.
  */
-function createFallbackContent() {
-    const fallbackTitle = tp.file.title || "New Note";
+function showCompletionNotices(config) {
+    const destinationMessage = `${config.noteType} "${config.title}" created in ${config.destination}`;
+    showSuccess(destinationMessage);
+
+    if (config.noteType !== NOTE_TYPES.CONTENT) {
+        return;
+    }
+
+    const summary = summarizePromptedPropertyOutcomes(config.promptedPropertySummary);
+    if (summary.preservedCount > 0) {
+        showWarning(
+            `Left ${summary.preservedCount} prompted propert${summary.preservedCount === 1 ? "y" : "ies"} as template placeholders: ` +
+            `${summary.preservedPlaceholderProperties.join(", ")}`
+        );
+    }
+
+    showSuccess(
+        `Prompted ${summary.promptCount} content propert${summary.promptCount === 1 ? "y" : "ies"}; ` +
+        `filled ${summary.providedCount} and set note-status to ${config.noteStatus || NOTE_STATUS.DRAFT}.`
+    );
+}
+
+/**
+ * Creates fallback content when the main workflow fails to ensure user gets usable note
+ * @param {Error|string} error - Failure encountered during note creation
+ * @param {Object|null} config - Partial or completed note configuration when available
+ * @returns {string} Safe fallback note content with error context and timestamps
+ */
+function createFallbackContent(error, config = null) {
+    const fallbackTitle = config?.title || tp.file.title || "New Note";
+    const errorMessage = getErrorMessage(error);
+    const wasCancelled = isCancellationError(error);
+
+    if (config?.noteType === NOTE_TYPES.CONTENT) {
+        const contentTypeName = config.contentType?.name || "Unknown";
+        const safeSummary = summarizePromptedPropertyOutcomes(config.promptedPropertySummary);
+        const preservedSection = safeSummary.preservedCount > 0
+            ? `- Prompted placeholders preserved: ${safeSummary.preservedPlaceholderProperties.join(", ")}\n`
+            : "";
+
+        return `---
+aliases:
+tags:
+primary-categories:
+secondary-categories:
+type: "${contentTypeName}"
+note-status: "${NOTE_STATUS.DRAFT}"
+---
+# [[${fallbackTitle}]]
+
+## Overview
+
+> [!warning] Note Creation ${wasCancelled ? "Cancelled" : "Failed"}
+> The automated creation workflow ${wasCancelled ? "was cancelled" : "failed"} before the note could be fully assembled.
+> Review the properties and body content below before marking this note as ready.
+
+## Recovery Details
+
+- Reason: ${errorMessage}
+- Intended destination: ${config.destination || PATHS.CONTENT}/
+- Content type: ${contentTypeName}
+- Prompted properties filled: ${safeSummary.providedCount}
+${preservedSection}
+---
+
+${TIMESTAMP}`;
+    }
+
     return `# ${fallbackTitle}
 
 ## Overview
 
-*Note creation encountered an error. Please try again or create manually.*
+> [!warning] Note Creation ${wasCancelled ? "Cancelled" : "Failed"}
+> The automated creation workflow ${wasCancelled ? "was cancelled" : "failed"} before the note could be fully assembled.
+> Reason: ${errorMessage}
 
 ---
 
@@ -2077,16 +3536,18 @@ async function executeNoteCreation() {
         currentFile: tp.file.title,
         vaultName: app.vault.getName()
     });
+    let config = null;
     
     try {     
 	    Logger.debug("Phase 1: Building note configuration"); 
-        const config = await buildNoteConfiguration();
+	    config = await buildNoteConfiguration();
 
-        Logger.debug("Phase 2: Moving note to destination");
-        await moveNoteToDestination(config);
-
-        Logger.debug("Phase 3: Building note content");
+        Logger.debug("Phase 2: Building note content");
         const noteContent = await buildNoteContent(config);
+
+        Logger.debug("Phase 3: Moving note to destination");
+        await moveNoteToDestination(config);
+        showCompletionNotices(config);
         
         Logger.info("=== Adversary Simulation Note Creation Completed Successfully ===", {
             noteType: config.noteType,
@@ -2095,7 +3556,6 @@ async function executeNoteCreation() {
             finalPath: `${config.destination}${config.title}.md`
         });
         
-        showSuccess(`${config.noteType} "${config.title}" created successfully!`);
         return noteContent.trimEnd();
         
     } catch (error) {
@@ -2103,10 +3563,14 @@ async function executeNoteCreation() {
             phase: "unknown", // Could be enhanced to track current phase
             currentFile: tp.file.title
         });
-        showError("Note creation failed. Check console for details.");
+        if (isCancellationError(error)) {
+            showWarning("Note creation was cancelled. Leaving a safe draft in the current file.");
+        } else {
+            showError("Note creation failed. Leaving a safe draft in the current file. Check console for details.");
+        }
 
 		Logger.info("Generating fallback content");
-        return createFallbackContent();
+        return createFallbackContent(error, config);
     }
 }
 

@@ -2,9 +2,9 @@
 aliases: 
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - Add link(s) [[]] back to related PRIMARY categories
-secondary categories:
+secondary-categories:
   - Add link(s) [[]] back to related SECONDARY categories
 type: Basic
 ---

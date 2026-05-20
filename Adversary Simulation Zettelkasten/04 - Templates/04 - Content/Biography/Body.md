@@ -1,7 +1,8 @@
 ## Overview
 
-> [!tip]
-> Document timelines, notable contributions, and lasting impact of individuals significant to cybersecurity or your professional development.
+> [!todo] Todo: DELETE ME
+> > [!tip]
+> > Document timelines, notable contributions, and lasting impact of individuals significant to cybersecurity or your professional development.
 
 ## Timeline
 

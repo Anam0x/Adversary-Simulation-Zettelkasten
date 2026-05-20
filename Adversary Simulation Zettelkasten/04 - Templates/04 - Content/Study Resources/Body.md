@@ -1,7 +1,8 @@
 ## Overview
 
-> [!tip]
-> Outline learning objectives, exercises, and key takeaways from courses, certifications, and training programs.
+> [!todo] Todo: DELETE ME
+> > [!tip]
+> > Outline learning objectives, exercises, and key takeaways from courses, certifications, and training programs.
 
 ## Learning Objectives
 

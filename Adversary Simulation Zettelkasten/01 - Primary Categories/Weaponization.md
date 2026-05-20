@@ -1,45 +1,42 @@
 ---
 aliases:
 tags:
-  - 🥈Secondary_Category
-primary categories:
-  - "[[Training]]"
-type: Secondary Category
+  - 🥇Primary_Category
+  - ☣️Weaponization
+type: Primary Category
 ---
-# [[Learning Techniques]]
+# [[Weaponization]]
 
-***
+---
 
 ## Overview
 
-Metacognitive strategies and study methodologies for effective knowledge retention and skill development. Includes the Zettelkasten system, Feynman Technique, SQ3R reading method, spaced repetition, active recall, and deliberate practice frameworks.
+Covers the design, development, and adaptation of offensive capabilities for operational use. This includes payloads, loaders, beacons, C2 components, offensive tooling, and the engineering tradeoffs involved in making them effective, evasive, and reliable.
 
 ---
 
 ## Statistics
 
 ```dataviewjs
-const secondaryLink = dv.current().file.link;
+const primaryLink = dv.current().file.link;
 const isPublished = (page) =>
   !page["note-status"] ||
   page["note-status"] === "☑️ Ready" ||
   page["note-status"] === "Ready";
-
+const secondaries = dv.pages('"02 - Secondary Categories"')
+  .where(p => p.file.outlinks.includes(primaryLink));
 const content = dv.pages('"03 - Content"')
-  .where(p => p.file.outlinks.includes(secondaryLink) && isPublished(p));
-
-const primaries = dv.pages('"01 - Primary Categories"')
-  .where(p => dv.current().file.outlinks.map(l => l.path).includes(p.file.path));
+  .where(p => p.file.outlinks.includes(primaryLink) && isPublished(p));
 
 // Helper: Count only connections within 01/02/03 directories
 const countKnowledgeLinks = (note) => {
-  const knowledgeInlinks = note.file.inlinks.filter(l =>
+  const knowledgeInlinks = note.file.inlinks.filter(l => 
     l.path.startsWith('01 - Primary Categories') ||
     l.path.startsWith('02 - Secondary Categories') ||
     l.path.startsWith('03 - Content')
   ).length;
   
-  const knowledgeOutlinks = note.file.outlinks.filter(l =>
+  const knowledgeOutlinks = note.file.outlinks.filter(l => 
     l.path.startsWith('01 - Primary Categories') ||
     l.path.startsWith('02 - Secondary Categories') ||
     l.path.startsWith('03 - Content')
@@ -69,22 +66,14 @@ const isolatedNotes = content.where(p =>
   (p.file.outlinks.length <= 2 && p.file.inlinks.length <= 1)
 ).length;
 
-// Content types
 const types = {};
 content.forEach(p => {
   const type = p.type || 'Uncategorized';
   types[type] = (types[type] || 0) + 1;
 });
-const sortedTypes = Object.entries(types).sort((a, b) => b[1] - a[1]);
-const topType = sortedTypes.length > 0 ? sortedTypes[0] : null;
+const topType = Object.entries(types).sort((a, b) => b[1] - a[1])[0];
 
-// Recent activity metrics
 const now = new Date();
-const lastUpdated = content.length > 0 
-  ? content.array().sort((a, b) => b.file.mtime - a.file.mtime)[0].file.mtime
-  : null;
-const daysSinceUpdate = lastUpdated ? Math.floor((now - lastUpdated) / (1000 * 60 * 60 * 24)) : null;
-
 const recentContent = content.where(p => {
   const daysSince = (now - p.file.mtime) / (1000 * 60 * 60 * 24);
   return daysSince <= 30;
@@ -95,21 +84,21 @@ const oldContent = content.where(p => {
   return daysSince > 180;
 }).length;
 
-// Note completion statistics
+const contentPerSecondary = secondaries.length > 0 ? (content.length / secondaries.length).toFixed(1) : '0';
+const mostPopulatedSecondary = secondaries.array()
+  .map(s => ({
+    name: s.file.name,
+    count: content.where(c => c.file.outlinks.map(l => l.path).includes(s.file.path)).length
+  }))
+  .sort((a, b) => b.count - a.count)[0];
+
 const stubNotes = content.where(p => p.file.size < 500).length;
 const wellDeveloped = content.where(p => p.file.size > 2000).length;
 
-// Actionable content metrics
-const tools = content.where(p => p.type === 'Tool').length;
-const techniques = content.where(p => p.type === 'Technique').length;
-const commands = content.where(p => p.type === 'Command').length;
-const playbooks = content.where(p => p.type === 'Playbook').length;
-const actionable = tools + techniques + commands + playbooks;
-
 // Health Score
-const contentScore = Math.min((content.length / 20) * 100, 100);
-const avgConn = content.length > 0
-  ? content.array().reduce((sum, p) => sum + p.file.inlinks.length + p.file.outlinks.length, 0) / content.length
+const contentScore = Math.min((content.length / 50) * 100, 100);
+const avgConn = content.length > 0 
+  ? content.array().reduce((sum, p) => sum + p.file.inlinks.length + p.file.outlinks.length, 0) / content.length 
   : 0;
 const connectivityScore = Math.min((avgConn / 10) * 100, 100);
 const freshnessScore = content.length > 0 ? (recentContent / content.length) * 100 : 0;
@@ -139,8 +128,11 @@ dv.paragraph(`
 
 dv.header(3, "📊 Overview");
 dv.paragraph(`
+- **Secondary Categories**: ${secondaries.length}
 - **Content Notes**: ${content.length}
 - **Content Types**: ${Object.keys(types).length}
+- **Avg Content per Secondary**: ${contentPerSecondary}
+- **Most Populated Secondary**: ${mostPopulatedSecondary ? mostPopulatedSecondary.name : 'N/A'} (${mostPopulatedSecondary ? mostPopulatedSecondary.count : 0})
 `);
 
 dv.header(3, "🔗 Connectivity");
@@ -160,28 +152,78 @@ dv.paragraph(`
 - **Stubs**: ${stubNotes} (${content.length > 0 ? ((stubNotes / content.length) * 100).toFixed(0) : 0}%)
 `);
 
-dv.header(3, "📚 Content Type Distribution");
-if (sortedTypes.length > 0) {
-  const typeList = sortedTypes.map(([type, count]) => 
-    `  - **${type}**: ${count} (${((count / content.length) * 100).toFixed(0)}%)`
-  ).join('\n');
-  dv.paragraph(typeList);
-} else {
-  dv.paragraph('  - No content yet');
-}
-
-dv.header(3, "🛠️ Actionable Content");
-dv.paragraph(`
-- **Tools**: ${tools} | **Techniques**: ${techniques} | **Commands**: ${commands} | **Playbooks**: ${playbooks}
-- **Total Actionable**: ${actionable} (${content.length > 0 ? ((actionable / content.length) * 100).toFixed(0) : 0}%)
-`);
-
 dv.header(3, "⏰ Activity Metrics");
 dv.paragraph(`
 - **Updated in Last 30 Days**: ${recentContent} (${content.length > 0 ? ((recentContent / content.length) * 100).toFixed(0) : 0}%)
 - **Not Updated in 6+ Months**: ${oldContent} (${content.length > 0 ? ((oldContent / content.length) * 100).toFixed(0) : 0}%)
 - **Last Activity**: ${content.length > 0 ? content.array().sort((a, b) => b.file.mtime - a.file.mtime)[0].file.mtime.toFormat('MMM dd, yyyy') : 'N/A'}
 `);
+```
+
+### Top 5 Most Related Primary Categories
+```dataviewjs
+const currentPrimary = dv.current().file.link;
+
+const mySecondaries = dv.pages('"02 - Secondary Categories"')
+  .where(p => p.file.outlinks.includes(currentPrimary))
+  .map(p => p.file.link);
+
+const relatedPrimaries = dv.pages('"01 - Primary Categories"')
+  .where(p => p.file.name != dv.current().file.name)
+  .map(p => {
+    const sharedSecondaries = dv.pages('"02 - Secondary Categories"')
+      .where(s => s.file.outlinks.includes(p.file.link) && 
+                  mySecondaries.some(ms => ms.path === s.file.path))
+      .length;
+    return {link: p.file.link, shared: sharedSecondaries};
+  })
+  .filter(p => p.shared > 0)
+  .sort(p => p.shared, 'desc')
+  .limit(5);
+
+if (relatedPrimaries.length > 0) {
+  dv.table(
+    ["Related Primary Category", "Shared Secondary Category Count"],
+    relatedPrimaries.map(p => [p.link, p.shared])
+  );
+} else {
+  dv.paragraph("*No related primary categories found.*");
+}
+```
+
+---
+
+## Secondary Categories
+
+> [!seealso]- Click to Expand
+> ```dataview
+>  LIST
+>  FROM "02 - Secondary Categories"
+>  WHERE contains(primary-categories, this.file.link) OR contains(parents, this.file.link)
+>  SORT file.name ASC 
+> ```
+
+### Recent Activity
+```dataview
+TABLE WITHOUT ID
+  file.link AS "Secondary Category",
+  file.mtime AS "Modified"
+FROM "02 - Secondary Categories"
+WHERE contains(file.outlinks, this.file.link)
+SORT file.mtime DESC
+LIMIT 10
+```
+
+### Most Connected
+```dataview
+TABLE WITHOUT ID
+  file.link AS "Note",
+  length(file.outlinks) AS "→ Links Out",
+  length(file.inlinks) AS "← Links In",
+  (length(file.outlinks) + length(file.inlinks)) AS "Total"
+FROM "02 - Secondary Categories"
+WHERE contains(file.outlinks, this.file.link)
+SORT file.name ASC
 ```
 
 ---
@@ -193,7 +235,7 @@ dv.paragraph(`
 >  LIST
 >  FROM "03 - Content"
 >  WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
->    AND (contains(secondary-categories, this.file.link) OR contains(parents, this.file.link))
+>    AND (contains(primary-categories, this.file.link) OR contains(parents, this.file.link))
 >  SORT file.name ASC 
 > ```
 
@@ -225,7 +267,7 @@ SORT (length(file.outlinks) + length(file.inlinks)) DESC
 LIMIT 10
 ```
 
-***
+---
 
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

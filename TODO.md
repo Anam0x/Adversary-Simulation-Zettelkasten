@@ -56,19 +56,30 @@
 ### High Priority (Core Functionality and Usability)
 
 - [ ] Templater Plugin Script Enhancements
-  - [ ] Modify/add new Templater script to permit creating a new Content Type directly (currently only supports content type creation by going through note creation workflow)
-  - [ ] ~~Go back button during note creation workflow (possibly not supportable)~~
-  - [ ] Sanitize search tag emoji because titles can contain illegal tag characters 
-  - [ ] Need a hack for preventing file getting created via Templater if the user cancels the workflow or an unexpected error occurs
-  - [x] Modify back-linking primary/secondary categories menu
-    - [x] Proceed without selecting a category
-    - [x] De-select a category
-  - [ ] Personal/unfinished ideas ~~directory~~ (property)
-    - [ ] Update installation scripts/instructions
-    - [ ] Update vault structure notes
-  - [ ] Title character validation or search tag emoji sanitization for invalid tag characters (e.g., "$" is a valid character for note titles, but not tags)
-  - [ ] Title character validation includes all link-breaking characters
-  - [ ] Prompt for aliases
+  - [ ] Phase 1: Entry points and workflow separation
+    - [ ] Modify/add new Templater script to permit creating a new Content Type directly (currently only supports content type creation by going through note creation workflow)
+    - [x] Modify back-linking primary/secondary categories menu
+      - [x] Proceed without selecting a category
+      - [x] De-select a category
+    - [ ] Revisit whether additional dedicated entry-point scripts are still needed after direct content-type creation is implemented
+  - [ ] Phase 2: Title/tag sanitization and filename safety
+    - [ ] Sanitize search tag emoji because titles can contain illegal tag characters
+    - [ ] Title character validation or search tag emoji sanitization for invalid tag characters (e.g., "$" is a valid character for note titles, but not tags)
+    - [ ] Title character validation includes all link-breaking characters
+    - [ ] Consolidate title validation and tag-sanitization rules into one documented normalization path
+  - [ ] ~~Phase 3: Cancellation/failure hardening follow-up~~
+    - [ ] ~~Need a hack for preventing file getting created via Templater if the user cancels the workflow or an unexpected error occurs~~
+    - [ ] ~~Decide whether "safe recovery content" is sufficient or whether a stronger no-file workaround is still necessary~~
+  - [ ] Phase 4: Metadata capture improvements
+    - [ ] Prompt for aliases
+    - [ ] Support iterative multi-value alias entry during note creation
+  - [ ] Phase 5: Idea-state and unfinished-workflow support
+    - [ ] Personal/unfinished ideas ~~directory~~ (property)
+      - [ ] Update installation scripts/instructions
+      - [ ] Update vault structure notes
+      - [ ] Define and document how the property should interact with `note-status`, Dataview filtering, and Idea/Basic note creation
+  - [ ] Deferred/possibly unsupported
+    - [ ] ~~Go back button during note creation workflow (possibly not supportable)~~
 
 - [x] Dataview query standardization
   - [x] Create dedicated `Dataview.md` files for lightweight and rich content templates

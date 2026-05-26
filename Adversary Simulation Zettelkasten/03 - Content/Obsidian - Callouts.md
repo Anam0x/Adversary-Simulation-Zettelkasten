@@ -2,11 +2,12 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Obsidian - Callouts]]
 
@@ -14,7 +15,7 @@ type: Basic
 
 ## Overview
 
-As of [Obsidian v0.14.0](https://obsidian.md/changelog/2022-03-14-desktop-v0.14.0/), Obsidian natively supports callout boxes[^1] (also known as admonitions). Callouts allow you to create visually distinct blocks with different icons, colors, and styles directly in your notes without requiring community plugins.
+As of v0.14.0, Obsidian natively supports callout boxes[^1][^2] (also known as admonitions). Callouts allow you to create visually distinct blocks with different icons, colors, and styles directly in your notes without requiring community plugins.
 
 Callouts are useful for:
 - Highlighting important information, warnings, or tips
@@ -335,13 +336,13 @@ Callouts support full Markdown formatting, including:
 
 ```markdown
 > [!info] Related Topics
-> See also: [[Active Directory]], [[Kerberoasting]], and [[PowerShell]]
+> See also: [[Active Directory]] and [[PowerShell]]
 > 
 > External resource: [MITRE ATT&CK](https://attack.mitre.org/)
 ```
 
 > [!info] Related Topics
-> See also: [[Active Directory]], [[Kerberoasting]], and [[PowerShell]]
+> See also: [[Active Directory]] and [[PowerShell]]
 > 
 > External resource: [MITRE ATT&CK](https://attack.mitre.org/)
 
@@ -370,7 +371,7 @@ Callouts support full Markdown formatting, including:
 Many callout types have aliases that produce the same styling. Use whichever name best fits your context:
 
 | Primary Type | Aliases                |
-| ------------ | ---------------------- |
+| --------- | --------------- |
 | `note`       | `seealso`              |
 | `abstract`   | `summary`, `tldr`      |
 | `info`       | —                      |
@@ -391,15 +392,15 @@ Many callout types have aliases that produce the same styling. Use whichever nam
 
 ### Footnotes
 
-Footnotes cannot be embedded directly within callout blocks. They must be placed outside the callout:
+Footnotes can be embedded directly within callout blocks, but they will only appear in reading view, not editing view.
 
 ```markdown
 > [!note]
-> This callout attempts to use a footnote[^2].
+> This callout attempts to use a footnote[^3].
 ```
 
 > [!note]
-> This callout attempts to use a footnote[^2].
+> This callout attempts to use a footnote[^3].
 
 It is advised to use inline links instead:
 
@@ -430,18 +431,19 @@ Dataview queries within callouts may not render correctly in all contexts. Test 
 | Performance           | Native (faster) | Plugin (slight overhead)        |
 | Future Compatibility  | High            | Dependent on plugin maintenance |
 
-It is recomended to use native callouts for new notes. The [[Admonition]] plugin remains available for legacy compatibility and advanced customization needs.
+It is recommended to use native callouts for new notes. The [[Obsidian - Admonition]] plugin remains available for legacy compatibility and advanced customization needs.
 
 ## Resources
 
-| Hyperlink                                                                                                                                      | Info                                                                 |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Callouts, Obsidian Help](https://help.obsidian.md/Editing+and+formatting/Callouts)                                                            | Official Obsidian documentation for callouts                         |
 | [0.14.0 Desktop, Obsidian Changelog](https://obsidian.md/changelog/2022-03-14-desktop-v0.14.0/)                                                | Release notes introducing native callout support                     |
 | [How to make Custom Callouts in Obsidian, Brianna Laird](https://briannalaird.com/content/blog-posts/2025-06-17-making-callouts-obsidian.html) | Community member-published guide on styling and customizing callouts |
 
-[^1]: Callouts, Obsidian Help, https://help.obsidian.md/Editing+and+formatting/Callouts
-[^2]: Example Page, Google, https://google.com/example
+[^1]: Obsidian v0.14.0, Obsidian Changelog, https://obsidian.md/changelog/2022-03-14-desktop-v0.14.0/
+[^2]: Callouts, Obsidian Help, https://help.obsidian.md/Editing+and+formatting/Callouts
+[^3]: Example Page, Google, https://google.com/example
 
 ---
 

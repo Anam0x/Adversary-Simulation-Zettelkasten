@@ -2,24 +2,24 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Obsidian - Custom CSS]]  
 
-***
-
+---
 ## Enabling Custom CSS Snippets
 
 To enable custom styling within Obsidian, you'll need to:
-1. Create the associated 'snippets' folder within the obsidian vault filestructure. This folder can be created by going to `Settings > Appearences` and clicking on the folder icon (far right) shown below. This folder will be created within the `$VAULTPATH/.obsidian/` directory. 
+1. Create the associated 'snippets' folder within the obsidian vault file structure. This folder can be created by going to `Settings > Appearences` and clicking on the folder icon (far right) shown below. This folder will be created within the `$VAULTPATH/.obsidian/` directory. 
 
 ![[Pasted image 20210907125248.png]]
 
-2. Within the newly created `snippets` folder, create a single `.css` or several `.css` files with the descired snippets below. 
+2. Within the newly created `snippets` folder, create a single `.css` or several `.css` files with the desired snippets below. 
 
 ![[Pasted image 20210907125653.png]]
 
@@ -34,7 +34,7 @@ To enable custom styling within Obsidian, you'll need to:
 #### Description
 Recolor `unresolved` or non-existent notes to show up in graph view as dark red (#CF4747).
 
-While Obsidian exposes the ability to colorize the graph view using groups, there doesnt seem to yet be a way to colorize unresolved notes. For this we'll use a CSS snippet. 
+While Obsidian exposes the ability to colorize the graph view using groups, there doesn't seem to yet be a way to colorize unresolved notes. For this we'll use a CSS snippet. 
 
 #### CSS Snippet
 
@@ -259,11 +259,10 @@ ___
 
 ## Resources
 
-| Hyperlink                                                                          | Info                                         |
-| ---------------------------------------------------------------------------------- | -------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian Forums Showcase, Obsidian](https://forum.obsidian.md/c/share-showcase/9) | The source for several of the above snippets |
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

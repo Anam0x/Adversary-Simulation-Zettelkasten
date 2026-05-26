@@ -2,16 +2,16 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Obsidian - Properties]]
 
-***
-
+---
 ## Overview
 
 This note documents the official approach to using Obsidian frontmatter properties in the Adversary Simulation Tradecraft Zettelkasten. Properties exist to support classification, navigation, and targeted Dataview queries without turning note creation into excessive data entry.
@@ -27,7 +27,7 @@ The vault therefore follows three design principles:
 Obsidian properties used in this vault may be any of the following:
 - **Text**: plain text values, including single Obsidian links when appropriate
 - **Lists**: multi-value fields, commonly used for links or controlled vocabulary
-- **Numbers**: quantitative values such as scores or ports
+- **Numbers**: quantitative values such as scores
 - **Booleans**: `true`/`false`
 - **Dates**: calendar dates
 - **Date & Time**: timestamps when more precision is useful
@@ -347,8 +347,6 @@ This refactor separates **configuration** from **prompting logic**. Users making
 | `confidence` | `text` | Controlled value | No | Useful assessment metadata, but not required to capture the IOC. |
 | `associated-tools` | `list[link]` | Note picker | No | Relationship enrichment. |
 | `associated-tradecraft` | `list[link]` | Note picker | No | Relationship enrichment. |
-| `first-seen` | `date` | Date | No | Timeline enrichment. |
-| `last-seen` | `date` | Date | No | Timeline enrichment. |
 | `active` | `boolean` | Boolean | No | Useful state flag, but not mandatory for first capture. |
 
 ### Lab Setup
@@ -385,14 +383,13 @@ This refactor separates **configuration** from **prompting logic**. Users making
 | `required-access` | `list[text]` | Free-write list | No | Helpful prerequisite detail, not required for initial creation. |
 | `opsec-risk` | `text` | Controlled value | No | Operational nuance. |
 | `tested` | `boolean` | Boolean | No | Lifecycle/workflow metadata. |
-| `last-executed` | `date` | Date | No | Lifecycle/workflow metadata. |
 
 ### Protocol
 
 | Property | Type | Input Mode | Required | Justification |
 | --- | --- | --- | --- | --- |
 | `protocol-family` | `text` | Controlled value | Yes | Primary classifier for protocol discovery. |
-| `ports` | `list[number]` | Free-write list | No | Useful technical detail, but not always required immediately. |
+| `ports` | `list[text]` | Free-write list | No | Useful technical detail, but not always required immediately. |
 | `authentication-methods` | `list[text]` | Controlled list | No | Valuable nuance, but not essential for first-pass capture. |
 | `abused-by-tradecraft` | `list[link]` | Note picker | No | Relationship enrichment. |
 | `secured-by-controls` | `list[link]` | Note picker | No | Relationship enrichment. |
@@ -448,18 +445,18 @@ This refactor separates **configuration** from **prompting logic**. Users making
 
 ### Tradecraft
 
-| Property | Type | Input Mode | Required | Justification |
-| --- | --- | --- | --- | --- |
-| `attack-id` | `text` | Free-write | No | Helpful external mapping, but not every note needs it. |
-| `tactic` | `text` | Controlled value | Yes | Core classifier and major Dataview dimension. |
-| `platforms` | `list[text]` | Controlled list | Yes | Core classifier and major Dataview dimension. |
-| `permissions-required` | `list[text]` | Controlled list | No | Important nuance, but not required for first capture. |
-| `supports-remote` | `boolean` | Boolean | No | Helpful nuance, not a minimum classifier. |
-| `data-sources` | `list[text]` | Free-write list | No | Important defensive context, but can be filled later. |
-| `uses-tools` | `list[link]` | Note picker | No | Relationship enrichment. |
-| `bypasses-controls` | `list[link]` | Note picker | No | Relationship enrichment. |
-| `exploits-vulnerabilities` | `list[link]` | Note picker | No | Relationship enrichment. |
-| `uses-protocols` | `list[link]` | Note picker | No | Relationship enrichment. |
+| Property                   | Type         | Input Mode       | Required | Justification                                             |
+| -------------------------- | ------------ | ---------------- | -------- | --------------------------------------------------------- |
+| `attack-id`                | `list[text]` | Free-write       | No       | Helpful external mapping(s), but not every note needs it. |
+| `tactic`                   | `text`       | Controlled value | Yes      | Core classifier and major Dataview dimension.             |
+| `platforms`                | `list[text]` | Controlled list  | Yes      | Core classifier and major Dataview dimension.             |
+| `permissions-required`     | `list[text]` | Controlled list  | No       | Important nuance, but not required for first capture.     |
+| `supports-remote`          | `boolean`    | Boolean          | No       | Helpful nuance, not a minimum classifier.                 |
+| `data-sources`             | `list[text]` | Free-write list  | No       | Important defensive context, but can be filled later.     |
+| `uses-tools`               | `list[link]` | Note picker      | No       | Relationship enrichment.                                  |
+| `bypasses-controls`        | `list[link]` | Note picker      | No       | Relationship enrichment.                                  |
+| `exploits-vulnerabilities` | `list[link]` | Note picker      | No       | Relationship enrichment.                                  |
+| `uses-protocols`           | `list[link]` | Note picker      | No       | Relationship enrichment.                                  |
 
 ### Vulnerability
 
@@ -473,16 +470,14 @@ This refactor separates **configuration** from **prompting logic**. Users making
 | `exploited-by-tradecraft` | `list[link]` | Note picker | No | Relationship enrichment. |
 | `prerequisites` | `list[text]` | Free-write list | No | Useful exploit context, but not required initially. |
 
-***
-
+---
 ## Resources
 
-| Hyperlink                                                                        | Info                                                       |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Properties, Obsidian Help, https://help.obsidian.md/properties                   | Official Obsidian documentation for frontmatter properties |
-| Dataview Wiki, Michael Brenan, https://blacksmithgu.github.io/obsidian-dataview/ | Official Dataview documentation and query reference        |
+| Reference | Info |
+| --------- | ---- |
+| [Properties, Obsidian Help](https://help.obsidian.md/properties)                   | Official Obsidian documentation for frontmatter properties |
+| [Dataview Wiki, Michael Brenan](https://blacksmithgu.github.io/obsidian-dataview/) | Official Dataview documentation and query reference        |
 
-***
-
-*Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
+---
+*Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

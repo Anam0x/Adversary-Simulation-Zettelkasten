@@ -233,8 +233,6 @@ const CONTENT_TYPE_PROPERTY_SCHEMAS = {
         { name: "confidence", type: "text", required: false, promptOnCreate: true, prompt: "Confidence", allowedValues: CONTROLLED_VALUES.CONFIDENCE_LEVELS },
         { name: "associated-tools", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Associated tools", targetContentTypes: ["Tool"] },
         { name: "associated-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Associated tradecraft", targetContentTypes: ["Tradecraft"] },
-        { name: "first-seen", type: "date", required: false, prompt: "First seen date" },
-        { name: "last-seen", type: "date", required: false, prompt: "Last seen date" },
         { name: "active", type: "boolean", required: false, prompt: "Indicator still active" }
     ],
     "Lab Setup": [
@@ -261,12 +259,11 @@ const CONTENT_TYPE_PROPERTY_SCHEMAS = {
         { name: "required-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Required tradecraft", targetContentTypes: ["Tradecraft"] },
         { name: "required-access", type: "list[text]", required: false, prompt: "Required access", example: "'Valid domain user credentials', 'VPN access'" },
         { name: "opsec-risk", type: "text", required: false, promptOnCreate: true, prompt: "OPSEC risk", allowedValues: CONTROLLED_VALUES.OPSEC_RISK },
-        { name: "tested", type: "boolean", required: false, prompt: "Tested" },
-        { name: "last-executed", type: "date", required: false, prompt: "Last executed date" }
+        { name: "tested", type: "boolean", required: false, prompt: "Tested" }
     ],
     "Protocol": [
         { name: "protocol-family", type: "text", required: true, promptOnCreate: true, prompt: "Protocol family", allowedValues: CONTROLLED_VALUES.PROTOCOL_FAMILIES },
-        { name: "ports", type: "list[number]", required: false, prompt: "Ports" },
+        { name: "ports", type: "list[text]", required: false, prompt: "Ports" },
         { name: "authentication-methods", type: "list[text]", required: false, promptOnCreate: true, prompt: "Authentication methods", allowedValues: CONTROLLED_VALUES.PROTOCOL_AUTHENTICATION_METHODS },
         { name: "abused-by-tradecraft", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Abused by tradecraft", targetContentTypes: ["Tradecraft"] },
         { name: "secured-by-controls", type: "list[link]", required: false, promptOnCreate: true, allowEmptyOnCreate: true, prompt: "Secured by controls", targetContentTypes: ["Security Control"] },
@@ -309,7 +306,7 @@ const CONTENT_TYPE_PROPERTY_SCHEMAS = {
         { name: "tested", type: "boolean", required: false, prompt: "Tested" }
     ],
     "Tradecraft": [
-        { name: "attack-id", type: "text", required: false, prompt: "ATT&CK or framework ID", example: "T1059.001" },
+        { name: "attack-id", type: "list[text]", required: false, prompt: "ATT&CK or framework ID", example: "T1059.001" },
         { name: "tactic", type: "text", required: true, promptOnCreate: true, prompt: "Tactic", allowedValues: CONTROLLED_VALUES.TACTICS },
         { name: "platforms", type: "list[text]", required: true, promptOnCreate: true, prompt: "Platforms", allowedValues: CONTROLLED_VALUES.TARGET_PLATFORMS },
         { name: "permissions-required", type: "list[text]", required: false, promptOnCreate: true, prompt: "Permissions required", allowedValues: CONTROLLED_VALUES.PERMISSIONS_REQUIRED },

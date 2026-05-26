@@ -2,17 +2,17 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
-# [[Emoji Toolbar]]
+# [[Obsidian - Emoji Toolbar]]
 
-***
-
-## Description
+---
+## Overview
 
 The Emoji Toolbar plugin for Obsidian adds a customizable hotkey that opens a searchable emoji picker, letting you quickly filter, preview (with Twitter-style formatting), and insert emojis, including skin tone variants and recently used icons, directly into your editor.
 
@@ -98,7 +98,7 @@ renderBulletList("Content", contentTypeItems);
 > [!info]
 > Currently, there is no restriction on using the same emoji as a search tag for new primary categories or content types (e.g., you can have a primary category with the search tag "💯New_Category" and a content type with the search tag "💯New_Content_Type"). This is a deliberate design choice to account for scenarios where the list of compatible emojis has been exhausted (an unlikely scenario given Emoji Toolbar theoretically supports [at least 3,790 emojis as of September 2024](https://emojipedia.org/faq#how-many)) and where users create loosely related content types (e.g., two content types with the search tags "⛏️Offensive_Tool" and "⛏️Defensive_Tool").
 
-The following emojis are always reserved for vault administration and cannot be used to create new search tags via the [[Templater]] plugin script:
+The following emojis are always reserved for vault administration and cannot be used to create new search tags via the [[Obsidian - Templater]] plugin script:
 
 * 🥇 - Primary Category
 * 🥈 - Secondary Category
@@ -106,16 +106,14 @@ The following emojis are always reserved for vault administration and cannot be 
 
 Although the note creation workflow script automatically prohibits this behavior, users must avoid manually introducing search tags using these emojis. Failure to do so may result in unexpected behavior from the Obsidian search tag feature.
 
-***
-
+---
 ## Resources
 
-| Hyperlink                                                                                                                       | Info                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness) | Example implementation of Zettelkasten using Obsidian; discusses the importance of "special tags" |
 | [Dataview, GitHub](https://github.com/blacksmithgu/obsidian-dataview)                                                           | Main repository for the Dataview community plugin for Obsidian                                    |
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

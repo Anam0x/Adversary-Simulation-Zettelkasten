@@ -18,7 +18,7 @@ Configuration, plugins, workflows, and best practices for maintaining Obsidian-b
 
 * [[Obsidian - Getting Started]]
 * [[Obsidian - Linking Content]]
-* [[Vault Structure and Note Creation]]
+* [[Obsidian - Vault Structure and Note Creation]]
 * [[Zettelkasten]]
 
 ### Customization
@@ -30,14 +30,14 @@ Configuration, plugins, workflows, and best practices for maintaining Obsidian-b
 
 #### Required
 
-* [[03 - Content/Dataview]]
-* [[Templater]]
-* [[Obsidian Git]]
-* [[Emoji Toolbar]]
+* [[Obsidian - Dataview]]
+* [[Obsidian - Templater]]
+* [[Obsidian - Obsidian Git]]
+* [[Obsidian - Emoji Toolbar]]
 
 #### Optional
 
-- [[Admonition]]
+- [[Obsidian - Admonition]]
 
 ---
 

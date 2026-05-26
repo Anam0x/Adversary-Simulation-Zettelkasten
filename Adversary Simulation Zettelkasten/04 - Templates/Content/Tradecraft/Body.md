@@ -56,12 +56,17 @@
 
 - <!-- Controls or hardening measures that most meaningfully disrupt this tradecraft -->
 
-## References And Examples
+## References
 
 ### Procedure Examples
 
-| Source | Actor/Tool/Campaign     | Description | Reference |
-| ------ | ----------------------- | ----------- | --------- |
+| Source | Actor/Campaign | Description | Reference |
+| ------ | -------------- | ----------- | --------- |
+
+### Tool Examples
+
+| Tool | Role In Tradecraft | Notes | Reference |
+| ---- | ------------------ | ----- | --------- |
 
 ### Framework Mappings
 

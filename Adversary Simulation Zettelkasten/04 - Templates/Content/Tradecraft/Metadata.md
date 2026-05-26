@@ -7,7 +7,8 @@ primary-categories:
 secondary-categories:
   - Add link(s) [[]] back to related SECONDARY categories
 type: Tradecraft
-attack-id: <!-- e.g., T1059.001 -->
+attack-id: 
+  - <!-- e.g., T1059.001 -->
 tactic: <!-- Initial Access, Execution, Persistence, Privilege Escalation, etc. -->
 platforms:
   - <!-- Windows, Linux, macOS, Cloud, Network, Container -->

@@ -30,34 +30,42 @@ LIMIT 10
 
 #### Uses Tools
 ```dataview
-LIST WITHOUT ID uses-tools
-WHERE file = this.file
-FLATTEN uses-tools
-SORT uses-tools ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Tool"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.uses-tools, file.link)
+SORT file.name ASC
 ```
 
 #### Bypasses Controls
 ```dataview
-LIST WITHOUT ID bypasses-controls
-WHERE file = this.file
-FLATTEN bypasses-controls
-SORT bypasses-controls ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Security Control"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.bypasses-controls, file.link)
+SORT file.name ASC
 ```
 
 #### Exploits Vulnerabilities
 ```dataview
-LIST WITHOUT ID exploits-vulnerabilities
-WHERE file = this.file
-FLATTEN exploits-vulnerabilities
-SORT exploits-vulnerabilities ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Vulnerability"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.exploits-vulnerabilities, file.link)
+SORT file.name ASC
 ```
 
 #### Uses Protocols
 ```dataview
-LIST WITHOUT ID uses-protocols
-WHERE file = this.file
-FLATTEN uses-protocols
-SORT uses-protocols ASC
+LIST
+FROM "03 - Content"
+WHERE type = "Protocol"
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND contains(this.uses-protocols, file.link)
+SORT file.name ASC
 ```
 
 ### Reverse Relationships

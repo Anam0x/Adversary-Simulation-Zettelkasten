@@ -13,9 +13,11 @@
 
 ## Major Components
 
-### Component: <!-- Name -->
+### <!-- Component Name -->
 
-**Role**: <!-- What the component does -->
+**Role**:
+- <!-- What the component does -->
+- <!-- How the component related to the overall architecture -->
 
 **Dependencies**:
 - <!-- Systems, services, or identities it depends on -->

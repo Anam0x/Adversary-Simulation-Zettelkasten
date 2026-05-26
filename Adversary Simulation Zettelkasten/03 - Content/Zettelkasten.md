@@ -3,19 +3,20 @@ aliases:
   - Slip-Box
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Training]]"
-secondary categories:
+secondary-categories:
   - "[[Learning Techniques]]"
+
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Zettelkasten]]
 
-***
-
+---
 ## Overview
 
-[[Niklas Luhmann]]'s Zettelkasten (German for "slip-box") was a physical index-card system for managing [**atomic notes**](https://www.notedexapp.com/blog/atomic-notes) through unique identifiers and cross-references, enabling non-linear exploration that helped him produce prolific work. Unlike isolated flashcards, the Zettelkasten's strength lies in its network of interconnected notes — a concept modern tools like Obsidian replicate digitally using Markdown-linked notes. As highlighted in TrustedSec's blog post *Obsidian, Taming a Collective Consciousness*[^1], this approach can transform siloed documentation into a living, interconnected knowledge base that evolves continuously.
+[[Niklas Luhmann]]'s Zettelkasten (German for "slip-box") was a physical index-card system for managing atomic notes through unique identifiers and cross-references, enabling non-linear exploration that helped him produce prolific work. Unlike isolated flashcards, the Zettelkasten's strength lies in its network of interconnected notes — a concept modern tools like Obsidian replicate digitally using Markdown-linked notes. As highlighted in TrustedSec's blog post *Obsidian, Taming a Collective Consciousness*[^1], this approach can transform siloed documentation into a living, interconnected knowledge base that evolves continuously.
 
 ## Zettelkasten Principles
 
@@ -167,7 +168,7 @@ The core benefits of TrustedSec's approach (i.e., rapid content creation, networ
 Like any methodology, Zettelkasten has limitations alongside its strengths. The following table outlines common criticisms that can help inform whether this approach fits your workflow.
 
 | Criticism                       | Implication                                                                                              |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| --------- | --------------- |
 | High complexity & time cost     | Not feasible for casual or fast-paced workflows; requires long-term commitment to see positive results   |
 | Lack of standard format         | Hinders consistency and navigation                                                                       |
 | Steep learning curve            | Delayed productivity benefits                                                                            |
@@ -181,11 +182,11 @@ Like any methodology, Zettelkasten has limitations alongside its strengths. The 
 
 The Zettelkasten methodology transforms documentation from a post-engagement burden into an integrated operational tool. Knowledge accumulates through natural linking rather than forced categorization, enabling rapid access to cross-domain information during active engagements.
 
-***
+---
 ## Resources
 
-| Hyperlink                                                                                                                                                                                                                                                      | Info                                                                                                        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Zettelkasten, Wikipedia](https://en.wikipedia.org/wiki/Zettelkasten)                                                                                                                                                                                          | Wikipedia page for Zettelkasten                                                                             |
 | [The Zettelkasten Method, Abram Demski](https://www.lesswrong.com/posts/NfdHG6oHBJ8Qxc26s/the-zettelkasten-method-1)                                                                                                                                           | Flashcard implementation of Zettelkasten                                                                    |
 | [Zettelkasten Method: How to Take Smart Notes For Knowledge Management, Disputant](https://disputant.medium.com/zettelkasten-method-how-to-take-smart-notes-for-knowledge-management-a66f636ede6c)                                                             | High-level overview of Zettelkasten and discussion of digital solutions                                     |
@@ -194,7 +195,6 @@ The Zettelkasten methodology transforms documentation from a post-engagement bur
 
 [^1]: Obsidian, Taming a Collective Consciousness; Sam Link; https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

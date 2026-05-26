@@ -2,16 +2,16 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Obsidian - Getting Started]]  
 
-***
-
+---
 ## Welcome to Anam0x's Obsidian Zettelkasten!
 
 This vault was inspired by TrustedSec's research on using Obsidian[^1] for collaborative offensive security knowledge management.
@@ -23,15 +23,15 @@ This vault was inspired by TrustedSec's research on using Obsidian[^1] for colla
 
 If you're just getting started, be sure to check out the complete blog pertaining to Obsidian on TrustedSec's website[^2]. In addition, dig into a few of the resources cited below which go into substantially more detail surrounding many of the how-tos of Obsidian and the benefits of maintaining a digital [[Zettelkasten]].
 
-For instructions on how to add your own content and categories, navigate to the [[Vault Structure and Note Creation]] page. Be sure to check out [[Obsidian - Plugins]] along with the individual pages for the following required vault plugins:
+For instructions on how to add your own content and categories, navigate to the [[Obsidian - Vault Structure and Note Creation]] page. Be sure to check out [[Obsidian - Plugins]] along with the individual pages for the following required vault plugins:
 
-* [[Dataview]]
-* [[Emoji Toolbar]]
-* [[Obsidian Git]]
-* [[Templater]]
+* [[Obsidian - Dataview]]
+* [[Obsidian - Emoji Toolbar]]
+* [[Obsidian - Obsidian Git]]
+* [[Obsidian - Templater]]
 
 > [!tip] Native Callouts
-> As of Obsidian v0.14.0, callout boxes (admonitions) are natively supported without requiring the [[Admonition]] community plugin. See [[Obsidian - Callouts]] for usage instructions and examples.
+> As of Obsidian v0.14.0, callout boxes (admonitions) are natively supported without requiring the [[Obsidian - Admonition]] community plugin. See [[Obsidian - Callouts]] for usage instructions and examples.
 
 Everyone's learning style is different. It is therefore encouraged that you make your own changes to this vault to best accommodate your preferences and workflow.
 
@@ -39,14 +39,13 @@ ___
 
 ## Resources
 
-| Hyperlink                                                                                                                       | Info                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness) | Example implementation of Zettelkasten using Obsidian |
 
 [^1]: Obsidian, Obsidian, https://obsidian.md/
 [^2]: Obsidian, Taming a Collective Consciousness; Sam Link; https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

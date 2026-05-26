@@ -2,18 +2,17 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
-# [[Dataview]]
+# [[Obsidian - Dataview]]
 
-***
-
-## Description
-
+---
+## Overview
 Adds dynamic views, tables, lists, and calendars by querying your notes' metadata, tags, links, and content.
 
 ## Installation
@@ -30,9 +29,9 @@ Adds dynamic views, tables, lists, and calendars by querying your notes' metadat
 ## Basic Usage
 
 Every Dataview query consists of:
-* Exactly one [Query Type]([[Dataview#Query Types]])
+* Exactly one [Query Type]([[Obsidian - Dataview#Query Types]])
 * Zero or one `FROM` data commands with one to many sources
-* Zero to many other [Data Commands]([[Dataview#Data Commands]]) with one to many expressions and/or other fields depending on the data command
+* Zero to many other [Data Commands]([[Obsidian - Dataview#Data Commands]]) with one to many expressions and/or other fields depending on the data command
 
 ### Query Types
 
@@ -98,18 +97,16 @@ FROM "01 - Primary Categories"
 SORT file.ctime DESC
 ```
 
-***
-
+---
 ## Resources
 
-| Hyperlink                                                                                                                       | Info                                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness) | Example implementation of Zettelkasten using Obsidian; demonstrates leveraging Dataview for dynamic query results |
 | [Dataview Wiki, Michael Brenan](https://blacksmithgu.github.io/obsidian-dataview/)                                              | Dataview official documentation and syntax guide                                                                  |
 
 [^1]: Dataview Plugin, Michael Brenan, https://github.com/blacksmithgu/obsidian-dataview
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

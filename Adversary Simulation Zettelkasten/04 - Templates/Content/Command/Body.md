@@ -9,7 +9,7 @@
 - <!-- What problem this command solves -->
 - <!-- When you would choose it over an alternative -->
 
-## Requirements And Assumptions
+## Requirements/Assumptions
 
 - <!-- Required permissions, binaries, modules, environment variables, or network reachability -->
 
@@ -23,10 +23,9 @@
 # Example Bash/sh syntax
 ```
 
-## Examples And Use Cases
+## Examples/Use Cases
 
-### Example 1
-
+Example 1:
 ```powershell
 # Example command invocation
 ```
@@ -34,8 +33,7 @@
 **Why it matters**:
 - <!-- Explain the context or outcome -->
 
-### Example 2
-
+Example 2:
 ```bash
 # Example command invocation
 ```
@@ -45,7 +43,7 @@
 
 ## Notes
 
-### Common Flags / Variants
+### Common Flags/Variants
 
 - <!-- Useful switches, modes, or argument patterns -->
 

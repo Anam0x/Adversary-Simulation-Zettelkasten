@@ -14,7 +14,5 @@ associated-tools:
   - <!-- [[Tool Note]] -->
 associated-tradecraft:
   - <!-- [[Tradecraft Note]] -->
-first-seen: <!-- YYYY-MM-DD -->
-last-seen: <!-- YYYY-MM-DD -->
 active: <!-- true/false -->
 ---

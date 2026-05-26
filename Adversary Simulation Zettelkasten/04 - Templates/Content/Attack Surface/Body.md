@@ -6,18 +6,30 @@
 
 ## Architecture Summary
 
-<!-- Briefly explain what the platform/service does, how it is typically deployed, and which major components matter most during assessment. -->
+> [!todo]- Diagram/Visual Aid
+> Add an architecture diagram or other visual aid when it materially improves understanding of the attack surface, trust boundaries, or major data/identity flows.
+
+| Component | Role | Exposure/Trust | Why It Matters |
+| --------- | ---- | -------------- | -------------- |
+| <!-- Core service, listener, or management plane --> | <!-- What this component does --> | <!-- Who can reach it or which trust zone it belongs to --> | <!-- Why assessors should care --> |
+| <!-- Supporting service, identity, or integration point --> | <!-- What this component does --> | <!-- Who can reach it or which trust zone it belongs to --> | <!-- Why assessors should care --> |
+| <!-- Data store, agent, broker, or remote dependency --> | <!-- What this component does --> | <!-- Who can reach it or which trust zone it belongs to --> | <!-- Why assessors should care --> |
 
 ## Trust Boundaries
 
-- **Identity Boundary**: <!-- Where identities are established, federated, or delegated -->
-- **Administrative Boundary**: <!-- Where privileged actions are performed -->
-- **Data Boundary**: <!-- Where sensitive data is processed, stored, or transmitted -->
-- **Network Boundary**: <!-- Where traffic crosses zones, segments, or external interfaces -->
+| Boundary Type | What Crosses It | Why It Matters |
+| ------------- | --------------- | -------------- |
+| Identity Boundary | <!-- Where identities are established, federated, or delegated --> | <!-- Why it matters during assessment --> |
+| Administrative Boundary | <!-- Where privileged actions are performed --> | <!-- Why it matters during assessment --> |
+| Data Boundary | <!-- Where sensitive data is processed, stored, or transmitted --> | <!-- Why it matters during assessment --> |
+| Network Boundary | <!-- Where traffic crosses zones, segments, or external interfaces --> | <!-- Why it matters during assessment --> |
 
 ## Key Components
 
-### Component: <!-- Name -->
+### <!-- Component Name -->
+
+> [!todo]- Diagram/Visual Aid
+> Add an architecture diagram or other visual aid when it materially improves understanding of the attack surface component.
 
 **Purpose**: <!-- What this component does -->
 
@@ -34,22 +46,34 @@
 
 ### Common Attack Paths
 
-- <!-- High-level path or abuse chain -->
+| Attack Path | Preconditions | Impact |
+| ----------- | ------------- | ------ |
+| <!-- High-level path or abuse chain --> | <!-- Required access, trust, or exposed capability --> | <!-- What the attacker gains --> |
 
 ### Security Model
 
-- <!-- Authentication, authorization, tenancy, isolation, or trust assumptions -->
+| Control Area | Notes |
+| ------------ | ----- |
+| Authentication | <!-- Authentication assumptions --> |
+| Authorization | <!-- Authorization assumptions --> |
+| Isolation/Tenancy | <!-- Isolation or trust assumptions --> |
 
 ### Common Weaknesses
 
-- <!-- Misconfigurations, exposure patterns, or recurring failure modes -->
+| Weakness | Why It Recurs | Impact |
+| -------- | ------------- | ------ |
+| <!-- Misconfiguration, exposure pattern, or recurring failure mode --> | <!-- Why it commonly appears --> | <!-- What it enables --> |
 
 ## Defensive Notes
 
 ### High-Value Controls
 
-- <!-- Controls that meaningfully reduce risk for this surface -->
+| Control | Impact |
+| ------- | ------ |
+| <!-- Control that meaningfully reduces risk --> | <!-- Why it is especially valuable --> |
 
 ### Logging/Telemetry Considerations
 
-- <!-- Useful logs, telemetry, or investigative choke points -->
+| Source | What It Shows | Investigative Use |
+| ------ | ------------- | ----------------- |
+| <!-- Useful logs, telemetry, or investigative choke point --> | <!-- What the source captures --> | <!-- Why analysts care --> |

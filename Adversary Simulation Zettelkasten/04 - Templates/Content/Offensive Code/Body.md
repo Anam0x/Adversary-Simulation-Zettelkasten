@@ -24,6 +24,13 @@
 
 - <!-- Libraries, services, runtime assumptions, or companion files -->
 
+## File Contents
+
+> [!example]- `filename.ext`
+> ```text
+> Representative file contents, excerpt, or pseudocode block
+> ```
+
 ## Usage
 
 ### Build/Setup

@@ -30,18 +30,19 @@
 
 ## Operational Breakdown
 
-### Tradecraft Used
+### Phase Breakdown
 
-- <!-- High-level tradecraft notes and why they mattered here -->
+| Phase | Objective | Tradecraft/ATT&CK | Tools/Commands | Notes |
+| ----- | --------- | ----------------- | -------------- | ----- |
+| Initial Access | <!-- Goal for this phase --> | <!-- Technique or procedural description --> | <!-- Tooling or commands used --> | <!-- Key observations or blockers --> |
+| Post-Exploitation | <!-- Goal for this phase --> | <!-- Technique or procedural description --> | <!-- Tooling or commands used --> | <!-- Key observations or blockers --> |
+| Escalation/Impact | <!-- Goal for this phase --> | <!-- Technique or procedural description --> | <!-- Tooling or commands used --> | <!-- Key observations or blockers --> |
 
-### Tooling Notes
+### Tooling/Configuration
 
-- <!-- Key tools, configurations, or operator tradeoffs -->
-
-## Tooling Breakdown
-
-| Tool | Usage Notes | Flags/Configs | Notes |
-| ---- | ----------- | --------------- | ----- |
+| Tool                    | Role In Operation             | Flags/Configs                                  | Tradeoffs/Notes                                          |
+| ----------------------- | ----------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| <!-- Tool or script --> | <!-- What it was used for --> | <!-- Important switches, modules, or setup --> | <!-- Stability, OPSEC, or environment-specific notes --> |
 
 ## Observations
 

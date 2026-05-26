@@ -6,11 +6,10 @@ primary-categories:
   - "[[Vault Administration]]"
 secondary-categories:
   - "[[Obsidian]]"
-
 type: Basic
 note-status: ☑️ Ready
 ---
-# [[Vault Structure and Note Creation]]
+# [[Obsidian - Vault Structure and Note Creation]]
 
 ---
 ## Overview

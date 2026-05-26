@@ -17,5 +17,4 @@ required-access:
   - <!-- e.g., Valid domain user credentials -->
 opsec-risk: <!-- Low, Medium, High, Critical -->
 tested: <!-- true/false -->
-last-executed: <!-- YYYY-MM-DD -->
 ---

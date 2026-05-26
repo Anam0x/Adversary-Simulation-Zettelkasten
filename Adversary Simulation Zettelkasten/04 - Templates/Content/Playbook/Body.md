@@ -4,9 +4,9 @@
 > > [!tip]
 > > Create a clear, repeatable operational workflow for achieving a specific objective.
 
-## Objective
+## Objectives
 
-<!-- Briefly state what this playbook is designed to accomplish and when it should be used. -->
+- <!-- Briefly state what this playbook is designed to accomplish and when it should be used. -->
 
 ## Prerequisites
 

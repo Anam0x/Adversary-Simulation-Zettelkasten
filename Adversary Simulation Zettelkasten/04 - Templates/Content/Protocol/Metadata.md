@@ -9,7 +9,7 @@ secondary-categories:
 type: Protocol
 protocol-family: <!-- Application, Network, Authentication, Industrial, Cloud API -->
 ports:
-  - <!-- "80" -->
+  - <!-- "TCP/80" -->
 authentication-methods:
   - <!-- Kerberos, NTLM, Certificates, Tokens -->
 abused-by-tradecraft:

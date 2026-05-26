@@ -6,23 +6,31 @@
 
 ## Indicator Context
 
-- **What it is**: <!-- Short description of the indicator -->
-- **Why it matters**: <!-- Threat relevance or investigative value -->
-- **Scope/Confidence Notes**: <!-- Any ambiguity, age, or quality concerns -->
+| Dimension | Notes |
+| --------- | ----- |
+| What It Is | <!-- Short description of the indicator --> |
+| Why It Matters | <!-- Threat relevance or investigative value --> |
+| Scope/Confidence Notes | <!-- Any ambiguity, age, or quality concerns --> |
 
 ## Detection And Investigation
 
 ### Detection Logic
 
-- <!-- How this IOC is typically matched or searched for -->
+| Detection Source | What To Match | Caveats |
+| ---------------- | ------------- | ------- |
+| <!-- Process, DNS, proxy, EDR, SIEM, email, etc. --> | <!-- How this IOC is searched, matched, or correlated --> | <!-- False positive or coverage note --> |
 
 ### False Positive Considerations
 
-- <!-- Benign overlaps or environmental caveats -->
+| Scenario | Why It Can Be Benign | Triage Hint |
+| -------- | -------------------- | ----------- |
+| <!-- Benign overlap or environmental caveat --> | <!-- Why it can appear legitimately --> | <!-- What to check next --> |
 
 ### Triage Notes
 
-- <!-- Where to pivot next if this IOC is observed -->
+| Pivot | Why It Matters |
+| ----- | -------------- |
+| <!-- Host, user, process, network, time window, etc. --> | <!-- Where to investigate next --> |
 
 ### YARA/Rule Snippet
 

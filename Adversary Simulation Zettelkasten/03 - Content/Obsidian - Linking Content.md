@@ -2,20 +2,19 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Obsidian - Linking Content]]  
 
-***
-
-## Description
+---
+## Overview
 
 1. Within Obsidian, links are the means by which data is structured and relationships are drawn. 
-
 2. Obsidian allows the linking of content to a note at **3** levels ^0266aa
 
 | Result                                     | Command                        | Example                                    |
@@ -57,15 +56,13 @@ type: Basic
 
 5. If you're using templates when creating new notes, the hierarchical folder structure above your new note is automatically applied to the note a series of links. Unlike [[Tagging Content|Tags]], several *links* should be added to new notes with the idea that more meaningful links creates more relationships/opportunity for relationships between notes. This process should ultimately lead to a natural distillation of categorical knowledge and thus a new category and MOC.
 
-***
-
+---
 ## Resources
 
-| Hyperlink                                                                                                                       | Info                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness) | Example implementation of Zettelkasten using Obsidian |
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

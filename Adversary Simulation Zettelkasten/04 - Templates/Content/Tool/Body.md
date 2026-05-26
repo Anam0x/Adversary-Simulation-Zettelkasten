@@ -14,6 +14,11 @@
 
 ## Usage
 
+> [!tip]- Help Menu
+> ```
+> 
+> ```
+
 - <!-- Primary workflows, common commands, or operator patterns -->
 
 ## Operational Security (OPSEC)
@@ -23,10 +28,3 @@
 ## Under-the-Hood
 
 - <!-- Internal architecture, important modules, or how it works at a high level -->
-
-## Help Menu
-
-> [!info]- Help Menu
-> ```
-> 
-> ```

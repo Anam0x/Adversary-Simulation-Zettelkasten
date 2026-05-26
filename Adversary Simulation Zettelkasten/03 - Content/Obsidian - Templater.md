@@ -2,19 +2,18 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
-# [[Templater]]
+# [[Obsidian - Templater]]
 
-***
-
-## Description:
-
-[Templater](https://github.com/SilentVoid13/Templater) is a template language that lets you insert **variables** and **functions** results into your [Obsidian](https://obsidian.md/) notes. 
+---
+## Overview
+Templater[^1] is a template language that lets you insert **variables** and **functions** results into your Obsidian[^2] notes. 
 
 ![templater_demo](https://github.com/SilentVoid13/Templater/blob/561ac7bb30dbc2aff6aeab0dd7aa9883bef4fca8/imgs/templater_demo.gif?raw=true)
 
@@ -29,8 +28,7 @@ type: Basic
 	- 03 - Content
 	- 05 - Personal
 
-## Installation:
-
+## Installation
 1. Templater[^1] is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse`
 	* [[Obsidian - Plugins#Required]]
 
@@ -48,14 +46,14 @@ ___
 
 # Resources
 
-| Hyperlink                                                                                                                                      | Info                                                                                                        |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness)                | Example implementation of Zettelkasten using Obsidian; showcases usage of Templater-automated note creation |
 | [Templater, Obsidian Hub](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/templater-obsidian) | Templater wiki page maintained by Obsidian community                                                        |
 
 [^1]: Templater Plugin, SilentVoid13, https://github.com/SilentVoid13/Templater
+[^2]: Obsidian, Obsidian, https://obsidian.md/
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

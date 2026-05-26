@@ -2,19 +2,18 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
 type: Basic
+note-status: ☑️ Ready
 ---
-# [[Admonition]]
+# [[Obsidian - Admonition]]
 
-***
-
-## Description
-
-Adds admonition block-styled content to Obsidian.md, styled after [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/reference/admonitions/).
+---
+## Overview
+Adds admonition block-styled content to Obsidian.md, styled after Material for MkDocs[^1].
 
 ![](https://raw.githubusercontent.com/javalent/admonitions/master/publish/gifs/all.gif)
 
@@ -35,7 +34,7 @@ Adds admonition block-styled content to Obsidian.md, styled after [Material for 
 
 ## Installation
 
-1. Admonition[^1] is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse`
+1. Admonition[^2] is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse`
 	* [[Obsidian - Plugins#Additional]]
 
 ## Configuration
@@ -76,7 +75,7 @@ My custom content.
 #### Supported Parameters
 
 | Parameter   | Description                                                          |
-| ----------- | -------------------------------------------------------------------- |
+| --------- | --------------- |
 | `title:`    | Optional. Overrides default title; supports Markdown in block-style. |
 | `collapse:` | `open`, `close`, or `none`. Controls collapsible behavior.           |
 | `icon:`     | Sets a custom icon using FontAwesome or RPG Awesome names.           |
@@ -129,13 +128,15 @@ It is not possible to embed a footnote in admonition-styled code blocks, illustr
 
 ````markdown
 ```ad-example
-Attempt to embed a footnote in this codeblock, it won't work[^2].
+Attempt to embed a footnote in this codeblock, it won't work[^3].
+
 However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
 ```
 ````
 
 ```ad-example
-Attempt to embed a footnote in this codeblock, it won't work[^2].
+Attempt to embed a footnote in this codeblock, it won't work[^3].
+
 However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
 ```
 
@@ -145,15 +146,15 @@ ___
 
 ## Resources
 
-| Hyperlink                                                                                                                                        | Info                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness)                  | Example implementation of Zettelkasten using Obsidian; showcases usage of Admonition-styled code blocks |
 | [Admonition, Obsidian Hub](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-admonition) | Admonition wiki page maintained by Obsidian community                                                   |
 
-[^1]: Admonition Plugin, Jeremy Valentine, https://github.com/javalent/admonitions
-[^2]: Example Page, Google, https://google.com/example
+[^1]: Admonition, Material for MkDocs, https://squidfunk.github.io/mkdocs-material/reference/admonitions/
+[^2]: Admonition Plugin, Jeremy Valentine, https://github.com/javalent/admonitions
+[^3]: Example Page, Google, https://google.com/example
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

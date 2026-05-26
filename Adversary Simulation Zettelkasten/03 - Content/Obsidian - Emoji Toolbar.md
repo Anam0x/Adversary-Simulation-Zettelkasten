@@ -95,6 +95,8 @@ renderBulletList("Primary Categories", primaryCategoryItems);
 renderBulletList("Content", contentTypeItems);
 ```
 
+The primary-category list is derived from live notes in `01 - Primary Categories`, while the content-type list is derived from the template taxonomy in `04 - Templates/Content`. This keeps the note aligned with the current template set even when older legacy content notes still exist in `03 - Content`.
+
 > [!info]
 > Currently, there is no restriction on using the same emoji as a search tag for new primary categories or content types (e.g., you can have a primary category with the search tag "💯New_Category" and a content type with the search tag "💯New_Content_Type"). This is a deliberate design choice to account for scenarios where the list of compatible emojis has been exhausted (an unlikely scenario given Emoji Toolbar theoretically supports [at least 3,790 emojis as of September 2024](https://emojipedia.org/faq#how-many)) and where users create loosely related content types (e.g., two content types with the search tags "⛏️Offensive_Tool" and "⛏️Defensive_Tool").
 
@@ -102,7 +104,7 @@ The following emojis are always reserved for vault administration and cannot be 
 
 * 🥇 - Primary Category
 * 🥈 - Secondary Category
-* ⚛️ - Atomic Note/Content
+* ⚛️ - Atomic Note/Content Type
 
 Although the note creation workflow script automatically prohibits this behavior, users must avoid manually introducing search tags using these emojis. Failure to do so may result in unexpected behavior from the Obsidian search tag feature.
 

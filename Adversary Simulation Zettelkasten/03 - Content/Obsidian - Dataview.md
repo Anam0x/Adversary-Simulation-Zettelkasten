@@ -26,6 +26,9 @@ Adds dynamic views, tables, lists, and calendars by querying your notes' metadat
 * Set inline query prefix (default: =) for inline Dataview expressions by navigating to `Settings > Community Plugins > Dataview > Codeblocks` and setting the *Inline query prefix* value
 * Enable/disable automatic task completion date tracking by navigating to `Settings > Community Plugins > Dataview > Tasks` and toggling *Automatic task completion tracking*
 
+> [!important]
+> JavaScript queries are required for parts of this vault, most notably the dynamic emoji inventory in [[Obsidian - Emoji Toolbar]].
+
 ## Basic Usage
 
 Every Dataview query consists of:
@@ -49,10 +52,46 @@ Every Dataview query consists of:
 * `FLATTEN`: Flatten an array in every row
 * `LIMIT N`: Limit results to at most `N` values
 
+## Vault Conventions
+
+This vault uses Dataview in three main ways:
+1. `Related Notes` sections inside content notes
+2. Category dashboards and discovery views
+3. Small utility notes such as [[Obsidian - Emoji Toolbar]]
+
+When writing new queries for this vault, prefer these conventions:
+- Filter content visibility with `note-status`
+- Use typed relationship fields instead of generic `related` lists where possible
+- Query template content types from `04 - Templates/Content` when the goal is taxonomy or schema discovery
+- Use `dataviewjs` only when plain DQL is too limited for the task
+
+### Publication Filter Pattern
+
+Most content-note discovery queries should treat published content like this:
+````
+```dataview
+LIST
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+LIMIT 5
+```
+````
+
+```dataview
+LIST
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+LIMIT 5
+```
+
+This includes:
+- Explicitly ready notes
+- Older notes that predate the status model
+
+and excludes:
+- Notes marked `✍️ Draft`
+
 ## Example Queries
 
 List all notes in the `01 - Primary Categories` directory:
-
 ````
 ```dataview
 LIST
@@ -66,7 +105,6 @@ FROM "01 - Primary Categories"
 ```
 
 List all notes tagged with the "🥇Primary_Category" tag not including files in the `04 - Templates` directory in ascending alphabetical order (should be equivalent to the query results above):
-
 ````
 ```dataview
 LIST
@@ -82,7 +120,6 @@ SORT file.name ASC
 ```
 
 Table of primary categories with last-created and -modified dates:
-
 ````
 ```dataview
 TABLE file.ctime as "Created", file.mtime as "Modified"
@@ -95,6 +132,23 @@ SORT file.ctime DESC
 TABLE file.ctime as "Created", file.mtime as "Modified"
 FROM "01 - Primary Categories"
 SORT file.ctime DESC
+```
+
+List published content notes only:
+````
+```dataview
+TABLE type, file.mtime AS "Modified"
+FROM "03 - Content"
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+SORT file.mtime DESC
+```
+````
+
+```dataview
+TABLE type, file.mtime AS "Modified"
+FROM "03 - Content"
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+SORT file.mtime DESC
 ```
 
 ---

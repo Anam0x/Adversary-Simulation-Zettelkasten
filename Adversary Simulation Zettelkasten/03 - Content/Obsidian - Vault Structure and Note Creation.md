@@ -44,14 +44,17 @@ The vault uses a hierarchical organization system with four main directories:
 │       └── Content/
 │           ├── Basic/
 │           │   ├── Body.md
+│           │   ├── Dataview.md
 │           │   ├── Footer.md
 │           │   └── Metadata.md
 │           ├── Custom Type 1/
 │           │   ├── Body.md
+│           │   ├── Dataview.md
 │           │   ├── Footer.md
 │           │   └── Metadata.md
 │           └── Custom Type 2/
 │               ├── Body.md
+│               ├── Dataview.md
 │               ├── Footer.md
 │               └── Metadata.md
 
@@ -72,10 +75,22 @@ Whereas in traditional note-taking systems, notes can only have a parent-child r
 
 The template system enables consistent note formatting and automated content generation. Each note type has dedicated templates in the `04 - Templates` directory:
 
-* **Content notes** have three components: Metadata (frontmatter with tags and properties), Body (main content structure), Footer (references, footnotes, and Dataview queries)
-* **Primary and secondary categories** use Metadata and Body templates for standardized organization
+* **Content notes** have four components:
+	1. *Metadata*: frontmatter with tags and properties
+	2. *Body*: main content structure
+	3. *Dataview*: related-note discovery queries
+	4. *Footer*: references and annotation footnotes
+* **Primary and secondary categories** use *Metadata* and *Body* templates for standardized organization
 
 Custom content types with personalized templates can be created on-demand at the content type selection phase of the note creation workflow.
+
+> [!todo] Screenshot/GIF Review Needed
+> Several of the workflow GIFs and screenshots below likely predate the current Templater behavior.
+> They should be reviewed and updated anywhere they still imply:
+> - Only three content-template parts
+> - `.trash`/staging-based note handling
+> - Older content-type creation behavior without `Dataview.md`
+> - Pre-`note-status` draft handling
 
 ## Note Creation Workflow
 
@@ -173,7 +188,7 @@ Content notes should focus on a single actionable atomic idea (e.g., a specific 
 
 ### Content Types
 
-After back-linking a new content type with primary and secondary categories, the user will be prompted to select a content type for the new content note. All new content types will be automatically relocated to the `03 - Content` directory in their own sub-directory; the sub-directory contains the structural elements `Metadata.md`, `Body.md`, and `Footer.md`.
+After back-linking a new content note with primary and secondary categories, the user will be prompted to select a content type for the new content note. New custom content types are created under `04 - Templates/Content/` in their own sub-directory; the sub-directory contains the structural elements `Metadata.md`, `Body.md`, `Dataview.md`, and `Footer.md`.
 
 ![[vault-structure-12.gif|700]]
 
@@ -193,7 +208,7 @@ Custom content type creation enables template personalization for specialized or
 
 ![[vault-structure-14.gif|700]]
 
-The template structure of a new content type is automatically generated from the "Basic" template. This can be modified after the note creation workflow to introduce new elements to any of the three structural components of the content type. This enables building a library of specialized templates tailored to your specific red team documentation needs
+The template structure of a new content type is automatically generated from the "Basic" template. This can be modified after the note creation workflow to introduce new elements to any of the four structural components of the content type. This enables building a library of specialized templates tailored to your specific red team documentation needs.
 
 ![[vault-structure-15.gif|700]]
 
@@ -202,6 +217,18 @@ Content types enable:
 * Specialized templates for different data types
 * Effective filtering and search capabilities
 * Scalable organization as vault content grows
+
+### Draft Visibility
+
+New content notes are now created directly in `03 - Content/` and use:
+- `note-status: ✍️ Draft`
+
+as the initial workflow state.
+
+Dataview visibility is controlled through `note-status`, not through a draft directory or promotion script. Notes should generally move to:
+- `note-status: ☑️ Ready`
+
+when they are ready to appear in most query-driven views.
 
 ## Best Practices
 

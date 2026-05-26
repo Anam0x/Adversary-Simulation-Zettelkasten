@@ -17,20 +17,19 @@ Templater[^1] is a template language that lets you insert **variables** and **fu
 
 ![templater_demo](https://github.com/SilentVoid13/Templater/blob/561ac7bb30dbc2aff6aeab0dd7aa9883bef4fca8/imgs/templater_demo.gif?raw=true)
 
-## How we'll use Templater
+## How We'll Use Templater
 
-- Prompt for the Search tag on note creation
-- Prompt for title on note creation
-- Add date *created* automatically
-- Update *last updated* automatically
-- Move the note to the appropriate location
-	* 02 - Secondary Categories
-	- 03 - Content
-	- 05 - Personal
+- Run the vault's main note/category creation workflow through `0400 - Gen_Note`
+- Prompt for note type, title, category links, content type, and type-specific properties
+- Apply controlled vocabularies and typed-link selection during creation
+- Generate frontmatter, body, Dataview, and footer sections from the active templates
+- Set `note-status` automatically for new content notes
+- Move newly created notes into the appropriate vault location
+- Leave behind a safe recovery draft if the workflow is cancelled or fails late
 
 ## Installation
-1. Templater[^1] is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse`
-	* [[Obsidian - Plugins#Required]]
+
+Templater is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse` (see [[Obsidian - Plugins#Required]] for more details).
 
 ## Configuration
 
@@ -40,7 +39,38 @@ Templater[^1] is a template language that lets you insert **variables** and **fu
 > 2. *Trigger Templater on New File Creation*: **True**
 > 3. *Empty File Template*: `04 - Templates/0400 - Gen_Note`
 
-To help manage **incomplete**, **NULL**, or **'Untitled'** notes, it can  be helpful to assign `Settings > Files & Links > Folder to Create New Notes in` to `.trash`. Since our **0400 - Gen_Note** template handles moving successfully created notes to their appropriate folders, the categories listed above will automatically end up in trash. 
+### Recommended Supporting Settings
+
+- `Settings > Files & Links > Folder to create new notes in`
+	- Set this to a temporary holding location if you want incomplete or cancelled notes isolated from your main content flow
+- `Settings > Editor > Properties in document`
+	- Use the mode that best fits your editing style, but remember the vault expects frontmatter-backed properties
+
+## Vault-Specific Workflow
+
+The main `0400 - Gen_Note` workflow currently handles:
+1. Note type selection
+2. Title validation and fallback handling
+3. Emoji selection for primary categories and content types
+4. Category back-linking
+5. Content-type selection or custom content-type creation
+6. Prompting for controlled values and typed relationships
+7. Final assembly of `Metadata`, `Body`, `Dataview`, and `Footer`
+
+For content notes, the workflow now defaults new notes to:
+- `note-status: ✍️ Draft`
+- Direct creation in `03 - Content/`
+
+Draft visibility is controlled through `note-status`, not through a dedicated drafts directory or promotion script.
+
+## Failure Recovery
+
+If the workflow is cancelled or fails after it has already started, Templater now leaves behind a safe recovery draft instead of malformed frontmatter.
+
+In practice this means:
+- Partially created content notes keep a minimal valid frontmatter block
+- `note-status` is preserved as a draft signal
+- Placeholder metadata can remain in place for later cleanup
 
 ___
 

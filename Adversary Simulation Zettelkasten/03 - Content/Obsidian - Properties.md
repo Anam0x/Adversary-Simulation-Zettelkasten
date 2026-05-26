@@ -211,6 +211,8 @@ This vault now favors **status-only filtering** over automated file promotion. I
 This keeps publication logic simple and avoids coupling note visibility to a promotion script or directory move.
 New content notes are not given a separate draft disclaimer block automatically; `note-status` is the source of truth for note visibility.
 
+When the generator adds `note-status` automatically, it currently appends it as the last metadata property if the template did not already define it. If a template explicitly includes `note-status`, the workflow updates that existing line in place rather than moving it.
+
 ## Failure Recovery
 
 The Templater workflow now auto-generates `note-status` for content notes so visibility can be controlled consistently during note creation.

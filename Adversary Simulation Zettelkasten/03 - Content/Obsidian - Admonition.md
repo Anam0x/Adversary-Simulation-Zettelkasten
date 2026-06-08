@@ -1,0 +1,160 @@
+---
+aliases:
+tags:
+  - 📝Basic
+primary-categories:
+  - "[[Vault Administration]]"
+secondary-categories:
+  - "[[Obsidian]]"
+type: Basic
+note-status: ☑️ Ready
+---
+# [[Obsidian - Admonition]]
+
+---
+## Overview
+Adds admonition block-styled content to Obsidian.md, styled after Material for MkDocs[^1].
+
+![](https://raw.githubusercontent.com/javalent/admonitions/master/publish/gifs/all.gif)
+
+> [!important]
+> As of [Obsidian v0.14.0](https://publish.obsidian.md/hub/01+-+Community/Obsidian+Roundup/2022-03-19+Better+Citations+Workflows+%26+Native+Callout+Boxes), Obsidian natively supports admonitions via [callout boxes](https://help.obsidian.md/callouts). This allows you to create visually distinct blocks with different icons and colors directly in your notes without needing to install the community Admonitions plugin.
+> 
+> ````markdown
+> > [!example]
+> > This is an example callout box.
+> ````
+> 
+> > [!example]
+> > This is an example callout box.
+> 
+> While the older, plugin-based Admonition syntax with code blocks (` ```ad-note `) still functions, the newer Callout syntax is recommended for future compatibility. Admonition is therefore labeled an "optional" plugin for this Zettelkasten vault.
+> 
+> For comprehensive internal documentation on native callouts, see [[Obsidian - Callouts]].
+
+## Installation
+
+1. Admonition[^2] is a registered Obsidian plugin and can be installed directly from `Settings > Community Plugins > Browse`
+	* [[Obsidian - Plugins#Additional]]
+
+## Configuration
+
+* Nothing required beyond installation for default admonition block element display
+* Would recommend enabling the 'copy' button permitting the copying of content directly from the blocks
+
+## Basic Usage
+
+### Code Block Style
+
+````markdown
+```ad-<type>
+title: <Optional Title>
+collapse: <none|open|close>
+icon: <FontAwesome or RPG Awesome icon name>
+color: <R,G,B>
+Your content here.
+```
+
+```ad-info
+title: Custom Title
+collapse: close
+icon: hat-wizard
+color: 200,0,200
+My custom content.
+```
+````
+
+```ad-info
+title: Custom Title
+collapse: close
+icon: hat-wizard
+color: 200,0,200
+My custom content.
+```
+
+#### Supported Parameters
+
+| Parameter   | Description                                                          |
+| --------- | --------------- |
+| `title:`    | Optional. Overrides default title; supports Markdown in block-style. |
+| `collapse:` | `open`, `close`, or `none`. Controls collapsible behavior.           |
+| `icon:`     | Sets a custom icon using FontAwesome or RPG Awesome names.           |
+| `color:`    | RGB triad (e.g., `200,200,200`) to override default styling.         |
+
+#### Supported Types
+
+| Type       | Aliases                           | Use Case                                                       |
+| ---------- | --------------------------------- | -------------------------------------------------------------- |
+| `note`     | `note`, `seealso`                 | General notes, references, or related information.             |
+| `abstract` | `abstract`, `summary`, `tldr`     | Summarizing content or providing an overview of a section.     |
+| `info`     | `info`, `todo`                    | Highlighting helpful information or listing tasks to complete. |
+| `tip`      | `tip`, `hint`, `important`        | Sharing helpful tips, best practices, or important details.    |
+| `success`  | `success`, `check`, `done`        | Indicating completion, success, or confirmation messages.      |
+| `question` | `question`, `help`, `faq`         | Posing questions, FAQs, or prompts for further thinking.       |
+| `warning`  | `warning`, `caution`, `attention` | Calling out cautions, risks, or important alerts.              |
+| `failure`  | `failure`, `fail`, `missing`      | Noting missing items, failed tasks, or critical issues.        |
+| `danger`   | `danger`, `error`                 | Highlighting severe problems, errors, or urgent issues.        |
+| `bug`      | `bug`                             | Tracking bugs, issues, or debugging notes.                     |
+| `example`  | `example`                         | Providing code examples, demonstrations, or sample content.    |
+| `quote`    | `quote`, `cite`                   | Highlighting quotes, citations, or references.                 |
+
+### Nesting
+
+For block-style admonitions, wrap with matching backtick levels.
+
+`````markdown
+````ad-note
+title: Parent
+```ad-warning
+title: Nested Child
+Nested content
+```
+Parent content
+````
+`````
+
+````ad-note
+title: Parent
+```ad-warning
+title: Nested Child
+Nested content.
+```
+Parent content
+````
+
+## Constraints
+
+It is not possible to embed a footnote in admonition-styled code blocks, illustrated below:
+
+````markdown
+```ad-example
+Attempt to embed a footnote in this codeblock, it won't work[^3].
+
+However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
+```
+````
+
+```ad-example
+Attempt to embed a footnote in this codeblock, it won't work[^3].
+
+However, embedded hyperlinks do appear to work, like [this one](https://google.com/example).
+```
+
+It is therefore recommended to avoid embedding footnotes in Admonition code blocks and to use inline hyperlinks instead.
+
+___
+
+## Resources
+
+| Reference | Info |
+| --------- | ---- |
+| [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness)                  | Example implementation of Zettelkasten using Obsidian; showcases usage of Admonition-styled code blocks |
+| [Admonition, Obsidian Hub](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-admonition) | Admonition wiki page maintained by Obsidian community                                                   |
+
+[^1]: Admonition, Material for MkDocs, https://squidfunk.github.io/mkdocs-material/reference/admonitions/
+[^2]: Admonition Plugin, Jeremy Valentine, https://github.com/javalent/admonitions
+[^3]: Example Page, Google, https://google.com/example
+
+---
+*Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
+*Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

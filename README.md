@@ -127,8 +127,8 @@ The vault requires four community plugins for full functionality.
 | ------------- | --------------------------------------------------- |
 | [Obsidian Git](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-git) | *Auto commit-and-sync interval (minutes)*: `60`<br />*Auto pull interval (minutes)*: `10`<br />*Commit message on auto commit-and-sync*: `[hostname OR FirstLast] {{date}}`<br />*{{date}} placeholder format*: `MM-DD-YYYY HH:mm:ss`<br />*Push on commit-and-sync*: ON<br />*Pull on commit-and-sync*: ON |
 | [Templater](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/templater-obsidian) | *Template folder location*: `04 - Templates`<br />*Trigger Templater on new file creation*: ON<br />*Enable folder templates*: ON<br />Add new folder templates for `01 - Primary Categories`, `02 - Secondary Categories`, and `03 - Content`<br />Set the folder templates' script to `04 - Templates/0400 - Gen_Note.md` |
-| [Dataview](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/dataview) | *Enable inline queries*: ON<br /> *Inline query prefix*: `=`                     |
-| [Emoji Toolbar](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-emoji-toolbar) | Hotkey: <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>.</kbd> (default)                         |
+| [Dataview](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/dataview) | *Enable inline queries*: ON<br /> *Inline query prefix*: `=`<br /> *Enable JavaScript queries*: ON |
+| [Emoji Toolbar](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/obsidian-emoji-toolbar) | Hotkey: <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>.</kbd> (default) |
 
 ### Detailed Plugin Setup Instructions
 
@@ -243,7 +243,9 @@ You may skip Obsidian Git installation and configuration if you are not working 
 
 4. Set the "Inline query prefix" option to `=`
 
-5. Enable/disable automatic task completion date tracking by toggling the "Automatic task completion tracking" option to on or off
+5. Toggle "Enable JavaScript queries" option to on
+
+6. Enable/disable automatic task completion date tracking by toggling the "Automatic task completion tracking" option to on or off
 
 </details>
 

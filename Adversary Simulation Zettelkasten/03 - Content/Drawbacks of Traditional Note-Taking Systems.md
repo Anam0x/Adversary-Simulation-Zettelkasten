@@ -2,11 +2,19 @@
 aliases:
 tags:
   - 💡Idea
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Learning Techniques]]"
 type: Idea
+status: Exploring
+related-tradecraft:
+  - <!-- [[Tradecraft Note]] -->
+related-tools:
+  - <!-- [[Tool Note]] -->
+related-playbooks:
+  - <!-- [[Playbook Note]] -->
+note-status: ☑️ Ready
 ---
 # [[Drawbacks of Traditional Note-Taking Systems]]
 
@@ -44,18 +52,23 @@ This idea came to me as I was learning more about the [[Zettelkasten]] method an
 
 * An Obsidian vault implementation of the Zettelkasten note-taking system
 
+## Risks/Unknowns
+
+- Some users may still prefer hierarchical structures for operational or archival tasks
+- The tradeoff between flexibility and navigational simplicity should be validated with real vault usage over time
+
 ## Next Steps
 
 1. [x] Fork the Obsidian-Vault-Structure[^2] repository by TrustedSec
 2. [x] Make personal edits to your detached fork repository
-3. [ ] Make the repository public and collect feedback
+3. [x] Make the repository public and collect feedback
 
 ---
 
 ## Resources
 
-| Hyperlink                                                                                                                                                                                                                                                      | Info                                                                                                        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [The Zettelkasten Method, Abram Demski](https://www.lesswrong.com/posts/NfdHG6oHBJ8Qxc26s/the-zettelkasten-method-1)                                                                                                                                           | Flashcard implementation of Zettelkasten                                                                    |
 | [Zettelkasten Method: How to Take Smart Notes For Knowledge Management, Disputant](https://disputant.medium.com/zettelkasten-method-how-to-take-smart-notes-for-knowledge-management-a66f636ede6c)                                                             | High-level overview of Zettelkasten and discussion of digital solutions                                     |
 | [Zettelkasten -- How One German Scholar Was So Freakishly Productive, David B. Clear](https://web.archive.org/web/20200630040820/https://writingcooperative.com/zettelkasten-how-one-german-scholar-was-so-freakishly-productive-997e4e0ca125?gi=b6844ef2ec52) | High-level overview of Zettelkasten and discussion of digital and analog solutions(Wayback Machine Archive) |

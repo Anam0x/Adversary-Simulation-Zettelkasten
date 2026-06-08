@@ -2,16 +2,17 @@
 aliases:
 tags:
   - 📝Basic
-primary categories:
+primary-categories:
   - "[[Vault Administration]]"
-secondary categories:
+secondary-categories:
   - "[[Obsidian]]"
+
 type: Basic
+note-status: ☑️ Ready
 ---
 # [[Vault Structure and Note Creation]]
 
-***
-
+---
 ## Overview
 
 This guide covers how to create and organize content in the Adversary Simulation Zettelkasten vault using the automated note creation system. You'll learn to add primary/secondary categories, content notes, and custom content types through the interactive workflow.
@@ -35,25 +36,26 @@ The vault uses a hierarchical organization system with four main directories:
 │   │   ├── Note 2.md
 │   │   └── Note 3.md
 │   └── 04 - Templates/
-│       ├── 04 - Content/
-│       │   ├── 04 - Basic/
-│       │   │   ├── Body.md
-│       │   │   ├── Footer.md
-│       │   │   └── Metadata.md
-│       │   ├── 04 - Custom Type 1/
-│       │   │   ├── Body.md
-│       │   │   ├── Footer.md
-│       │   │   └── Metadata.md
-│       │   └── 04 - Custom Type 2/
-│       │       ├── Body.md
-│       │       ├── Footer.md
-│       │       └── Metadata.md
-│       ├── 04 - Primary Category/
+│       ├── Primary Category/
 |       │   ├── Body.md
 │       │   └── Metadata.md
-│       └── 04 - Secondary Category/
-│           ├── Body.md
-│           └── Metadata.md
+│       ├── Secondary Category/
+│       │   ├── Body.md
+│       │   └── Metadata.md
+│       └── Content/
+│           ├── Basic/
+│           │   ├── Body.md
+│           │   ├── Footer.md
+│           │   └── Metadata.md
+│           ├── Custom Type 1/
+│           │   ├── Body.md
+│           │   ├── Footer.md
+│           │   └── Metadata.md
+│           └── Custom Type 2/
+│               ├── Body.md
+│               ├── Footer.md
+│               └── Metadata.md
+
 └── README.md
 ```
 
@@ -117,7 +119,7 @@ The emoji selection interface provides categorized options relevant to adversary
 Users can choose a search tag emoji from the categorized options list. Alternatively, they can select the `"🎲 Random selection"` option to allow the system to handle search tag emoji selection. The user can also manually enter a search tag emoji by selecting the `"✏️ Enter emoji manually"` option.
 
 > [!tip]
-> The [[Emoji Toolbar]] keyboard will not be available to you when you are redirected to the manual emoji entry system prompt, so it is advised to have your desired emoji copied to your clipboard before this step.
+> The [[Obsidian - Emoji Toolbar]] keyboard will not be available to you when you are redirected to the manual emoji entry system prompt, so it is advised to have your desired emoji copied to your clipboard before this step.
 
 #### Emoji Validation and Error Handling
 
@@ -231,17 +233,15 @@ A structured approach ensures your Adversary Simulation vault scales effectively
 * Use **wiki-link relationships** for knowledge graph navigation
 * Maintain **consistent naming conventions** across categories and content
 
-***
-
+---
 ## Resources
 
-| Hyperlink                                                                                                                       | Info                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Reference | Info |
+| --------- | ---- |
 | [Obsidian, Taming a Collective Consciousness; Sam Link](https://trustedsec.com/blog/obsidian-taming-a-collective-consciousness) | Example implementation of Zettelkasten using Obsidian; deep dive into vault structure and automation procedures |
 
 [^1]: Templater Plugin, SilentVoid13, https://github.com/SilentVoid13/Templater
 
-***
-
+---
 *Created Date*: <%+tp.file.creation_date("MMMM Do YYYY (HH:mm a)")%>  
 *Last Modified Date*: <%+tp.file.last_modified_date("MMMM Do YYYY (HH:mm a)")%>

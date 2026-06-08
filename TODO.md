@@ -6,46 +6,6 @@
 
 ## In Progress
 
-- [x] Content note modernization and coverage plan
-  - [x] Phase 1: Global metadata and footer migration for existing notes
-    - [x] Rename `primary categories` to `primary-categories` across existing `03 - Content` notes
-    - [x] Rename `secondary categories` to `secondary-categories` across existing `03 - Content` notes
-    - [x] Add `note-status` to existing notes and decide default values for published vs in-progress content
-    - [x] Migrate legacy footer tables from `Hyperlink | Info` to `Reference | Info`
-    - [x] Differentiate note-level resources from body-level annotation footnotes in existing notes
-  - [x] Phase 2: Legacy content type normalization
-    - [x] Migrate `Mindmap` notes to `Reference Material`
-    - [x] Migrate `Debrief` notes to `Case Study`
-    - [x] Migrate `Payload` notes to `Offensive Code`
-    - [x] Migrate `TTP` notes to `Tradecraft`
-    - [x] Update legacy emoji/type tags so migrated notes match the current content taxonomy
-  - [x] Phase 3: Metadata-, body-, and Dataview-template conformance for represented content types
-    - [x] Basic
-    - [x] Biography
-    - [x] Case Study
-    - [x] Command
-    - [x] Idea
-    - [x] Infrastructure
-    - [x] Offensive Code
-    - [x] Playbook
-    - [x] Reference Material
-    - [x] Study Resources
-    - [x] Tool
-    - [x] Tradecraft
-  - [x] Phase 4: Create representative notes for currently unrepresented content types
-    - [x] Attack Surface
-    - [x] IOC
-    - [x] Lab Setup
-    - [x] Protocol
-    - [x] Security Control
-    - [x] Vulnerability
-  - [ ] Phase 5: Final conformance validation
-    - [x] Enforce consistent use of hyperlinks and footnotes
-    - [x] Confirm every content note uses current frontmatter keys and current `note-status` conventions
-    - [x] Confirm all represented note types follow the modern body/footer structure closely enough to avoid template drift
-    - [x] Confirm all content types are represented by at least one live note or one intentional example note
-    - [ ] Confirm that documentation is up-to-date
-
 ### High Priority (Core Functionality and Usability)
 
 - [ ] Templater Plugin Script Enhancements
@@ -185,3 +145,43 @@
     - [x] **Lab Setup**
     - [x] **Idea**
     - [x] **Study Resources**
+
+- [x] Content note modernization and coverage plan
+  - [x] Phase 1: Global metadata and footer migration for existing notes
+    - [x] Rename `primary categories` to `primary-categories` across existing `03 - Content` notes
+    - [x] Rename `secondary categories` to `secondary-categories` across existing `03 - Content` notes
+    - [x] Add `note-status` to existing notes and decide default values for published vs in-progress content
+    - [x] Migrate legacy footer tables from `Hyperlink | Info` to `Reference | Info`
+    - [x] Differentiate note-level resources from body-level annotation footnotes in existing notes
+  - [x] Phase 2: Legacy content type normalization
+    - [x] Migrate `Mindmap` notes to `Reference Material`
+    - [x] Migrate `Debrief` notes to `Case Study`
+    - [x] Migrate `Payload` notes to `Offensive Code`
+    - [x] Migrate `TTP` notes to `Tradecraft`
+    - [x] Update legacy emoji/type tags so migrated notes match the current content taxonomy
+  - [x] Phase 3: Metadata-, body-, and Dataview-template conformance for represented content types
+    - [x] Basic
+    - [x] Biography
+    - [x] Case Study
+    - [x] Command
+    - [x] Idea
+    - [x] Infrastructure
+    - [x] Offensive Code
+    - [x] Playbook
+    - [x] Reference Material
+    - [x] Study Resources
+    - [x] Tool
+    - [x] Tradecraft
+  - [x] Phase 4: Create representative notes for currently unrepresented content types
+    - [x] Attack Surface
+    - [x] IOC
+    - [x] Lab Setup
+    - [x] Protocol
+    - [x] Security Control
+    - [x] Vulnerability
+  - [x] Phase 5: Final conformance validation
+    - [x] Enforce consistent use of hyperlinks and footnotes
+    - [x] Confirm every content note uses current frontmatter keys and current `note-status` conventions
+    - [x] Confirm all represented note types follow the modern body/footer structure closely enough to avoid template drift
+    - [x] Confirm all content types are represented by at least one live note or one intentional example note
+    - [x] Confirm that documentation is up-to-date

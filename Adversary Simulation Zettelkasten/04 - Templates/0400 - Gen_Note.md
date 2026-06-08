@@ -110,6 +110,58 @@ function withOtherOption(values = []) {
  * @returns {string} - Markdown content for the starter `Dataview.md` file.
  */
 function createStarterDataviewTemplate(queryTier) {
+    const sameClassificationQuery = [
+        "```dataview",
+        "LIST",
+        "FROM \"03 - Content\"",
+        "WHERE type = this.type",
+        "  AND (note-status = \"☑️ Ready\" OR note-status = \"Ready\" OR !note-status)",
+        "  AND file.name != this.file.name",
+        "SORT file.name ASC",
+        "LIMIT 10",
+        "```"
+    ].join("\n");
+
+    const typedRelationshipsQuery = [
+        "```dataviewjs",
+        "const relationshipPrefixes = [",
+        "  \"related-\", \"uses-\", \"supports-\", \"covers-\", \"required-\",",
+        "  \"detects-\", \"implements-\", \"targets-\", \"abused-by-\",",
+        "  \"secured-by-\", \"associated-\", \"exploited-\", \"practices-\"",
+        "];",
+        "const current = dv.current();",
+        "const relationshipRows = Object.entries(current)",
+        "  .filter(([key, value]) => relationshipPrefixes.some(prefix => key.startsWith(prefix)))",
+        "  .map(([key, value]) => {",
+        "    const values = Array.isArray(value) ? value.filter(Boolean) : (value ? [value] : []);",
+        "    return [key, values.length ? values.map(item => dv.fileLink(String(item).replace(/^\\[\\[|\\]\\]$/g, \"\"))) : [\"(empty)\"]];",
+        "  });",
+        "if (relationshipRows.length) {",
+        "  dv.table([\"Relationship Property\", \"Current Links\"], relationshipRows);",
+        "} else {",
+        "  dv.paragraph(\"No typed relationship properties have been populated yet.\");",
+        "}",
+        "```",
+        "",
+        "> [!todo]",
+        "> Replace this summary table with dedicated typed-relationship queries after you finalize this content type's metadata schema."
+    ].join("\n");
+
+    const reverseRelationshipsQuery = [
+        "```dataview",
+        "TABLE WITHOUT ID",
+        "  file.link AS \"Note\",",
+        "  type AS \"Content Type\",",
+        "  file.mtime AS \"Modified\"",
+        "FROM \"03 - Content\"",
+        "WHERE (note-status = \"☑️ Ready\" OR note-status = \"Ready\" OR !note-status)",
+        "  AND file.name != this.file.name",
+        "  AND contains(file.outlinks, this.file.link)",
+        "SORT file.mtime DESC",
+        "LIMIT 10",
+        "```"
+    ].join("\n");
+
     switch (queryTier) {
         case QUERY_TIERS.RICH:
             return [
@@ -117,9 +169,15 @@ function createStarterDataviewTemplate(queryTier) {
                 "",
                 "### Same Classification",
                 "",
+                sameClassificationQuery,
+                "",
                 "### Typed Relationships",
                 "",
-                "### Reverse Relationships"
+                typedRelationshipsQuery,
+                "",
+                "### Reverse Relationships",
+                "",
+                reverseRelationshipsQuery
             ].join("\n");
         case QUERY_TIERS.LIGHTWEIGHT:
             return [
@@ -127,7 +185,11 @@ function createStarterDataviewTemplate(queryTier) {
                 "",
                 "### Typed Relationships",
                 "",
-                "### Same Classification"
+                typedRelationshipsQuery,
+                "",
+                "### Same Classification",
+                "",
+                sameClassificationQuery
             ].join("\n");
         case QUERY_TIERS.NONE:
         default:
@@ -2725,7 +2787,6 @@ async function createTemplateStructure(typeName, emoji, queryTier) {
         await app.vault.create(dataviewTargetPath, createStarterDataviewTemplate(queryTier));
         filesCreated += 2;
         Logger.debug(`Created file: ${dataviewTargetPath}`);
-        Logger.debug(`Created file: ${schemaTargetPath}`);
 
         Logger.info(`Template structure created successfully`, {
             typeName,

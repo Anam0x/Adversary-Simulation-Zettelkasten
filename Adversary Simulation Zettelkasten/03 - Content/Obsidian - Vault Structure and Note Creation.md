@@ -84,14 +84,6 @@ The template system enables consistent note formatting and automated content gen
 
 Custom content types with personalized templates can be created on-demand at the content type selection phase of the note creation workflow.
 
-> [!todo] Screenshot/GIF Review Needed
-> Several of the workflow GIFs and screenshots below likely predate the current Templater behavior.
-> They should be reviewed and updated anywhere they still imply:
-> - Only three content-template parts
-> - `.trash`/staging-based note handling
-> - Older content-type creation behavior without `Dataview.md`
-> - Pre-`note-status` draft handling
-
 ## Note Creation Workflow
 
 All notes are created using the automated Templater[^1] script. The system guides you through type selection, categorization, and content structuring. To trigger the note creation workflow, right-click any one of the following three directories and select the `New note` option.
@@ -156,61 +148,107 @@ Primary category emojis become part of structured search tags that enable effici
 
 Content types also implement search tag emojis. For example, a "Lab Setup" content type with the 🧪 emoji creates the tag `🧪Lab_Setup`, and all new notes created using the "Lab Setup" template will be embedded with that search tag.
 
+#### Primary Category Description
+
+After the emoji step, the workflow prompts for a short 1-2 sentence description of the primary category. This description is inserted directly under the `## Overview` section of the generated primary-category note so that each category starts with a concise statement of scope and purpose.
+
+![[vault-structure-07.gif|700]]
+
+The goal of this prompt is to make new categories immediately useful instead of leaving behind an empty shell. Even a short description helps establish what the category is meant to cover, what kinds of notes belong inside it, and how it differs from nearby primary categories.
+
+#### Final Primary Category Result
+
+Once the workflow finishes, the new primary category is moved into `01 - Primary Categories/` and rendered with:
+- Frontmatter metadata
+- An `## Overview` section containing the prompted description
+- Category-specific Dataview views from the current primary-category body template
+- Standard created/modified timestamps
+
+![[vault-structure-08.gif|700]]
+
 ### Secondary Categories
 
 Secondary categories serve as specialized hubs for related techniques, tools, or procedures within broader primary category contexts. They enable more granular organization without losing the higher-level categorical structure. All new notes designated as secondary categories will be automatically relocated to the `02 - Secondary Categories` directory.
 
-![[vault-structure-07.gif|700]]
+![[vault-structure-09.gif|700]]
 
 #### Linking to Primary Categories
 
 New secondary categories establish relationships with existing primary categories through wiki-link references.
 
-![[vault-structure-08.gif|700]]
+![[vault-structure-10.gif|700]]
 
 This linking system creates a hierarchical knowledge graph where secondary categories inherit context from their primary categories. The multi-select interface allows secondary categories to relate to multiple primary domains when appropriate, supporting complex and non-rigid organizational relationships.
 
-![[vault-structure-09.gif|700]]
+#### Secondary Category Description
+
+After the user selects the relevant primary categories, the workflow prompts for a short 1-2 sentence description of the secondary category. Like the primary-category description prompt, this text is inserted under `## Overview` so the note begins with a clear explanation of what the category is for.
+
+![[vault-structure-11.gif|700]]
+
+#### Final Secondary Category Result
+
+When the workflow completes, the note is moved into `02 - Secondary Categories/` and generated with:
+- Frontmatter metadata
+- The selected primary-category backlinks
+- An `## Overview` section containing the prompted description
+- Category-specific Dataview views from the current secondary-category body template
+- Standard created/modified timestamps
+
+![[vault-structure-12.gif|700]]
 
 ### Content
 
 Content notes represent the atomic knowledge units in your vault (e.g., specific techniques, tools, procedures, or observations). All new notes designated as content notes will be automatically relocated to the `03 - Content` directory.
 
-![[vault-structure-10.gif|700]]
+![[vault-structure-13.gif|700]]
 
 #### Category Back-Linking
 
 Content notes establish bidirectional relationships with both primary and secondary categories. The dual-linking system ensures content notes remain discoverable within the broader organizational framework while maintaining their atomic nature.
 
-![[vault-structure-11.gif|700]]
+![[vault-structure-14.gif|700]]
 
 Content notes should focus on a single actionable atomic idea (e.g., a specific command syntax, payload example, configuration steps, or tactical procedure) with bidirectional category relationships supporting both top-down navigation (from categories to content) and bottom-up discovery (from content to related categories).
+
+If a category picker is left empty, the workflow can continue intentionally rather than forcing a brittle one-shot selection. This makes it easier to capture cross-domain or not-yet-categorized ideas without breaking the note-creation flow.
 
 ### Content Types
 
 After back-linking a new content note with primary and secondary categories, the user will be prompted to select a content type for the new content note. New custom content types are created under `04 - Templates/Content/` in their own sub-directory; the sub-directory contains the structural elements `Metadata.md`, `Body.md`, `Dataview.md`, and `Footer.md`.
 
-![[vault-structure-12.gif|700]]
+![[vault-structure-15.gif|700]]
 
 Content types determine the template structure and formatting for content notes. The system supports both existing content types and on-demand creation of new types.
+
+In addition to determining structure, content types also determine:
+- Which metadata properties are prompted during creation
+- Which controlled vocabularies are used
+- Which typed relationship fields appear in frontmatter
+- Which Dataview sections are assembled into the final note
 
 #### Using Existing Content Types
 
 Existing content types provide consistent template structures for common note formats.
 
-![[vault-structure-13.gif|700]]
+![[vault-structure-16.gif|700]]
 
 The "Basic" content type offers a general-purpose template suitable for most content, while specialized types provide focused structures for specific use cases (e.g., tool documentation, payload libraries, or procedure checklists).
+
+For built-in content types, the workflow also prompts for the frontmatter properties defined in the current Templater schema. Depending on the selected content type, that can include:
+- Controlled-value properties such as `severity`, `tactic`, or `resource-type`
+- Controlled-list properties such as `platforms`
+- Typed note relationships such as `uses-tools`, `related-tradecraft`, or `covers-tools`
+
+![[vault-structure-17.gif|700]]
 
 #### Creating New Content Types
 
 Custom content type creation enables template personalization for specialized organizational needs. New content types use the same note title and search tag emoji validation loop as other notes.
 
-![[vault-structure-14.gif|700]]
+![[vault-structure-18.gif|700]]
 
 The template structure of a new content type is automatically generated from the "Basic" template. This can be modified after the note creation workflow to introduce new elements to any of the four structural components of the content type. This enables building a library of specialized templates tailored to your specific red team documentation needs.
-
-![[vault-structure-15.gif|700]]
 
 Content types enable:
 * Consistent information structure across similar notes
@@ -218,9 +256,135 @@ Content types enable:
 * Effective filtering and search capabilities
 * Scalable organization as vault content grows
 
+#### Dataview Query Selection For New Content Types
+
+When creating a new custom content type, the workflow includes a Dataview query-tier selection step. This controls how much starter related-note scaffolding is generated inside the new `Dataview.md` file.
+
+The current tiers are:
+- `None`
+	- Minimal placeholder only
+- `Lightweight`
+	- A restrained `## Related Notes` layout intended for simpler note types
+- `Rich`
+	- A fuller discovery layout for note types expected to benefit from broader Dataview support
+
+This tier does not lock the content type permanently. It simply determines the initial scaffold, which you can edit later after the template exists.
+
+In practice:
+- Use `None` when the content type is highly specialized or unlikely to need automatic discovery
+- Use `Lightweight` when you want a modest set of typed/same-classification queries
+- Use `Rich` when the note type is meant to become a discovery hub
+
+The starter queries are intentionally generic. They are meant to render immediately for a brand-new custom content type, while also making it obvious where you should later replace the placeholders with type-specific Dataview queries.
+
+`Lightweight` creates:
+- a `Typed Relationships` discovery block implemented in `dataviewjs`
+- a `Same Classification` Dataview query that finds other published notes with the same `type`
+
+````md
+## Related Notes
+
+### Typed Relationships
+
+```dataviewjs
+const relationshipPrefixes = [
+  "related-", "uses-", "supports-", "covers-", "required-",
+  "detects-", "implements-", "targets-", "abused-by-",
+  "secured-by-", "associated-", "exploited-", "practices-"
+];
+const current = dv.current();
+const relationshipRows = Object.entries(current)
+  .filter(([key, value]) => relationshipPrefixes.some(prefix => key.startsWith(prefix)))
+  .map(([key, value]) => {
+    const values = Array.isArray(value) ? value.filter(Boolean) : (value ? [value] : []);
+    return [key, values.length ? values.map(item => dv.fileLink(String(item).replace(/^\[\[|\]\]$/g, ""))) : ["(empty)"]];
+  });
+if (relationshipRows.length) {
+  dv.table(["Relationship Property", "Current Links"], relationshipRows);
+} else {
+  dv.paragraph("No typed relationship properties have been populated yet.");
+}
+```
+
+> [!todo]
+> Replace this summary table with dedicated typed-relationship queries after you finalize this content type's metadata schema.
+
+### Same Classification
+
+```dataview
+LIST
+FROM "03 - Content"
+WHERE type = this.type
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND file.name != this.file.name
+SORT file.name ASC
+LIMIT 10
+```
+````
+
+`Rich` creates everything in `Lightweight`, plus a `Reverse Relationships` query that finds published notes already linking back to the current note:
+
+````md
+## Related Notes
+
+### Same Classification
+
+```dataview
+LIST
+FROM "03 - Content"
+WHERE type = this.type
+  AND (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND file.name != this.file.name
+SORT file.name ASC
+LIMIT 10
+```
+
+### Typed Relationships
+
+```dataviewjs
+const relationshipPrefixes = [
+  "related-", "uses-", "supports-", "covers-", "required-",
+  "detects-", "implements-", "targets-", "abused-by-",
+  "secured-by-", "associated-", "exploited-", "practices-"
+];
+const current = dv.current();
+const relationshipRows = Object.entries(current)
+  .filter(([key, value]) => relationshipPrefixes.some(prefix => key.startsWith(prefix)))
+  .map(([key, value]) => {
+    const values = Array.isArray(value) ? value.filter(Boolean) : (value ? [value] : []);
+    return [key, values.length ? values.map(item => dv.fileLink(String(item).replace(/^\[\[|\]\]$/g, ""))) : ["(empty)"]];
+  });
+if (relationshipRows.length) {
+  dv.table(["Relationship Property", "Current Links"], relationshipRows);
+} else {
+  dv.paragraph("No typed relationship properties have been populated yet.");
+}
+```
+
+> [!todo]
+> Replace this summary table with dedicated typed-relationship queries after you finalize this content type's metadata schema.
+
+### Reverse Relationships
+
+```dataview
+TABLE WITHOUT ID
+  file.link AS "Note",
+  type AS "Content Type",
+  file.mtime AS "Modified"
+FROM "03 - Content"
+WHERE (note-status = "☑️ Ready" OR note-status = "Ready" OR !note-status)
+  AND file.name != this.file.name
+  AND contains(file.outlinks, this.file.link)
+SORT file.mtime DESC
+LIMIT 10
+```
+````
+
+`Lightweight` is a good fit when you mainly want a starter note with self-discovery and schema reminders. `Rich` is a better fit when the new content type is expected to become a stronger hub in the vault graph.
+
 ### Draft Visibility
 
-New content notes are now created directly in `03 - Content/` and use:
+New content notes are created directly in `03 - Content/` and use:
 - `note-status: ✍️ Draft`
 
 as the initial workflow state.
